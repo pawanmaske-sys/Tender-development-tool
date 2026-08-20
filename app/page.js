@@ -800,10 +800,14 @@ export default function AllTenders() {
 
           <nav className="nav">
 
-           <a href="/" className="nav-item">
-  <span className="nav-icon">⌂</span>
-  <span>Dashboard</span>
-</a>
+          <NavItem
+  icon="⌂"
+  label="Dashboard"
+  active={activeNav === "Dashboard"}
+  onClick={() => {
+    window.location.href = "/";
+  }}
+/>
 
             <div className="nav-label">
               TENDERS
