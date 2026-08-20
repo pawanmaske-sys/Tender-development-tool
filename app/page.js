@@ -800,11 +800,10 @@ export default function AllTenders() {
 
           <nav className="nav">
 
-            <NavItem
-              icon="⌂"
-              label="Dashboard"
-              onClick={() => goTo("/")}
-            />
+           <a href="/" className="nav-item">
+  <span className="nav-icon">⌂</span>
+  <span>Dashboard</span>
+</a>
 
             <div className="nav-label">
               TENDERS
