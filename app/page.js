@@ -1,90 +1,72 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useState } from "react";
 
-const tenders = [
+const kpis = [
   {
-    id: "T-05621",
-    client: "ABC Ltd",
-    branch: "Pune",
-    assigned: "Rahul",
-    deadline: "22 Aug 2026",
-    amount: 1250000,
-    status: "In Process",
-    result: "-",
-    category: "IT Services",
+    title: "Total Tenders",
+    value: "1,245",
+    subtitle: "All tenders",
+    icon: "↗",
+    iconClass: "blue",
   },
   {
-    id: "T-05622",
-    client: "XYZ Corporation",
-    branch: "Mumbai",
-    assigned: "Priya",
-    deadline: "25 Aug 2026",
-    amount: 850000,
-    status: "Submitted",
-    result: "-",
-    category: "Consulting",
+    title: "Potential Amount",
+    value: "₹25.4 Cr",
+    subtitle: "Total potential value",
+    icon: "₹",
+    iconClass: "green",
   },
   {
-    id: "T-05623",
-    client: "Global Tech",
-    branch: "Delhi",
-    assigned: "Amit",
-    deadline: "28 Aug 2026",
-    amount: 2100000,
-    status: "Result Awaited",
-    result: "-",
-    category: "Technology",
+    title: "Submitted",
+    value: "842",
+    subtitle: "67.6% of total",
+    icon: "✓",
+    iconClass: "purple",
   },
   {
-    id: "T-05624",
-    client: "Metro Industries",
-    branch: "Pune",
-    assigned: "Sneha",
-    deadline: "30 Aug 2026",
-    amount: 650000,
-    status: "Won",
-    result: "Won",
-    category: "Infrastructure",
+    title: "In Process",
+    value: "230",
+    subtitle: "Currently working",
+    icon: "◔",
+    iconClass: "orange",
   },
   {
-    id: "T-05625",
-    client: "Sunrise Pvt Ltd",
-    branch: "Bangalore",
-    assigned: "Rahul",
-    deadline: "02 Sep 2026",
-    amount: 1450000,
-    status: "On Hold",
-    result: "-",
-    category: "IT Services",
+    title: "Won",
+    value: "173",
+    subtitle: "13.9% of total",
+    icon: "↗",
+    iconClass: "blue",
   },
   {
-    id: "T-05626",
-    client: "Prime Solutions",
-    branch: "Mumbai",
-    assigned: "Priya",
-    deadline: "05 Sep 2026",
-    amount: 980000,
-    status: "Lost",
-    result: "Lost",
-    category: "Consulting",
+    title: "Result Awaited",
+    value: "42",
+    subtitle: "Need follow-up",
+    icon: "₹",
+    iconClass: "green",
+  },
+  {
+    title: "On Hold",
+    value: "38",
+    subtitle: "Currently on hold",
+    icon: "✓",
+    iconClass: "purple",
+  },
+  {
+    title: "Lost",
+    value: "94",
+    subtitle: "Unsuccessful",
+    icon: "◔",
+    iconClass: "orange",
   },
 ];
-
-function formatAmount(amount) {
-  return new Intl.NumberFormat("en-IN", {
-    style: "currency",
-    currency: "INR",
-    maximumFractionDigits: 0,
-  }).format(amount);
-}
 
 function NavItem({ icon, label, active, onClick }) {
   return (
     <button
       type="button"
-      onClick={onClick}
       className={`nav-item ${active ? "active" : ""}`}
+      onClick={onClick}
     >
       <span className="nav-icon">{icon}</span>
       <span>{label}</span>
@@ -92,72 +74,23 @@ function NavItem({ icon, label, active, onClick }) {
   );
 }
 
-function StatusBadge({ status }) {
-  const className = status
-    .toLowerCase()
-    .replaceAll(" ", "-");
-
-  return (
-    <span className={`status-badge status-${className}`}>
-      {status}
-    </span>
-  );
-}
-
-export default function AllTenders() {
-  const [search, setSearch] = useState("");
-  const [status, setStatus] = useState("All Status");
-  const [branch, setBranch] = useState("All Branches");
+export default function Dashboard() {
+  const [year, setYear] = useState("2026");
+  const [month, setMonth] = useState("August");
+  const [business, setBusiness] = useState("All Business");
+  const [status, setStatus] = useState("All");
+  const [zsm, setZsm] = useState("All ZSM");
   const [category, setCategory] = useState("All Categories");
-
-  const branches = [
-    "All Branches",
-    ...new Set(tenders.map((item) => item.branch)),
-  ];
-
-  const categories = [
-    "All Categories",
-    ...new Set(tenders.map((item) => item.category)),
-  ];
-
-  const filteredTenders = useMemo(() => {
-    return tenders.filter((tender) => {
-      const searchText = search.toLowerCase();
-
-      const searchMatch =
-        tender.id.toLowerCase().includes(searchText) ||
-        tender.client.toLowerCase().includes(searchText) ||
-        tender.assigned.toLowerCase().includes(searchText);
-
-      const statusMatch =
-        status === "All Status" || tender.status === status;
-
-      const branchMatch =
-        branch === "All Branches" || tender.branch === branch;
-
-      const categoryMatch =
-        category === "All Categories" ||
-        tender.category === category;
-
-      return (
-        searchMatch &&
-        statusMatch &&
-        branchMatch &&
-        categoryMatch
-      );
-    });
-  }, [search, status, branch, category]);
-
-  const totalAmount = filteredTenders.reduce(
-    (sum, tender) => sum + tender.amount,
-    0
-  );
+  const [branch, setBranch] = useState("All");
 
   const resetFilters = () => {
-    setSearch("");
-    setStatus("All Status");
-    setBranch("All Branches");
+    setYear("2026");
+    setMonth("August");
+    setBusiness("All Business");
+    setStatus("All");
+    setZsm("All ZSM");
     setCategory("All Categories");
+    setBranch("All");
   };
 
   const goTo = (path) => {
@@ -167,14 +100,14 @@ export default function AllTenders() {
   return (
     <>
       <style jsx global>{`
-
         * {
           box-sizing: border-box;
         }
 
+        html,
         body {
           margin: 0;
-          background: #f5f7fb;
+          padding: 0;
           font-family:
             Inter,
             ui-sans-serif,
@@ -183,6 +116,7 @@ export default function AllTenders() {
             BlinkMacSystemFont,
             "Segoe UI",
             sans-serif;
+          background: #f5f7fb;
           color: #10213f;
         }
 
@@ -198,14 +132,14 @@ export default function AllTenders() {
           background: #f5f7fb;
         }
 
-        /* SIDEBAR */
+        /* ================= SIDEBAR ================= */
 
         .sidebar {
           width: 245px;
           min-width: 245px;
+          min-height: 100vh;
           background: #111a2b;
           color: white;
-          min-height: 100vh;
           padding: 22px 14px;
           display: flex;
           flex-direction: column;
@@ -305,7 +239,7 @@ export default function AllTenders() {
           line-height: 1.5;
         }
 
-        /* MAIN */
+        /* ================= MAIN ================= */
 
         .content {
           flex: 1;
@@ -393,7 +327,7 @@ export default function AllTenders() {
           color: #8a98ae;
         }
 
-        /* BODY */
+        /* ================= PAGE ================= */
 
         .page-body {
           padding: 28px 32px 45px;
@@ -434,7 +368,62 @@ export default function AllTenders() {
           background: #1d4ed8;
         }
 
-        /* KPI */
+        /* ================= FILTERS ================= */
+
+        .filter-panel {
+          background: white;
+          border: 1px solid #e4e9f1;
+          border-radius: 11px;
+          padding: 13px 13px;
+          margin-bottom: 18px;
+        }
+
+        .filter-row {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          flex-wrap: wrap;
+        }
+
+        .filter-title {
+          font-size: 11px;
+          font-weight: 700;
+          color: #10213f;
+          margin-right: 2px;
+        }
+
+        .filter-select {
+          height: 36px;
+          min-width: 90px;
+          border: 1px solid #dce3ed;
+          border-radius: 7px;
+          padding: 0 10px;
+          background: white;
+          color: #34445d;
+          font-size: 11px;
+          outline: none;
+        }
+
+        .filter-select:focus {
+          border-color: #2563eb;
+        }
+
+        .reset-btn {
+          border: 0;
+          background: #f1f3f7;
+          color: #52627b;
+          border-radius: 7px;
+          height: 36px;
+          padding: 0 13px;
+          font-size: 11px;
+          cursor: pointer;
+        }
+
+        .reset-btn:hover {
+          background: #e7ebf2;
+        }
+
+        /* ================= KPI ================= */
 
         .kpi-grid {
           display: grid;
@@ -448,7 +437,7 @@ export default function AllTenders() {
           border: 1px solid #e4e9f1;
           border-radius: 11px;
           padding: 18px;
-          min-height: 125px;
+          min-height: 115px;
         }
 
         .kpi-top {
@@ -470,22 +459,22 @@ export default function AllTenders() {
           font-weight: 700;
         }
 
-        .icon-0 {
+        .icon-blue {
           background: #eef5ff;
           color: #2563eb;
         }
 
-        .icon-1 {
+        .icon-green {
           background: #ecfdf5;
           color: #16a34a;
         }
 
-        .icon-2 {
+        .icon-purple {
           background: #f5f3ff;
           color: #7c3aed;
         }
 
-        .icon-3 {
+        .icon-orange {
           background: #fff7ed;
           color: #f97316;
         }
@@ -503,225 +492,172 @@ export default function AllTenders() {
           font-size: 10px;
         }
 
-        /* FILTER */
+        /* ================= CHART AREA ================= */
 
-        .filter-panel {
+        .charts-grid {
+          display: grid;
+          grid-template-columns: 1.7fr 1fr;
+          gap: 14px;
+        }
+
+        .chart-card {
           background: white;
           border: 1px solid #e4e9f1;
           border-radius: 11px;
-          padding: 19px;
-          margin-bottom: 18px;
+          min-height: 280px;
+          padding: 18px;
         }
 
-        .filter-title {
+        .chart-header {
           display: flex;
           justify-content: space-between;
-          align-items: center;
-          margin-bottom: 16px;
+          align-items: flex-start;
         }
 
-        .filter-title h2 {
+        .chart-title {
           margin: 0;
           font-size: 14px;
           color: #10213f;
         }
 
-        .reset-btn {
-          border: 1px solid #e0e6ef;
-          background: #f8fafc;
-          color: #43516a;
-          border-radius: 7px;
-          padding: 7px 13px;
-          font-size: 11px;
-          cursor: pointer;
-        }
-
-        .filter-grid {
-          display: grid;
-          grid-template-columns: 1.5fr 0.8fr 0.8fr 0.8fr;
-          gap: 12px;
-        }
-
-        .filter-field {
-          display: flex;
-          flex-direction: column;
-          gap: 7px;
-        }
-
-        .filter-field label {
+        .chart-subtitle {
+          margin-top: 5px;
+          color: #8a98ae;
           font-size: 10px;
-          color: #52627b;
-          font-weight: 600;
         }
 
-        .filter-field input,
-        .filter-field select {
-          height: 38px;
+        .year-select {
+          height: 36px;
           border: 1px solid #dce3ed;
           border-radius: 7px;
-          padding: 0 11px;
-          color: #26364f;
           background: white;
+          padding: 0 10px;
+          color: #34445d;
           font-size: 11px;
-          outline: none;
         }
 
-        .filter-field input:focus,
-        .filter-field select:focus {
-          border-color: #2563eb;
-          box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.08);
+        /* BAR CHART */
+
+        .bar-chart {
+          height: 190px;
+          margin-top: 28px;
+          display: flex;
+          align-items: flex-end;
+          justify-content: space-around;
+          gap: 14px;
+          border-bottom: 1px solid #e8edf4;
+          padding: 0 10px;
         }
 
-        /* TABLE */
+        .bar-group {
+          height: 100%;
+          flex: 1;
+          display: flex;
+          align-items: flex-end;
+          justify-content: center;
+          gap: 5px;
+        }
 
-        .table-card {
+        .bar {
+          width: 9px;
+          border-radius: 5px 5px 0 0;
+          background: #2563eb;
+        }
+
+        .bar.secondary {
+          background: #93c5fd;
+        }
+
+        .month-labels {
+          display: flex;
+          justify-content: space-around;
+          color: #94a3b8;
+          font-size: 9px;
+          margin-top: 8px;
+        }
+
+        /* DONUT */
+
+        .donut-area {
+          height: 220px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 25px;
+        }
+
+        .donut {
+          width: 145px;
+          height: 145px;
+          border-radius: 50%;
+          background:
+            conic-gradient(
+              #16a34a 0deg 160deg,
+              #2563eb 160deg 245deg,
+              #f97316 245deg 285deg,
+              #7c3aed 285deg 320deg,
+              #e11d48 320deg 360deg
+            );
+          position: relative;
+        }
+
+        .donut::after {
+          content: "";
+          position: absolute;
+          inset: 34px;
           background: white;
-          border: 1px solid #e4e9f1;
-          border-radius: 11px;
-          overflow: hidden;
+          border-radius: 50%;
         }
 
-        .table-header {
-          padding: 18px 19px;
-          border-bottom: 1px solid #e9edf3;
+        .legend {
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
         }
 
-        .table-header h2 {
-          margin: 0;
-          font-size: 14px;
-          color: #10213f;
-        }
-
-        .table-header p {
-          margin: 5px 0 0;
-          color: #8a98ae;
+        .legend-item {
+          display: flex;
+          align-items: center;
+          gap: 8px;
           font-size: 10px;
+          color: #52627b;
         }
 
-        .table-wrapper {
-          width: 100%;
-          overflow-x: auto;
+        .legend-dot {
+          width: 8px;
+          height: 8px;
+          border-radius: 50%;
         }
 
-        table {
-          width: 100%;
-          border-collapse: collapse;
-          min-width: 900px;
+        .dot-green {
+          background: #16a34a;
         }
 
-        th {
-          text-align: left;
-          padding: 12px 12px;
-          background: #fafbfd;
-          border-bottom: 1px solid #e5e9f1;
-          color: #65748d;
-          font-size: 9px;
-          font-weight: 700;
-          text-transform: uppercase;
-          letter-spacing: 0.3px;
+        .dot-blue {
+          background: #2563eb;
         }
 
-        td {
-          padding: 13px 12px;
-          border-bottom: 1px solid #edf0f5;
-          color: #43516a;
-          font-size: 11px;
-          vertical-align: middle;
+        .dot-orange {
+          background: #f97316;
         }
 
-        tbody tr:hover {
-          background: #fafcff;
+        .dot-purple {
+          background: #7c3aed;
         }
 
-        td strong {
-          color: #1c2d48;
-          font-weight: 600;
+        .dot-red {
+          background: #e11d48;
         }
 
-        td small {
-          display: block;
-          margin-top: 3px;
-          color: #9aa6b8;
-          font-size: 9px;
-        }
-
-        .tender-id {
-          color: #2563eb !important;
-        }
-
-        .amount {
-          font-weight: 600;
-          color: #26364f;
-        }
-
-        .status-badge {
-          display: inline-flex;
-          padding: 5px 9px;
-          border-radius: 20px;
-          font-size: 9px;
-          font-weight: 600;
-          white-space: nowrap;
-        }
-
-        .status-in-process {
-          background: #eef5ff;
-          color: #2563eb;
-        }
-
-        .status-submitted {
-          background: #ecfdf5;
-          color: #16a34a;
-        }
-
-        .status-result-awaited {
-          background: #fff7ed;
-          color: #ea580c;
-        }
-
-        .status-on-hold {
-          background: #f5f3ff;
-          color: #7c3aed;
-        }
-
-        .status-won {
-          background: #ecfdf5;
-          color: #15803d;
-        }
-
-        .status-lost {
-          background: #fff1f2;
-          color: #e11d48;
-        }
-
-        .view-button {
-          border: 1px solid #d7deea;
-          background: white;
-          color: #2563eb;
-          padding: 6px 12px;
-          border-radius: 6px;
-          font-size: 10px;
-          cursor: pointer;
-        }
-
-        .view-button:hover {
-          background: #eff6ff;
-        }
-
-        .empty-state {
-          text-align: center;
-          padding: 35px;
-          color: #8a98ae;
-        }
-
-        /* RESPONSIVE */
+        /* ================= RESPONSIVE ================= */
 
         @media (max-width: 1100px) {
           .kpi-grid {
             grid-template-columns: repeat(2, 1fr);
           }
 
-          .filter-grid {
-            grid-template-columns: 1fr 1fr;
+          .charts-grid {
+            grid-template-columns: 1fr;
           }
         }
 
@@ -771,16 +707,21 @@ export default function AllTenders() {
             grid-template-columns: 1fr;
           }
 
-          .filter-grid {
-            grid-template-columns: 1fr;
+          .filter-row {
+            align-items: stretch;
+            flex-direction: column;
+          }
+
+          .filter-select,
+          .reset-btn {
+            width: 100%;
           }
         }
-
       `}</style>
 
       <div className="app-shell">
 
-        {/* SIDEBAR */}
+        {/* ================= SIDEBAR ================= */}
 
         <aside className="sidebar">
 
@@ -800,41 +741,46 @@ export default function AllTenders() {
 
           <nav className="nav">
 
-          <NavItem
-  icon="⌂"
-  label="Dashboard"
-  active={activeNav === "Dashboard"}
-  onClick={() => {
-    window.location.href = "/";
-  }}
-/>
+            {/* DASHBOARD */}
+
+            <NavItem
+              icon="⌂"
+              label="Dashboard"
+              active={true}
+              onClick={() => goTo("/")}
+            />
 
             <div className="nav-label">
               TENDERS
             </div>
 
+            {/* ALL TENDERS */}
+
             <NavItem
               icon="▣"
               label="All Tenders"
-              active={true}
+              active={false}
               onClick={() => goTo("/all-tenders")}
             />
 
             <NavItem
               icon="◉"
               label="My Tenders"
+              active={false}
               onClick={() => goTo("/my-tenders")}
             />
 
             <NavItem
               icon="◌"
               label="On Hold"
+              active={false}
               onClick={() => goTo("/on-hold")}
             />
 
             <NavItem
               icon="◷"
               label="Result Awaited"
+              active={false}
               onClick={() => goTo("/result-awaited")}
             />
 
@@ -845,36 +791,42 @@ export default function AllTenders() {
             <NavItem
               icon="▥"
               label="Reports & Analytics"
+              active={false}
               onClick={() => goTo("/reports")}
             />
 
             <NavItem
               icon="◎"
               label="Targets"
+              active={false}
               onClick={() => goTo("/targets")}
             />
 
             <NavItem
               icon="⚠"
               label="Data Quality"
+              active={false}
               onClick={() => goTo("/data-quality")}
             />
 
             <NavItem
               icon="⚙"
               label="Masters"
+              active={false}
               onClick={() => goTo("/masters")}
             />
 
             <NavItem
               icon="♙"
               label="Users & Roles"
+              active={false}
               onClick={() => goTo("/users-roles")}
             />
 
             <NavItem
               icon="≡"
               label="Audit History"
+              active={false}
               onClick={() => goTo("/audit-history")}
             />
 
@@ -892,7 +844,7 @@ export default function AllTenders() {
 
         </aside>
 
-        {/* MAIN CONTENT */}
+        {/* ================= MAIN ================= */}
 
         <section className="content">
 
@@ -902,19 +854,19 @@ export default function AllTenders() {
 
             <div>
               <div className="breadcrumb">
-                Home / Tenders / All Tenders
+                Home / Dashboard
               </div>
 
               <h1>
-                All Tenders
+                Dashboard
               </h1>
             </div>
 
             <div className="top-actions">
 
               <button
-                className="icon-btn"
                 type="button"
+                className="icon-btn"
               >
                 ♧
                 <span className="notification-dot"></span>
@@ -958,122 +910,109 @@ export default function AllTenders() {
                 </h2>
 
                 <p>
-                  View and manage all tender opportunities.
+                  Here's your tender performance overview.
                 </p>
               </div>
 
               <button
                 className="primary-btn"
                 type="button"
+                onClick={() => goTo("/all-tenders")}
               >
-                ＋ New Tender
+                + New Tender
               </button>
 
             </div>
 
-            {/* KPI CARDS */}
-
-            <section className="kpi-grid">
-
-              <div className="kpi-card">
-
-                <div className="kpi-top">
-                  <span>Total Tenders</span>
-
-                  <div className="kpi-icon icon-0">
-                    ↗
-                  </div>
-                </div>
-
-                <div className="kpi-value">
-                  {filteredTenders.length}
-                </div>
-
-                <div className="kpi-sub">
-                  Matching records
-                </div>
-
-              </div>
-
-              <div className="kpi-card">
-
-                <div className="kpi-top">
-                  <span>Total Potential Amount</span>
-
-                  <div className="kpi-icon icon-1">
-                    ₹
-                  </div>
-                </div>
-
-                <div className="kpi-value">
-                  {formatAmount(totalAmount)}
-                </div>
-
-                <div className="kpi-sub">
-                  Filtered tender value
-                </div>
-
-              </div>
-
-              <div className="kpi-card">
-
-                <div className="kpi-top">
-                  <span>Submitted</span>
-
-                  <div className="kpi-icon icon-2">
-                    ✓
-                  </div>
-                </div>
-
-                <div className="kpi-value">
-                  {
-                    filteredTenders.filter(
-                      (t) => t.status === "Submitted"
-                    ).length
-                  }
-                </div>
-
-                <div className="kpi-sub">
-                  Currently submitted
-                </div>
-
-              </div>
-
-              <div className="kpi-card">
-
-                <div className="kpi-top">
-                  <span>In Process</span>
-
-                  <div className="kpi-icon icon-3">
-                    ◔
-                  </div>
-                </div>
-
-                <div className="kpi-value">
-                  {
-                    filteredTenders.filter(
-                      (t) => t.status === "In Process"
-                    ).length
-                  }
-                </div>
-
-                <div className="kpi-sub">
-                  Currently working
-                </div>
-
-              </div>
-
-            </section>
-
-            {/* SEARCH FILTERS */}
+            {/* FILTERS */}
 
             <section className="filter-panel">
 
-              <div className="filter-title">
+              <div className="filter-row">
 
-                <h2>
-                  Search & Filters
-                </h2>
+                <span className="filter-title">
+                  Filters
+                </span>
+
+                <select
+                  className="filter-select"
+                  value={year}
+                  onChange={(e) => setYear(e.target.value)}
+                >
+                  <option>2026</option>
+                  <option>2025</option>
+                  <option>2024</option>
+                </select>
+
+                <select
+                  className="filter-select"
+                  value={month}
+                  onChange={(e) => setMonth(e.target.value)}
+                >
+                  <option>August</option>
+                  <option>July</option>
+                  <option>June</option>
+                  <option>May</option>
+                </select>
+
+                <select
+                  className="filter-select"
+                  value={business}
+                  onChange={(e) => setBusiness(e.target.value)}
+                >
+                  <option>All Business</option>
+                  <option>Corporate</option>
+                  <option>Retail</option>
+                  <option>Government</option>
+                </select>
+
+                <select
+                  className="filter-select"
+                  value={status}
+                  onChange={(e) => setStatus(e.target.value)}
+                >
+                  <option>All</option>
+                  <option>Submitted</option>
+                  <option>In Process</option>
+                  <option>Won</option>
+                  <option>Lost</option>
+                  <option>On Hold</option>
+                </select>
+
+                <select
+                  className="filter-select"
+                  value={zsm}
+                  onChange={(e) => setZsm(e.target.value)}
+                >
+                  <option>All ZSM</option>
+                  <option>Rahul</option>
+                  <option>Priya</option>
+                  <option>Amit</option>
+                </select>
+
+                <select
+                  className="filter-select"
+                  value={category}
+                  onChange={(e) => setCategory(e.target.value)}
+                >
+                  <option>All Categories</option>
+                  <option>IT Services</option>
+                  <option>Consulting</option>
+                  <option>Technology</option>
+                  <option>Infrastructure</option>
+                </select>
+
+                <select
+                  className="filter-select"
+                  value={branch}
+                  onChange={(e) => setBranch(e.target.value)}
+                >
+                  <option>All</option>
+                  <option>Pune</option>
+                  <option>Mumbai</option>
+                  <option>Delhi</option>
+                  <option>Bangalore</option>
+                </select>
 
                 <button
                   className="reset-btn"
@@ -1085,208 +1024,206 @@ export default function AllTenders() {
 
               </div>
 
-              <div className="filter-grid">
+            </section>
 
-                <div className="filter-field">
+            {/* KPI CARDS */}
 
-                  <label>
-                    Search
-                  </label>
+            <section className="kpi-grid">
 
-                  <input
-                    value={search}
-                    onChange={(e) =>
-                      setSearch(e.target.value)
-                    }
-                    placeholder="Search Tender ID, Client or Assignee..."
-                  />
+              {kpis.map((item) => (
+                <div className="kpi-card" key={item.title}>
 
-                </div>
+                  <div className="kpi-top">
 
-                <div className="filter-field">
+                    <span>
+                      {item.title}
+                    </span>
 
-                  <label>
-                    Status
-                  </label>
+                    <div
+                      className={`kpi-icon icon-${item.iconClass}`}
+                    >
+                      {item.icon}
+                    </div>
 
-                  <select
-                    value={status}
-                    onChange={(e) =>
-                      setStatus(e.target.value)
-                    }
-                  >
-                    <option>All Status</option>
-                    <option>In Process</option>
-                    <option>Submitted</option>
-                    <option>Result Awaited</option>
-                    <option>On Hold</option>
-                    <option>Won</option>
-                    <option>Lost</option>
-                  </select>
+                  </div>
+
+                  <div className="kpi-value">
+                    {item.value}
+                  </div>
+
+                  <div className="kpi-sub">
+                    {item.subtitle}
+                  </div>
 
                 </div>
-
-                <div className="filter-field">
-
-                  <label>
-                    Branch
-                  </label>
-
-                  <select
-                    value={branch}
-                    onChange={(e) =>
-                      setBranch(e.target.value)
-                    }
-                  >
-                    {branches.map((item) => (
-                      <option key={item}>
-                        {item}
-                      </option>
-                    ))}
-                  </select>
-
-                </div>
-
-                <div className="filter-field">
-
-                  <label>
-                    Category
-                  </label>
-
-                  <select
-                    value={category}
-                    onChange={(e) =>
-                      setCategory(e.target.value)
-                    }
-                  >
-                    {categories.map((item) => (
-                      <option key={item}>
-                        {item}
-                      </option>
-                    ))}
-                  </select>
-
-                </div>
-
-              </div>
+              ))}
 
             </section>
 
-            {/* TABLE */}
+            {/* CHARTS */}
 
-            <section className="table-card">
+            <section className="charts-grid">
 
-              <div className="table-header">
+              {/* TENDER PERFORMANCE */}
 
-                <h2>
-                  Tender List
-                </h2>
+              <div className="chart-card">
 
-                <p>
-                  {filteredTenders.length} records found
-                </p>
+                <div className="chart-header">
+
+                  <div>
+                    <h2 className="chart-title">
+                      Tender Performance
+                    </h2>
+
+                    <div className="chart-subtitle">
+                      Monthly submitted vs won tenders
+                    </div>
+                  </div>
+
+                  <select
+                    className="year-select"
+                    value={year}
+                    onChange={(e) => setYear(e.target.value)}
+                  >
+                    <option>2026</option>
+                    <option>2025</option>
+                  </select>
+
+                </div>
+
+                <div className="bar-chart">
+
+                  <div className="bar-group">
+                    <div
+                      className="bar"
+                      style={{ height: "35%" }}
+                    ></div>
+                    <div
+                      className="bar secondary"
+                      style={{ height: "18%" }}
+                    ></div>
+                  </div>
+
+                  <div className="bar-group">
+                    <div
+                      className="bar"
+                      style={{ height: "52%" }}
+                    ></div>
+                    <div
+                      className="bar secondary"
+                      style={{ height: "25%" }}
+                    ></div>
+                  </div>
+
+                  <div className="bar-group">
+                    <div
+                      className="bar"
+                      style={{ height: "42%" }}
+                    ></div>
+                    <div
+                      className="bar secondary"
+                      style={{ height: "22%" }}
+                    ></div>
+                  </div>
+
+                  <div className="bar-group">
+                    <div
+                      className="bar"
+                      style={{ height: "70%" }}
+                    ></div>
+                    <div
+                      className="bar secondary"
+                      style={{ height: "35%" }}
+                    ></div>
+                  </div>
+
+                  <div className="bar-group">
+                    <div
+                      className="bar"
+                      style={{ height: "50%" }}
+                    ></div>
+                    <div
+                      className="bar secondary"
+                      style={{ height: "28%" }}
+                    ></div>
+                  </div>
+
+                  <div className="bar-group">
+                    <div
+                      className="bar"
+                      style={{ height: "75%" }}
+                    ></div>
+                    <div
+                      className="bar secondary"
+                      style={{ height: "40%" }}
+                    ></div>
+                  </div>
+
+                </div>
+
+                <div className="month-labels">
+                  <span>Jan</span>
+                  <span>Feb</span>
+                  <span>Mar</span>
+                  <span>Apr</span>
+                  <span>May</span>
+                  <span>Jun</span>
+                </div>
 
               </div>
 
-              <div className="table-wrapper">
+              {/* OUTCOME DISTRIBUTION */}
 
-                <table>
+              <div className="chart-card">
 
-                  <thead>
+                <div className="chart-header">
 
-                    <tr>
-                      <th>Tender ID</th>
-                      <th>Client</th>
-                      <th>Branch</th>
-                      <th>Assigned To</th>
-                      <th>Deadline</th>
-                      <th>Amount</th>
-                      <th>Status</th>
-                      <th>Result</th>
-                      <th>Action</th>
-                    </tr>
+                  <div>
+                    <h2 className="chart-title">
+                      Outcome Distribution
+                    </h2>
 
-                  </thead>
+                    <div className="chart-subtitle">
+                      Current tender result mix
+                    </div>
+                  </div>
 
-                  <tbody>
+                </div>
 
-                    {filteredTenders.length > 0 ? (
+                <div className="donut-area">
 
-                      filteredTenders.map((tender) => (
+                  <div className="donut"></div>
 
-                        <tr key={tender.id}>
+                  <div className="legend">
 
-                          <td>
-                            <strong className="tender-id">
-                              {tender.id}
-                            </strong>
-                          </td>
+                    <div className="legend-item">
+                      <span className="legend-dot dot-green"></span>
+                      Won
+                    </div>
 
-                          <td>
-                            <strong>
-                              {tender.client}
-                            </strong>
+                    <div className="legend-item">
+                      <span className="legend-dot dot-blue"></span>
+                      Submitted
+                    </div>
 
-                            <small>
-                              {tender.category}
-                            </small>
-                          </td>
+                    <div className="legend-item">
+                      <span className="legend-dot dot-orange"></span>
+                      In Process
+                    </div>
 
-                          <td>
-                            {tender.branch}
-                          </td>
+                    <div className="legend-item">
+                      <span className="legend-dot dot-purple"></span>
+                      On Hold
+                    </div>
 
-                          <td>
-                            {tender.assigned}
-                          </td>
+                    <div className="legend-item">
+                      <span className="legend-dot dot-red"></span>
+                      Lost
+                    </div>
 
-                          <td>
-                            {tender.deadline}
-                          </td>
+                  </div>
 
-                          <td className="amount">
-                            {formatAmount(tender.amount)}
-                          </td>
-
-                          <td>
-                            <StatusBadge
-                              status={tender.status}
-                            />
-                          </td>
-
-                          <td>
-                            {tender.result}
-                          </td>
-
-                          <td>
-                            <button
-                              className="view-button"
-                              type="button"
-                            >
-                              View
-                            </button>
-                          </td>
-
-                        </tr>
-
-                      ))
-
-                    ) : (
-
-                      <tr>
-                        <td
-                          colSpan="9"
-                          className="empty-state"
-                        >
-                          No tenders found.
-                        </td>
-                      </tr>
-
-                    )}
-
-                  </tbody>
-
-                </table>
+                </div>
 
               </div>
 
