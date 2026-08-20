@@ -139,8 +139,9 @@ export default function Dashboard() {
             icon="▣"
             label="All Tenders"
             active={activeNav === "All Tenders"}
-            onClick={setActiveNav}
-          />
+            onClick={() => {
+  window.location.href = "/all-tenders";
+}}
 
           <NavItem
             icon="◉"
