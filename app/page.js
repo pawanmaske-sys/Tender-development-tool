@@ -283,7 +283,7 @@ export default function Dashboard() {
 
             <div>
               <h2>
-                Good afternoon, Pawan
+                Good afternoon, Pawan👋
               </h2>
 
               <p>
