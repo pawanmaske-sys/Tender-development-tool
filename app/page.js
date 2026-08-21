@@ -64,20 +64,22 @@ const kpis = [
 export default function Dashboard() {
   const [year, setYear] = useState("2026");
   const [month, setMonth] = useState("August");
-  const [business, setBusiness] = useState("All Business");
-  const [status, setStatus] = useState("All");
-  const [zsm, setZsm] = useState("All ZSM");
-  const [category, setCategory] = useState("All Categories");
-  const [branch, setBranch] = useState("All");
+
+  const [business, setBusiness] = useState("Select All");
+  const [status, setStatus] = useState("Select All");
+  const [zsm, setZsm] = useState("Select All");
+  const [category, setCategory] = useState("Select All");
+  const [branch, setBranch] = useState("Select All");
 
   const resetFilters = () => {
     setYear("2026");
     setMonth("August");
-    setBusiness("All Business");
-    setStatus("All");
-    setZsm("All ZSM");
-    setCategory("All Categories");
-    setBranch("All");
+
+    setBusiness("Select All");
+    setStatus("Select All");
+    setZsm("Select All");
+    setCategory("Select All");
+    setBranch("Select All");
   };
 
   const goTo = (path) => {
@@ -86,18 +88,25 @@ export default function Dashboard() {
 
   return (
     <main className="content">
-      
-      {/* TOP BAR */}
+
+      {/* =====================================================
+          TOP BAR
+          ===================================================== */}
+
       <header className="topbar">
+
         <div>
           <div className="breadcrumb">
             Home / Dashboard
           </div>
 
-          <h1>Dashboard</h1>
+          <h1>
+            Dashboard
+          </h1>
         </div>
 
         <div className="top-actions">
+
           <button
             type="button"
             className="icon-btn"
@@ -107,11 +116,13 @@ export default function Dashboard() {
           </button>
 
           <div className="profile">
+
             <div className="avatar">
               PM
             </div>
 
             <div>
+
               <div className="profile-name">
                 Pawan Maske
               </div>
@@ -119,21 +130,35 @@ export default function Dashboard() {
               <div className="profile-role">
                 Tender Executive
               </div>
+
             </div>
 
             <span className="chevron">
               ⌄
             </span>
+
           </div>
+
         </div>
+
       </header>
 
-      {/* PAGE BODY */}
+
+      {/* =====================================================
+          PAGE BODY
+          ===================================================== */}
+
       <main className="page-body">
 
-        {/* WELCOME */}
+
+        {/* ===================================================
+            WELCOME
+            =================================================== */}
+
         <div className="welcome-row">
+
           <div>
+
             <h2>
               Good afternoon, Pawan👋
             </h2>
@@ -141,6 +166,7 @@ export default function Dashboard() {
             <p>
               Here's your tender performance overview.
             </p>
+
           </div>
 
           <button
@@ -150,9 +176,14 @@ export default function Dashboard() {
           >
             + New Tender
           </button>
+
         </div>
 
-        {/* FILTERS */}
+
+        {/* ===================================================
+            FILTERS
+            =================================================== */}
+
         <section className="filter-panel">
 
           <div className="filter-row">
@@ -161,85 +192,199 @@ export default function Dashboard() {
               Filters
             </span>
 
+
+            {/* YEAR */}
+
             <select
               className="filter-select"
               value={year}
               onChange={(e) => setYear(e.target.value)}
             >
-              <option>2026</option>
-              <option>2025</option>
-              <option>2024</option>
+              <option value="2026">
+                2026
+              </option>
+
+              <option value="2025">
+                2025
+              </option>
+
+              <option value="2024">
+                2024
+              </option>
             </select>
+
+
+            {/* MONTH */}
 
             <select
               className="filter-select"
               value={month}
               onChange={(e) => setMonth(e.target.value)}
             >
-              <option>August</option>
-              <option>July</option>
-              <option>June</option>
-              <option>May</option>
+              <option value="August">
+                August
+              </option>
+
+              <option value="July">
+                July
+              </option>
+
+              <option value="June">
+                June
+              </option>
+
+              <option value="May">
+                May
+              </option>
             </select>
+
+
+            {/* BUSINESS */}
 
             <select
               className="filter-select"
               value={business}
               onChange={(e) => setBusiness(e.target.value)}
             >
-              <option>All Business</option>
-              <option>Corporate</option>
-              <option>Retail</option>
-              <option>Government</option>
+              <option value="Select All">
+                Select All
+              </option>
+
+              <option value="Corporate">
+                Corporate
+              </option>
+
+              <option value="Retail">
+                Retail
+              </option>
+
+              <option value="Government">
+                Government
+              </option>
             </select>
+
+
+            {/* STATUS */}
 
             <select
               className="filter-select"
               value={status}
               onChange={(e) => setStatus(e.target.value)}
             >
-              <option>All</option>
-              <option>Submitted</option>
-              <option>In Process</option>
-              <option>Won</option>
-              <option>Lost</option>
-              <option>On Hold</option>
+              <option value="Select All">
+                Select All
+              </option>
+
+              <option value="Submitted">
+                Submitted
+              </option>
+
+              <option value="In Process">
+                In Process
+              </option>
+
+              <option value="Won">
+                Won
+              </option>
+
+              <option value="Lost">
+                Lost
+              </option>
+
+              <option value="On Hold">
+                On Hold
+              </option>
+
+              <option value="Result Awaited">
+                Result Awaited
+              </option>
             </select>
+
+
+            {/* ZSM */}
 
             <select
               className="filter-select"
               value={zsm}
               onChange={(e) => setZsm(e.target.value)}
             >
-              <option>All ZSM</option>
-              <option>Rahul</option>
-              <option>Priya</option>
-              <option>Amit</option>
+              <option value="Select All">
+                Select All
+              </option>
+
+              <option value="Rahul">
+                Rahul
+              </option>
+
+              <option value="Priya">
+                Priya
+              </option>
+
+              <option value="Amit">
+                Amit
+              </option>
             </select>
+
+
+            {/* CATEGORY */}
 
             <select
               className="filter-select"
               value={category}
               onChange={(e) => setCategory(e.target.value)}
             >
-              <option>All Categories</option>
-              <option>IT Services</option>
-              <option>Consulting</option>
-              <option>Technology</option>
-              <option>Infrastructure</option>
+              <option value="Select All">
+                Select All
+              </option>
+
+              <option value="IT Services">
+                IT Services
+              </option>
+
+              <option value="Consulting">
+                Consulting
+              </option>
+
+              <option value="Technology">
+                Technology
+              </option>
+
+              <option value="Infrastructure">
+                Infrastructure
+              </option>
             </select>
+
+
+            {/* BRANCH */}
 
             <select
               className="filter-select"
               value={branch}
               onChange={(e) => setBranch(e.target.value)}
             >
-              <option>All</option>
-              <option>Pune</option>
-              <option>Mumbai</option>
-              <option>Delhi</option>
-              <option>Bangalore</option>
+              <option value="Select All">
+                Select All
+              </option>
+
+              <option value="Pune">
+                Pune
+              </option>
+
+              <option value="Mumbai">
+                Mumbai
+              </option>
+
+              <option value="Delhi">
+                Delhi
+              </option>
+
+              <option value="Bangalore">
+                Bangalore
+              </option>
             </select>
+
+
+            {/* RESET */}
 
             <button
               className="reset-btn"
@@ -250,12 +395,18 @@ export default function Dashboard() {
             </button>
 
           </div>
+
         </section>
 
-        {/* KPI CARDS */}
+
+        {/* ===================================================
+            KPI CARDS
+            =================================================== */}
+
         <section className="kpi-grid">
 
           {kpis.map((item) => (
+
             <div
               className="kpi-card"
               key={item.title}
@@ -284,19 +435,29 @@ export default function Dashboard() {
               </div>
 
             </div>
+
           ))}
 
         </section>
 
-        {/* CHARTS */}
+
+        {/* ===================================================
+            CHARTS
+            =================================================== */}
+
         <section className="charts-grid">
 
-          {/* TENDER PERFORMANCE */}
+
+          {/* =================================================
+              TENDER PERFORMANCE
+              ================================================= */}
+
           <div className="chart-card">
 
             <div className="chart-header">
 
               <div>
+
                 <h2 className="chart-title">
                   Tender Performance
                 </h2>
@@ -304,6 +465,7 @@ export default function Dashboard() {
                 <div className="chart-subtitle">
                   Monthly submitted vs won tenders
                 </div>
+
               </div>
 
               <select
@@ -311,16 +473,25 @@ export default function Dashboard() {
                 value={year}
                 onChange={(e) => setYear(e.target.value)}
               >
-                <option>2026</option>
-                <option>2025</option>
+
+                <option value="2026">
+                  2026
+                </option>
+
+                <option value="2025">
+                  2025
+                </option>
+
               </select>
 
             </div>
+
 
             <div className="bar-chart">
 
               {[35, 52, 42, 70, 50, 75].map(
                 (height, index) => (
+
                   <div
                     className="bar-group"
                     key={index}
@@ -341,28 +512,37 @@ export default function Dashboard() {
                     ></div>
 
                   </div>
+
                 )
               )}
 
             </div>
 
+
             <div className="month-labels">
+
               <span>Jan</span>
               <span>Feb</span>
               <span>Mar</span>
               <span>Apr</span>
               <span>May</span>
               <span>Jun</span>
+
             </div>
 
           </div>
 
-          {/* OUTCOME DISTRIBUTION */}
+
+          {/* =================================================
+              OUTCOME DISTRIBUTION
+              ================================================= */}
+
           <div className="chart-card">
 
             <div className="chart-header">
 
               <div>
+
                 <h2 className="chart-title">
                   Outcome Distribution
                 </h2>
@@ -370,39 +550,61 @@ export default function Dashboard() {
                 <div className="chart-subtitle">
                   Current tender result mix
                 </div>
+
               </div>
 
             </div>
+
 
             <div className="donut-area">
 
               <div className="donut"></div>
 
+
               <div className="legend">
 
                 <div className="legend-item">
+
                   <span className="legend-dot dot-green"></span>
+
                   Won
+
                 </div>
 
+
                 <div className="legend-item">
+
                   <span className="legend-dot dot-blue"></span>
+
                   Submitted
+
                 </div>
 
+
                 <div className="legend-item">
+
                   <span className="legend-dot dot-orange"></span>
+
                   In Process
+
                 </div>
 
+
                 <div className="legend-item">
+
                   <span className="legend-dot dot-purple"></span>
+
                   On Hold
+
                 </div>
 
+
                 <div className="legend-item">
+
                   <span className="legend-dot dot-red"></span>
+
                   Lost
+
                 </div>
 
               </div>
