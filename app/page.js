@@ -75,6 +75,7 @@ function NavItem({ icon, label, active, onClick }) {
 }
 
 export default function Dashboard() {
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [year, setYear] = useState("2026");
   const [month, setMonth] = useState("August");
   const [business, setBusiness] = useState("All Business");
