@@ -75,8 +75,6 @@ function NavItem({ icon, label, active, onClick }) {
 }
 
 export default function Dashboard() {
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-
   const [year, setYear] = useState("2026");
   const [month, setMonth] = useState("August");
   const [business, setBusiness] = useState("All Business");
@@ -149,14 +147,6 @@ export default function Dashboard() {
             width 0.25s ease,
             min-width 0.25s ease,
             padding 0.25s ease;
-        }
-
-        /* COLLAPSED SIDEBAR */
-
-        .sidebar.collapsed {
-          width: 72px;
-          min-width: 72px;
-          padding: 22px 9px;
         }
 
         .brand {
@@ -825,11 +815,7 @@ export default function Dashboard() {
 
         {/* ================= SIDEBAR ================= */}
 
-        <aside
-          className={`sidebar ${
-            sidebarCollapsed ? "collapsed" : ""
-          }`}
-        >
+        <aside className="sidebar">
 
           {/* BRAND */}
 
@@ -850,41 +836,6 @@ export default function Dashboard() {
             </div>
 
           </div>
-
-          {/* COLLAPSE BUTTON */}
-
-          <button
-            type="button"
-            className="collapse-button"
-            onClick={() =>
-              setSidebarCollapsed((prev) => !prev)
-            }
-            title={
-              sidebarCollapsed
-                ? "Expand sidebar"
-                : "Collapse sidebar"
-            }
-          >
-            <span className="collapse-icon">
-              {sidebarCollapsed ? "»" : "«"}
-            </span>
-
-            <span className="collapse-text">
-              Collapse
-            </span>
-          </button>
-
-          {/* NAVIGATION */}
-
-          <nav className="nav">
-
-            <NavItem
-              icon="⌂"
-              label="Dashboard"
-              active={true}
-              collapsed={sidebarCollapsed}
-              onClick={() => goTo("/")}
-            />
 
             <div className="nav-label">
               TENDERS
