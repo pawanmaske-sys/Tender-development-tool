@@ -61,19 +61,15 @@ const kpis = [
   },
 ];
 
-function NavItem({ icon, label, active, onClick, collapsed }) {
+function NavItem({ icon, label, active, onClick }) {
   return (
     <button
       type="button"
-      className={`nav-item ${active ? "active" : ""} ${
-        collapsed ? "nav-item-collapsed" : ""
-      }`}
+      className={`nav-item ${active ? "active" : ""}`}
       onClick={onClick}
-      title={collapsed ? label : ""}
     >
       <span className="nav-icon">{icon}</span>
-
-      {!collapsed && <span>{label}</span>}
+      <span>{label}</span>
     </button>
   );
 }
