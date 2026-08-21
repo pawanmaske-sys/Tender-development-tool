@@ -61,21 +61,26 @@ const kpis = [
   },
 ];
 
-function NavItem({ icon, label, active, onClick }) {
+function NavItem({ icon, label, active, onClick, collapsed }) {
   return (
     <button
       type="button"
-      className={`nav-item ${active ? "active" : ""}`}
+      className={`nav-item ${active ? "active" : ""} ${
+        collapsed ? "nav-item-collapsed" : ""
+      }`}
       onClick={onClick}
+      title={collapsed ? label : ""}
     >
       <span className="nav-icon">{icon}</span>
-      <span>{label}</span>
+
+      {!collapsed && <span>{label}</span>}
     </button>
   );
 }
 
 export default function Dashboard() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+
   const [year, setYear] = useState("2026");
   const [month, setMonth] = useState("August");
   const [business, setBusiness] = useState("All Business");
@@ -144,18 +149,31 @@ export default function Dashboard() {
           padding: 22px 14px;
           display: flex;
           flex-direction: column;
+          transition:
+            width 0.25s ease,
+            min-width 0.25s ease,
+            padding 0.25s ease;
+        }
+
+        /* COLLAPSED SIDEBAR */
+
+        .sidebar.collapsed {
+          width: 72px;
+          min-width: 72px;
+          padding: 22px 9px;
         }
 
         .brand {
           display: flex;
           align-items: center;
           gap: 12px;
-          padding: 0 10px 28px;
+          padding: 0 10px 14px;
         }
 
         .brand-mark {
           width: 38px;
           height: 38px;
+          min-width: 38px;
           border-radius: 9px;
           background: #2563eb;
           display: flex;
@@ -165,15 +183,72 @@ export default function Dashboard() {
           font-weight: 700;
         }
 
+        .brand-info {
+          min-width: 0;
+          flex: 1;
+        }
+
         .brand-name {
           font-size: 17px;
           font-weight: 700;
+          white-space: nowrap;
         }
 
         .brand-sub {
           margin-top: 2px;
           font-size: 11px;
           color: #94a3b8;
+          white-space: nowrap;
+        }
+
+        /* COLLAPSE BUTTON */
+
+        .collapse-button {
+          width: 100%;
+          height: 34px;
+          border: 1px solid #26344d;
+          background: #18233a;
+          color: #aeb8ca;
+          border-radius: 7px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 7px;
+          cursor: pointer;
+          font-size: 11px;
+          margin-bottom: 15px;
+          transition: 0.15s ease;
+        }
+
+        .collapse-button:hover {
+          background: #22304a;
+          color: white;
+        }
+
+        .collapse-icon {
+          font-size: 15px;
+          line-height: 1;
+          font-weight: 600;
+        }
+
+        .sidebar.collapsed .brand {
+          justify-content: center;
+          padding-left: 0;
+          padding-right: 0;
+        }
+
+        .sidebar.collapsed .brand-info {
+          display: none;
+        }
+
+        .sidebar.collapsed .collapse-button {
+          width: 38px;
+          margin-left: auto;
+          margin-right: auto;
+        }
+
+        .sidebar.collapsed .collapse-text {
+          display: none;
         }
 
         .nav {
@@ -188,6 +263,18 @@ export default function Dashboard() {
           letter-spacing: 1px;
           color: #64748b;
           padding: 20px 10px 7px;
+        }
+
+        .sidebar.collapsed .nav-label {
+          text-align: center;
+          font-size: 0;
+          padding: 12px 0;
+        }
+
+        .sidebar.collapsed .nav-label::after {
+          content: "•";
+          font-size: 9px;
+          color: #64748b;
         }
 
         .nav-item {
@@ -218,8 +305,15 @@ export default function Dashboard() {
 
         .nav-icon {
           width: 17px;
+          min-width: 17px;
           text-align: center;
           font-size: 14px;
+        }
+
+        .nav-item-collapsed {
+          justify-content: center;
+          padding-left: 10px;
+          padding-right: 10px;
         }
 
         .sidebar-footer {
@@ -238,6 +332,10 @@ export default function Dashboard() {
           font-size: 10px;
           color: #718096;
           line-height: 1.5;
+        }
+
+        .sidebar.collapsed .sidebar-footer {
+          display: none;
         }
 
         /* ================= MAIN ================= */
@@ -671,14 +769,21 @@ export default function Dashboard() {
 
           .brand {
             justify-content: center;
-            padding: 0 0 25px;
+            padding: 0 0 14px;
           }
 
-          .brand > div:not(.brand-mark),
+          .brand-info,
+          .collapse-text,
           .nav-item span:last-child,
           .nav-label,
           .sidebar-footer {
             display: none;
+          }
+
+          .collapse-button {
+            width: 38px;
+            margin-left: auto;
+            margin-right: auto;
           }
 
           .nav-item {
@@ -724,12 +829,21 @@ export default function Dashboard() {
 
         {/* ================= SIDEBAR ================= */}
 
-        <aside className="sidebar">
+        <aside
+          className={`sidebar ${
+            sidebarCollapsed ? "collapsed" : ""
+          }`}
+        >
+
+          {/* BRAND */}
 
           <div className="brand">
-            <div className="brand-mark">T</div>
 
-            <div>
+            <div className="brand-mark">
+              T
+            </div>
+
+            <div className="brand-info">
               <div className="brand-name">
                 TenderHub
               </div>
@@ -738,16 +852,41 @@ export default function Dashboard() {
                 Management Tool
               </div>
             </div>
+
           </div>
 
-          <nav className="nav">
+          {/* COLLAPSE BUTTON */}
 
-            {/* DASHBOARD */}
+          <button
+            type="button"
+            className="collapse-button"
+            onClick={() =>
+              setSidebarCollapsed((prev) => !prev)
+            }
+            title={
+              sidebarCollapsed
+                ? "Expand sidebar"
+                : "Collapse sidebar"
+            }
+          >
+            <span className="collapse-icon">
+              {sidebarCollapsed ? "»" : "«"}
+            </span>
+
+            <span className="collapse-text">
+              Collapse
+            </span>
+          </button>
+
+          {/* NAVIGATION */}
+
+          <nav className="nav">
 
             <NavItem
               icon="⌂"
               label="Dashboard"
               active={true}
+              collapsed={sidebarCollapsed}
               onClick={() => goTo("/")}
             />
 
@@ -755,12 +894,11 @@ export default function Dashboard() {
               TENDERS
             </div>
 
-            {/* ALL TENDERS */}
-
             <NavItem
               icon="▣"
               label="All Tenders"
               active={false}
+              collapsed={sidebarCollapsed}
               onClick={() => goTo("/all-tenders")}
             />
 
@@ -768,6 +906,7 @@ export default function Dashboard() {
               icon="◉"
               label="My Tenders"
               active={false}
+              collapsed={sidebarCollapsed}
               onClick={() => goTo("/my-tenders")}
             />
 
@@ -775,6 +914,7 @@ export default function Dashboard() {
               icon="◌"
               label="On Hold"
               active={false}
+              collapsed={sidebarCollapsed}
               onClick={() => goTo("/on-hold")}
             />
 
@@ -782,6 +922,7 @@ export default function Dashboard() {
               icon="◷"
               label="Result Awaited"
               active={false}
+              collapsed={sidebarCollapsed}
               onClick={() => goTo("/result-awaited")}
             />
 
@@ -793,6 +934,7 @@ export default function Dashboard() {
               icon="▥"
               label="Reports & Analytics"
               active={false}
+              collapsed={sidebarCollapsed}
               onClick={() => goTo("/reports")}
             />
 
@@ -800,6 +942,7 @@ export default function Dashboard() {
               icon="◎"
               label="Targets"
               active={false}
+              collapsed={sidebarCollapsed}
               onClick={() => goTo("/targets")}
             />
 
@@ -807,6 +950,7 @@ export default function Dashboard() {
               icon="⚠"
               label="Data Quality"
               active={false}
+              collapsed={sidebarCollapsed}
               onClick={() => goTo("/data-quality")}
             />
 
@@ -814,6 +958,7 @@ export default function Dashboard() {
               icon="⚙"
               label="Masters"
               active={false}
+              collapsed={sidebarCollapsed}
               onClick={() => goTo("/masters")}
             />
 
@@ -821,6 +966,7 @@ export default function Dashboard() {
               icon="♙"
               label="Users & Roles"
               active={false}
+              collapsed={sidebarCollapsed}
               onClick={() => goTo("/users-roles")}
             />
 
@@ -828,12 +974,16 @@ export default function Dashboard() {
               icon="≡"
               label="Audit History"
               active={false}
+              collapsed={sidebarCollapsed}
               onClick={() => goTo("/audit-history")}
             />
 
           </nav>
 
+          {/* FOOTER */}
+
           <div className="sidebar-footer">
+
             <div className="help-title">
               Need help?
             </div>
@@ -841,6 +991,7 @@ export default function Dashboard() {
             <div className="help-text">
               Contact your system administrator.
             </div>
+
           </div>
 
         </aside>
@@ -854,6 +1005,7 @@ export default function Dashboard() {
           <header className="topbar">
 
             <div>
+
               <div className="breadcrumb">
                 Home / Dashboard
               </div>
@@ -861,6 +1013,7 @@ export default function Dashboard() {
               <h1>
                 Dashboard
               </h1>
+
             </div>
 
             <div className="top-actions">
@@ -870,7 +1023,9 @@ export default function Dashboard() {
                 className="icon-btn"
               >
                 ♧
+
                 <span className="notification-dot"></span>
+
               </button>
 
               <div className="profile">
@@ -880,6 +1035,7 @@ export default function Dashboard() {
                 </div>
 
                 <div>
+
                   <div className="profile-name">
                     Pawan Maske
                   </div>
@@ -887,6 +1043,7 @@ export default function Dashboard() {
                   <div className="profile-role">
                     Tender Executive
                   </div>
+
                 </div>
 
                 <span className="chevron">
@@ -899,6 +1056,8 @@ export default function Dashboard() {
 
           </header>
 
+          {/* PAGE */}
+
           <main className="page-body">
 
             {/* PAGE HEADER */}
@@ -906,6 +1065,7 @@ export default function Dashboard() {
             <div className="welcome-row">
 
               <div>
+
                 <h2>
                   Good afternoon, Pawan👋
                 </h2>
@@ -913,6 +1073,7 @@ export default function Dashboard() {
                 <p>
                   Here's your tender performance overview.
                 </p>
+
               </div>
 
               <button
@@ -938,7 +1099,9 @@ export default function Dashboard() {
                 <select
                   className="filter-select"
                   value={year}
-                  onChange={(e) => setYear(e.target.value)}
+                  onChange={(e) =>
+                    setYear(e.target.value)
+                  }
                 >
                   <option>2026</option>
                   <option>2025</option>
@@ -948,7 +1111,9 @@ export default function Dashboard() {
                 <select
                   className="filter-select"
                   value={month}
-                  onChange={(e) => setMonth(e.target.value)}
+                  onChange={(e) =>
+                    setMonth(e.target.value)
+                  }
                 >
                   <option>August</option>
                   <option>July</option>
@@ -959,7 +1124,9 @@ export default function Dashboard() {
                 <select
                   className="filter-select"
                   value={business}
-                  onChange={(e) => setBusiness(e.target.value)}
+                  onChange={(e) =>
+                    setBusiness(e.target.value)
+                  }
                 >
                   <option>All Business</option>
                   <option>Corporate</option>
@@ -970,7 +1137,9 @@ export default function Dashboard() {
                 <select
                   className="filter-select"
                   value={status}
-                  onChange={(e) => setStatus(e.target.value)}
+                  onChange={(e) =>
+                    setStatus(e.target.value)
+                  }
                 >
                   <option>All</option>
                   <option>Submitted</option>
@@ -983,7 +1152,9 @@ export default function Dashboard() {
                 <select
                   className="filter-select"
                   value={zsm}
-                  onChange={(e) => setZsm(e.target.value)}
+                  onChange={(e) =>
+                    setZsm(e.target.value)
+                  }
                 >
                   <option>All ZSM</option>
                   <option>Rahul</option>
@@ -994,7 +1165,9 @@ export default function Dashboard() {
                 <select
                   className="filter-select"
                   value={category}
-                  onChange={(e) => setCategory(e.target.value)}
+                  onChange={(e) =>
+                    setCategory(e.target.value)
+                  }
                 >
                   <option>All Categories</option>
                   <option>IT Services</option>
@@ -1006,7 +1179,9 @@ export default function Dashboard() {
                 <select
                   className="filter-select"
                   value={branch}
-                  onChange={(e) => setBranch(e.target.value)}
+                  onChange={(e) =>
+                    setBranch(e.target.value)
+                  }
                 >
                   <option>All</option>
                   <option>Pune</option>
@@ -1032,7 +1207,10 @@ export default function Dashboard() {
             <section className="kpi-grid">
 
               {kpis.map((item) => (
-                <div className="kpi-card" key={item.title}>
+                <div
+                  className="kpi-card"
+                  key={item.title}
+                >
 
                   <div className="kpi-top">
 
@@ -1072,6 +1250,7 @@ export default function Dashboard() {
                 <div className="chart-header">
 
                   <div>
+
                     <h2 className="chart-title">
                       Tender Performance
                     </h2>
@@ -1079,12 +1258,15 @@ export default function Dashboard() {
                     <div className="chart-subtitle">
                       Monthly submitted vs won tenders
                     </div>
+
                   </div>
 
                   <select
                     className="year-select"
                     value={year}
-                    onChange={(e) => setYear(e.target.value)}
+                    onChange={(e) =>
+                      setYear(e.target.value)
+                    }
                   >
                     <option>2026</option>
                     <option>2025</option>
@@ -1099,6 +1281,7 @@ export default function Dashboard() {
                       className="bar"
                       style={{ height: "35%" }}
                     ></div>
+
                     <div
                       className="bar secondary"
                       style={{ height: "18%" }}
@@ -1110,6 +1293,7 @@ export default function Dashboard() {
                       className="bar"
                       style={{ height: "52%" }}
                     ></div>
+
                     <div
                       className="bar secondary"
                       style={{ height: "25%" }}
@@ -1121,6 +1305,7 @@ export default function Dashboard() {
                       className="bar"
                       style={{ height: "42%" }}
                     ></div>
+
                     <div
                       className="bar secondary"
                       style={{ height: "22%" }}
@@ -1132,6 +1317,7 @@ export default function Dashboard() {
                       className="bar"
                       style={{ height: "70%" }}
                     ></div>
+
                     <div
                       className="bar secondary"
                       style={{ height: "35%" }}
@@ -1143,6 +1329,7 @@ export default function Dashboard() {
                       className="bar"
                       style={{ height: "50%" }}
                     ></div>
+
                     <div
                       className="bar secondary"
                       style={{ height: "28%" }}
@@ -1154,6 +1341,7 @@ export default function Dashboard() {
                       className="bar"
                       style={{ height: "75%" }}
                     ></div>
+
                     <div
                       className="bar secondary"
                       style={{ height: "40%" }}
@@ -1180,6 +1368,7 @@ export default function Dashboard() {
                 <div className="chart-header">
 
                   <div>
+
                     <h2 className="chart-title">
                       Outcome Distribution
                     </h2>
@@ -1187,6 +1376,7 @@ export default function Dashboard() {
                     <div className="chart-subtitle">
                       Current tender result mix
                     </div>
+
                   </div>
 
                 </div>
