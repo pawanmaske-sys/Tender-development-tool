@@ -1,483 +1,506 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
-const kpis = [
+const tenders = [
   {
-    title: "Total Tenders",
-    value: "1,245",
-    subtitle: "All tenders",
-    icon: "↗",
-    iconClass: "icon-blue",
+    id: "T-05621",
+    client: "ABC Ltd",
+    branch: "Pune",
+    assigned: "Rahul",
+    deadline: "22 Aug 2026",
+    amount: 1250000,
+    status: "In Process",
+    result: "-",
+    category: "IT Services",
   },
   {
-    title: "Potential Amount",
-    value: "₹25.4 Cr",
-    subtitle: "Total potential value",
-    icon: "₹",
-    iconClass: "icon-green",
+    id: "T-05622",
+    client: "XYZ Corporation",
+    branch: "Mumbai",
+    assigned: "Priya",
+    deadline: "25 Aug 2026",
+    amount: 850000,
+    status: "Submitted",
+    result: "-",
+    category: "Consulting",
   },
   {
-    title: "Submitted",
-    value: "842",
-    subtitle: "67.6% of total",
-    icon: "✓",
-    iconClass: "icon-purple",
+    id: "T-05623",
+    client: "Global Tech",
+    branch: "Delhi",
+    assigned: "Amit",
+    deadline: "28 Aug 2026",
+    amount: 2100000,
+    status: "Result Awaited",
+    result: "-",
+    category: "Technology",
   },
   {
-    title: "In Process",
-    value: "230",
-    subtitle: "Currently working",
-    icon: "⏱",
-    iconClass: "icon-orange",
+    id: "T-05624",
+    client: "Metro Industries",
+    branch: "Pune",
+    assigned: "Sneha",
+    deadline: "30 Aug 2026",
+    amount: 650000,
+    status: "Won",
+    result: "Won",
+    category: "Infrastructure",
   },
   {
-    title: "Won",
-    value: "173",
-    subtitle: "13.9% of total",
-    icon: "↗",
-    iconClass: "icon-blue",
+    id: "T-05625",
+    client: "Sunrise Pvt Ltd",
+    branch: "Bangalore",
+    assigned: "Rahul",
+    deadline: "02 Sep 2026",
+    amount: 1450000,
+    status: "On Hold",
+    result: "-",
+    category: "IT Services",
   },
   {
-    title: "Result Awaited",
-    value: "42",
-    subtitle: "Need follow-up",
-    icon: "₹",
-    iconClass: "icon-green",
-  },
-  {
-    title: "On Hold",
-    value: "38",
-    subtitle: "Currently on hold",
-    icon: "✓",
-    iconClass: "icon-purple",
-  },
-  {
-    title: "Lost",
-    value: "94",
-    subtitle: "Unsuccessful",
-    icon: "⏱",
-    iconClass: "icon-orange",
+    id: "T-05626",
+    client: "Prime Solutions",
+    branch: "Mumbai",
+    assigned: "Priya",
+    deadline: "05 Sep 2026",
+    amount: 980000,
+    status: "Lost",
+    result: "Lost",
+    category: "Consulting",
   },
 ];
 
-const months = [
-  { month: "Jan", submitted: 62, won: 38 },
-  { month: "Feb", submitted: 75, won: 45 },
-  { month: "Mar", submitted: 55, won: 31 },
-  { month: "Apr", submitted: 88, won: 52 },
-  { month: "May", submitted: 70, won: 44 },
-  { month: "Jun", submitted: 92, won: 58 },
-  { month: "Jul", submitted: 82, won: 49 },
-  { month: "Aug", submitted: 96, won: 61 },
+const statusOptions = [
+  "All Status",
+  "In Process",
+  "Submitted",
+  "Result Awaited",
+  "On Hold",
+  "Won",
+  "Lost",
 ];
 
-export default function Dashboard() {
-  const [year, setYear] = useState("2026");
-  const [month, setMonth] = useState("August");
-  const [business, setBusiness] = useState("All Business");
-  const [branch, setBranch] = useState("All");
-  const [zsm, setZsm] = useState("All ZSM");
+function formatAmount(amount) {
+  return new Intl.NumberFormat("en-IN", {
+    style: "currency",
+    currency: "INR",
+    maximumFractionDigits: 0,
+  }).format(amount);
+}
+
+function StatusBadge({ status }) {
+  return (
+    <span
+      className={`status-badge status-${status
+        .toLowerCase()
+        .replaceAll(" ", "-")}`}
+    >
+      {status}
+    </span>
+  );
+}
+
+export default function AllTenders() {
+  const [search, setSearch] = useState("");
+  const [status, setStatus] = useState("All Status");
+  const [branch, setBranch] = useState("All Branches");
   const [category, setCategory] = useState("All Categories");
-  const [status, setStatus] = useState("All");
+
+  const branches = [
+    "All Branches",
+    ...new Set(tenders.map((tender) => tender.branch)),
+  ];
+
+  const categories = [
+    "All Categories",
+    ...new Set(tenders.map((tender) => tender.category)),
+  ];
+
+  const filteredTenders = useMemo(() => {
+    return tenders.filter((tender) => {
+      const searchText = search.toLowerCase().trim();
+
+      const matchesSearch =
+        tender.id.toLowerCase().includes(searchText) ||
+        tender.client.toLowerCase().includes(searchText) ||
+        tender.assigned.toLowerCase().includes(searchText);
+
+      const matchesStatus =
+        status === "All Status" || tender.status === status;
+
+      const matchesBranch =
+        branch === "All Branches" || tender.branch === branch;
+
+      const matchesCategory =
+        category === "All Categories" ||
+        tender.category === category;
+
+      return (
+        matchesSearch &&
+        matchesStatus &&
+        matchesBranch &&
+        matchesCategory
+      );
+    });
+  }, [search, status, branch, category]);
+
+  const totalAmount = filteredTenders.reduce(
+    (sum, tender) => sum + tender.amount,
+    0
+  );
+
+  const submittedCount = filteredTenders.filter(
+    (tender) => tender.status === "Submitted"
+  ).length;
+
+  const inProcessCount = filteredTenders.filter(
+    (tender) => tender.status === "In Process"
+  ).length;
 
   const resetFilters = () => {
-    setYear("2026");
-    setMonth("August");
-    setBusiness("All Business");
-    setBranch("All");
-    setZsm("All ZSM");
+    setSearch("");
+    setStatus("All Status");
+    setBranch("All Branches");
     setCategory("All Categories");
-    setStatus("All");
   };
 
   return (
-    <main className="dashboard-page">
+    <main className="all-tenders-page">
 
-      {/* TOP BAR */}
-
-      <header className="topbar">
-
+      {/* PAGE HEADER */}
+      <div className="page-header">
         <div>
           <div className="breadcrumb">
-            Home / Dashboard
+            Home / Tenders / All Tenders
           </div>
 
-          <h1>
-            Dashboard
-          </h1>
+          <h1>All Tenders</h1>
+
+          <p>
+            View and manage all tender opportunities.
+          </p>
         </div>
 
-        <div className="top-actions">
+        <button
+          type="button"
+          className="new-tender-button"
+        >
+          + New Tender
+        </button>
+      </div>
 
-          <button className="icon-btn" type="button">
-            ♧
-            <span className="notification-dot"></span>
-          </button>
 
-          <div className="profile">
+      {/* SUMMARY CARDS */}
+      <section className="summary-grid">
 
-            <div className="avatar">
-              PM
-            </div>
+        <div className="summary-card">
+          <span>Total Tenders</span>
 
-            <div>
-              <div className="profile-name">
-                Pawan Maske
-              </div>
+          <strong>
+            {filteredTenders.length}
+          </strong>
 
-              <div className="profile-role">
-                Tender Executive
-              </div>
-            </div>
-
-            <span className="chevron">
-              ⌄
-            </span>
-
-          </div>
-
+          <small>
+            Matching records
+          </small>
         </div>
 
-      </header>
+
+        <div className="summary-card">
+          <span>Total Potential Amount</span>
+
+          <strong>
+            {formatAmount(totalAmount)}
+          </strong>
+
+          <small>
+            Filtered tender value
+          </small>
+        </div>
 
 
-      {/* PAGE BODY */}
+        <div className="summary-card">
+          <span>Submitted</span>
 
-      <section className="page-body">
+          <strong>
+            {submittedCount}
+          </strong>
 
-        {/* WELCOME */}
+          <small>
+            Currently submitted
+          </small>
+        </div>
 
-        <div className="welcome-row">
 
-          <div>
+        <div className="summary-card">
+          <span>In Process</span>
 
-            <h2>
-              Good afternoon, Pawan👋
-            </h2>
+          <strong>
+            {inProcessCount}
+          </strong>
 
-            <p>
-              Here's your tender performance overview.
-            </p>
+          <small>
+            Currently working
+          </small>
+        </div>
 
-          </div>
+      </section>
+
+
+      {/* SEARCH & FILTERS */}
+      <section className="filter-panel all-tenders-filter">
+
+        <div className="filter-title">
+
+          <h2>
+            Search & Filters
+          </h2>
 
           <button
             type="button"
-            className="primary-btn"
-            onClick={() =>
-              alert("New Tender module coming next.")
-            }
+            className="reset-button"
+            onClick={resetFilters}
           >
-            + New Tender
+            Reset
           </button>
 
         </div>
 
 
-        {/* FILTERS */}
+        <div className="filter-grid">
 
-        <section className="filter-panel">
+          {/* SEARCH */}
+          <div className="filter-field search-field">
 
-          <div className="filter-row">
+            <label>
+              Search
+            </label>
 
-            <span className="filter-title">
-              Filters
-            </span>
-
-            <select
-              className="filter-select"
-              value={year}
+            <input
+              type="text"
+              placeholder="Search Tender ID, Client or Assignee..."
+              value={search}
               onChange={(e) =>
-                setYear(e.target.value)
+                setSearch(e.target.value)
               }
-            >
-              <option>2026</option>
-              <option>2025</option>
-              <option>2024</option>
-            </select>
+            />
+
+          </div>
+
+
+          {/* STATUS */}
+          <div className="filter-field">
+
+            <label>
+              Status
+            </label>
 
             <select
-              className="filter-select"
-              value={month}
-              onChange={(e) =>
-                setMonth(e.target.value)
-              }
-            >
-              <option>August</option>
-              <option>July</option>
-              <option>June</option>
-              <option>May</option>
-              <option>April</option>
-              <option>March</option>
-              <option>February</option>
-              <option>January</option>
-            </select>
-
-            <select
-              className="filter-select"
-              value={business}
-              onChange={(e) =>
-                setBusiness(e.target.value)
-              }
-            >
-              <option>All Business</option>
-              <option>Corporate</option>
-              <option>Retail</option>
-              <option>Government</option>
-            </select>
-
-            <select
-              className="filter-select"
-              value={branch}
-              onChange={(e) =>
-                setBranch(e.target.value)
-              }
-            >
-              <option>All</option>
-              <option>Pune</option>
-              <option>Mumbai</option>
-              <option>Delhi</option>
-              <option>Bangalore</option>
-            </select>
-
-            <select
-              className="filter-select"
-              value={zsm}
-              onChange={(e) =>
-                setZsm(e.target.value)
-              }
-            >
-              <option>All ZSM</option>
-              <option>ZSM 1</option>
-              <option>ZSM 2</option>
-              <option>ZSM 3</option>
-            </select>
-
-            <select
-              className="filter-select"
-              value={category}
-              onChange={(e) =>
-                setCategory(e.target.value)
-              }
-            >
-              <option>All Categories</option>
-              <option>IT Services</option>
-              <option>Consulting</option>
-              <option>Technology</option>
-              <option>Infrastructure</option>
-            </select>
-
-            <select
-              className="filter-select"
               value={status}
               onChange={(e) =>
                 setStatus(e.target.value)
               }
             >
-              <option>All</option>
-              <option>Submitted</option>
-              <option>In Process</option>
-              <option>Won</option>
-              <option>Lost</option>
-              <option>On Hold</option>
-              <option>Result Awaited</option>
+              {statusOptions.map((option) => (
+                <option
+                  key={option}
+                  value={option}
+                >
+                  {option}
+                </option>
+              ))}
             </select>
 
-            <button
-              type="button"
-              className="reset-btn"
-              onClick={resetFilters}
+          </div>
+
+
+          {/* BRANCH */}
+          <div className="filter-field">
+
+            <label>
+              Branch
+            </label>
+
+            <select
+              value={branch}
+              onChange={(e) =>
+                setBranch(e.target.value)
+              }
             >
-              Reset
-            </button>
+              {branches.map((option) => (
+                <option
+                  key={option}
+                  value={option}
+                >
+                  {option}
+                </option>
+              ))}
+            </select>
 
           </div>
 
-        </section>
 
+          {/* CATEGORY */}
+          <div className="filter-field">
 
-        {/* KPI CARDS */}
+            <label>
+              Category
+            </label>
 
-        <section className="kpi-grid">
-
-          {kpis.map((kpi) => (
-
-            <div
-              className="kpi-card"
-              key={kpi.title}
+            <select
+              value={category}
+              onChange={(e) =>
+                setCategory(e.target.value)
+              }
             >
-
-              <div className="kpi-top">
-
-                <span>
-                  {kpi.title}
-                </span>
-
-                <span
-                  className={`kpi-icon ${kpi.iconClass}`}
+              {categories.map((option) => (
+                <option
+                  key={option}
+                  value={option}
                 >
-                  {kpi.icon}
-                </span>
-
-              </div>
-
-              <div className="kpi-value">
-                {kpi.value}
-              </div>
-
-              <div className="kpi-sub">
-                {kpi.subtitle}
-              </div>
-
-            </div>
-
-          ))}
-
-        </section>
-
-
-        {/* CHARTS */}
-
-        <section className="charts-grid">
-
-          {/* TENDER PERFORMANCE */}
-
-          <div className="chart-card">
-
-            <div className="chart-header">
-
-              <div>
-
-                <h3 className="chart-title">
-                  Tender Performance
-                </h3>
-
-                <div className="chart-subtitle">
-                  Monthly submitted vs won tenders
-                </div>
-
-              </div>
-
-              <select
-                className="year-select"
-                value={year}
-                onChange={(e) =>
-                  setYear(e.target.value)
-                }
-              >
-                <option>2026</option>
-                <option>2025</option>
-                <option>2024</option>
-              </select>
-
-            </div>
-
-
-            <div className="bar-chart">
-
-              {months.map((item) => (
-
-                <div
-                  className="bar-group"
-                  key={item.month}
-                >
-
-                  <div
-                    className="bar"
-                    style={{
-                      height: `${item.submitted}%`,
-                    }}
-                    title={`Submitted: ${item.submitted}`}
-                  />
-
-                  <div
-                    className="bar secondary"
-                    style={{
-                      height: `${item.won}%`,
-                    }}
-                    title={`Won: ${item.won}`}
-                  />
-
-                </div>
-
+                  {option}
+                </option>
               ))}
-
-            </div>
-
-
-            <div className="month-labels">
-
-              {months.map((item) => (
-                <span key={item.month}>
-                  {item.month}
-                </span>
-              ))}
-
-            </div>
+            </select>
 
           </div>
 
+        </div>
 
-          {/* OUTCOME DISTRIBUTION */}
-
-          <div className="chart-card">
-
-            <div className="chart-header">
-
-              <div>
-
-                <h3 className="chart-title">
-                  Outcome Distribution
-                </h3>
-
-                <div className="chart-subtitle">
-                  Current tender result mix
-                </div>
-
-              </div>
-
-            </div>
+      </section>
 
 
-            <div className="donut-area">
+      {/* TENDER TABLE */}
+      <section className="table-card">
 
-              <div className="donut"></div>
+        <div className="table-header">
 
-              <div className="legend">
+          <div>
 
-                <div className="legend-item">
-                  <span className="legend-dot dot-green"></span>
-                  Won — 173
-                </div>
+            <h2>
+              Tender List
+            </h2>
 
-                <div className="legend-item">
-                  <span className="legend-dot dot-blue"></span>
-                  Submitted — 842
-                </div>
-
-                <div className="legend-item">
-                  <span className="legend-dot dot-orange"></span>
-                  Result Awaited — 42
-                </div>
-
-                <div className="legend-item">
-                  <span className="legend-dot dot-purple"></span>
-                  On Hold — 38
-                </div>
-
-                <div className="legend-item">
-                  <span className="legend-dot dot-red"></span>
-                  Lost — 94
-                </div>
-
-              </div>
-
-            </div>
+            <p>
+              {filteredTenders.length} records found
+            </p>
 
           </div>
 
-        </section>
+        </div>
+
+
+        <div className="table-wrapper">
+
+          <table>
+
+            <thead>
+              <tr>
+                <th>Tender ID</th>
+                <th>Client</th>
+                <th>Branch</th>
+                <th>Assigned To</th>
+                <th>Deadline</th>
+                <th>Amount</th>
+                <th>Status</th>
+                <th>Result</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+
+
+            <tbody>
+
+              {filteredTenders.length > 0 ? (
+
+                filteredTenders.map((tender) => (
+
+                  <tr key={tender.id}>
+
+                    <td>
+                      <strong className="tender-id">
+                        {tender.id}
+                      </strong>
+                    </td>
+
+
+                    <td>
+                      <strong>
+                        {tender.client}
+                      </strong>
+
+                      <small>
+                        {tender.category}
+                      </small>
+                    </td>
+
+
+                    <td>
+                      {tender.branch}
+                    </td>
+
+
+                    <td>
+                      {tender.assigned}
+                    </td>
+
+
+                    <td>
+                      {tender.deadline}
+                    </td>
+
+
+                    <td className="amount">
+                      {formatAmount(tender.amount)}
+                    </td>
+
+
+                    <td>
+                      <StatusBadge
+                        status={tender.status}
+                      />
+                    </td>
+
+
+                    <td>
+                      {tender.result}
+                    </td>
+
+
+                    <td>
+                      <button
+                        type="button"
+                        className="view-button"
+                      >
+                        View
+                      </button>
+                    </td>
+
+                  </tr>
+
+                ))
+
+              ) : (
+
+                <tr>
+
+                  <td
+                    colSpan="9"
+                    className="empty-state"
+                  >
+                    No tenders found.
+                  </td>
+
+                </tr>
+
+              )}
+
+            </tbody>
+
+          </table>
+
+        </div>
 
       </section>
 
