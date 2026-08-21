@@ -1,5 +1,5 @@
 /* =========================================================
-   TENDERHUB DASHBOARD LAYOUT
+   TENDERHUB GLOBAL STYLES
    ========================================================= */
 
 * {
@@ -14,17 +14,36 @@ body {
 }
 
 body {
-  font-family: Arial, Helvetica, sans-serif;
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+
   background: #f5f7fb;
   color: #10213f;
 }
 
-/* MAIN APPLICATION */
+/* =========================================================
+   MAIN APPLICATION LAYOUT
+   Matches app/layout.js
+   ========================================================= */
 
 .app-layout {
   display: flex;
-  min-height: 100vh;
   width: 100%;
+  min-height: 100vh;
+  background: #f5f7fb;
+}
+
+/* =========================================================
+   MAIN CONTENT
+   Matches app/layout.js
+   ========================================================= */
+
+.main-content {
+  flex: 1;
+  min-width: 0;
+  min-height: 100vh;
   background: #f5f7fb;
 }
 
@@ -36,11 +55,17 @@ body {
   width: 245px;
   min-width: 245px;
   min-height: 100vh;
+
   background: #101a2d;
-  color: white;
+  color: #ffffff;
+
   flex-shrink: 0;
-  transition: width 0.2s ease;
+
   overflow: hidden;
+
+  transition:
+    width 0.25s ease,
+    min-width 0.25s ease;
 }
 
 .sidebar.sidebar-collapsed {
@@ -49,14 +74,205 @@ body {
 }
 
 /* =========================================================
-   MAIN CONTENT
+   SIDEBAR BRAND
    ========================================================= */
 
-.main-content {
-  flex: 1;
-  min-width: 0;
-  min-height: 100vh;
-  background: #f5f7fb;
+.brand {
+  height: 82px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  padding: 0 22px;
+}
+
+.brand-logo {
+  width: 38px;
+  height: 38px;
+  min-width: 38px;
+
+  border-radius: 10px;
+
+  background: #2563eb;
+  color: #ffffff;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.brand-title {
+  font-size: 16px;
+  font-weight: 700;
+
+  color: #ffffff;
+
+  white-space: nowrap;
+}
+
+.brand-sub {
+  margin-top: 3px;
+
+  font-size: 10px;
+
+  color: #9aa7bd;
+
+  white-space: nowrap;
+}
+
+/* =========================================================
+   COLLAPSE BUTTON
+   ========================================================= */
+
+.collapse-button {
+  width: calc(100% - 28px);
+  height: 36px;
+
+  margin: 0 14px 16px;
+
+  border: 1px solid rgba(255, 255, 255, 0.12);
+
+  border-radius: 8px;
+
+  background: transparent;
+
+  color: #cbd5e1;
+
+  font-size: 12px;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.collapse-button:hover {
+  background: #1c2a43;
+  color: #ffffff;
+}
+
+/* =========================================================
+   SIDEBAR NAVIGATION
+   ========================================================= */
+
+.nav {
+  padding: 0 14px 30px;
+}
+
+.nav-label {
+  padding: 22px 16px 10px;
+
+  font-size: 10px;
+
+  font-weight: 700;
+
+  letter-spacing: 1.2px;
+
+  color: #6f7d95;
+}
+
+.nav-item {
+  width: 100%;
+  height: 42px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 14px;
+
+  margin-bottom: 4px;
+
+  padding: 0 14px;
+
+  border: 0;
+
+  border-radius: 8px;
+
+  background: transparent;
+
+  color: #b8c2d3;
+
+  font-family: inherit;
+
+  font-size: 12px;
+
+  text-align: left;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.nav-item:hover {
+  background: #18253b;
+  color: #ffffff;
+}
+
+.nav-item.active {
+  background: #2563eb;
+  color: #ffffff;
+}
+
+.nav-icon {
+  width: 18px;
+  min-width: 18px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 13px;
+}
+
+.nav-text {
+  white-space: nowrap;
+}
+
+/* =========================================================
+   COLLAPSED SIDEBAR
+   ========================================================= */
+
+.sidebar-collapsed .brand {
+  justify-content: center;
+  padding: 0;
+}
+
+.sidebar-collapsed .brand > div:last-child {
+  display: none;
+}
+
+.sidebar-collapsed .collapse-button {
+  width: 42px;
+
+  margin-left: 15px;
+  margin-right: 15px;
+
+  font-size: 18px;
+}
+
+.sidebar-collapsed .nav {
+  padding-left: 14px;
+  padding-right: 14px;
+}
+
+.sidebar-collapsed .nav-item {
+  justify-content: center;
+
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.sidebar-collapsed .nav-text,
+.sidebar-collapsed .nav-label {
+  display: none;
 }
 
 /* =========================================================
@@ -65,7 +281,9 @@ body {
 
 .topbar {
   height: 82px;
+
   background: #ffffff;
+
   border-bottom: 1px solid #e5eaf2;
 
   display: flex;
@@ -77,39 +295,55 @@ body {
 
 .breadcrumb {
   font-size: 12px;
+
   color: #7583a0;
+
   margin-bottom: 6px;
 }
 
 .topbar h1 {
   margin: 0;
+
   font-size: 22px;
+
   font-weight: 700;
+
   color: #10213f;
 }
 
-/* TOP RIGHT */
+/* =========================================================
+   TOP RIGHT
+   ========================================================= */
 
 .top-actions {
   display: flex;
   align-items: center;
+
   gap: 22px;
 }
 
 .icon-btn {
   position: relative;
+
   border: 0;
+
   background: transparent;
+
   font-size: 20px;
+
   cursor: pointer;
 }
 
 .notification-dot {
   position: absolute;
+
   width: 6px;
   height: 6px;
+
   border-radius: 50%;
+
   background: #ef4444;
+
   top: 1px;
   right: 1px;
 }
@@ -117,15 +351,18 @@ body {
 .profile {
   display: flex;
   align-items: center;
+
   gap: 10px;
 }
 
 .avatar {
   width: 38px;
   height: 38px;
+
   border-radius: 50%;
 
   background: #e8f0ff;
+
   color: #2563eb;
 
   display: flex;
@@ -133,71 +370,93 @@ body {
   justify-content: center;
 
   font-size: 13px;
+
   font-weight: 700;
 }
 
 .profile-name {
   font-size: 13px;
+
   font-weight: 700;
+
   color: #10213f;
 }
 
 .profile-role {
   font-size: 10px;
+
   color: #7583a0;
+
   margin-top: 2px;
 }
 
 .chevron {
   font-size: 14px;
+
   color: #7c879d;
 }
 
 /* =========================================================
-   PAGE BODY
+   DASHBOARD PAGE BODY
    ========================================================= */
 
 .page-body {
   padding: 28px 32px 40px;
 }
 
-/* WELCOME */
+/* =========================================================
+   WELCOME
+   ========================================================= */
 
 .welcome-row {
   display: flex;
+
   justify-content: space-between;
+
   align-items: center;
+
   margin-bottom: 22px;
 }
 
 .welcome-row h2 {
   margin: 0 0 6px;
+
   font-size: 23px;
+
   color: #10213f;
 }
 
 .welcome-row p {
   margin: 0;
+
   font-size: 13px;
+
   color: #7583a0;
 }
 
-/* NEW TENDER */
+/* =========================================================
+   NEW TENDER BUTTON
+   ========================================================= */
 
 .primary-btn {
   border: 0;
+
   background: #2563eb;
-  color: white;
+
+  color: #ffffff;
 
   padding: 11px 18px;
+
   border-radius: 8px;
 
   font-size: 12px;
+
   font-weight: 600;
 
   cursor: pointer;
 
-  box-shadow: 0 4px 10px rgba(37, 99, 235, 0.18);
+  box-shadow:
+    0 4px 10px rgba(37, 99, 235, 0.18);
 }
 
 .primary-btn:hover {
@@ -205,44 +464,58 @@ body {
 }
 
 /* =========================================================
-   FILTERS
+   FILTER PANEL
    ========================================================= */
 
 .filter-panel {
-  background: white;
+  background: #ffffff;
+
   border: 1px solid #e1e7f0;
+
   border-radius: 12px;
+
   padding: 12px;
+
   margin-bottom: 20px;
 }
 
 .filter-row {
   display: flex;
+
   align-items: center;
+
   gap: 8px;
+
   flex-wrap: wrap;
 }
 
 .filter-title {
   font-size: 12px;
+
   font-weight: 700;
+
   color: #10213f;
+
   margin-right: 2px;
 }
 
 .filter-select {
   height: 36px;
+
   min-width: 92px;
 
   border: 1px solid #d7dfeb;
+
   border-radius: 7px;
 
-  background: white;
+  background: #ffffff;
+
   color: #30415f;
 
   padding: 0 12px;
 
   font-size: 12px;
+
   outline: none;
 }
 
@@ -252,15 +525,19 @@ body {
 
 .reset-btn {
   height: 36px;
+
   border: 0;
+
   border-radius: 7px;
 
   padding: 0 15px;
 
   background: #f1f3f7;
+
   color: #52617b;
 
   font-size: 12px;
+
   cursor: pointer;
 }
 
@@ -269,19 +546,25 @@ body {
 }
 
 /* =========================================================
-   KPI CARDS
+   KPI GRID
    ========================================================= */
 
 .kpi-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr));
+
   gap: 14px;
+
   margin-bottom: 20px;
 }
 
 .kpi-card {
   background: #ffffff;
+
   border: 1px solid #e1e7f0;
+
   border-radius: 12px;
 
   padding: 16px;
@@ -291,43 +574,54 @@ body {
 
 .kpi-top {
   display: flex;
+
   align-items: center;
+
   justify-content: space-between;
 
   color: #62718d;
+
   font-size: 11px;
 }
 
 .kpi-icon {
   width: 30px;
   height: 30px;
+
   border-radius: 8px;
 
   display: flex;
+
   align-items: center;
+
   justify-content: center;
 
   font-size: 14px;
+
   font-weight: 700;
 }
 
 .icon-blue {
   background: #edf4ff;
+
   color: #2563eb;
 }
 
 .icon-green {
   background: #ecfaf3;
+
   color: #16a34a;
 }
 
 .icon-purple {
   background: #f3efff;
+
   color: #7c3aed;
 }
 
 .icon-orange {
   background: #fff5e9;
+
   color: #f97316;
 }
 
@@ -335,6 +629,7 @@ body {
   margin-top: 9px;
 
   font-size: 24px;
+
   font-weight: 700;
 
   color: #10213f;
@@ -344,6 +639,7 @@ body {
   margin-top: 4px;
 
   font-size: 10px;
+
   color: #7a87a1;
 }
 
@@ -353,47 +649,64 @@ body {
 
 .charts-grid {
   display: grid;
-  grid-template-columns: 1.5fr 1fr;
+
+  grid-template-columns:
+    1.5fr 1fr;
+
   gap: 14px;
 }
 
 .chart-card {
   background: #ffffff;
+
   border: 1px solid #e1e7f0;
+
   border-radius: 12px;
 
   min-height: 280px;
+
   padding: 18px;
 }
 
 .chart-header {
   display: flex;
+
   align-items: flex-start;
+
   justify-content: space-between;
 }
 
 .chart-title {
   margin: 0;
+
   font-size: 14px;
+
   font-weight: 700;
+
   color: #10213f;
 }
 
 .chart-subtitle {
   margin-top: 5px;
+
   font-size: 10px;
+
   color: #7a87a1;
 }
 
 .year-select {
   height: 36px;
+
   border: 1px solid #d7dfeb;
+
   border-radius: 7px;
 
-  background: white;
+  background: #ffffff;
+
   padding: 0 12px;
 
   color: #30415f;
+
   font-size: 12px;
 }
 
@@ -403,10 +716,13 @@ body {
 
 .bar-chart {
   height: 150px;
+
   margin-top: 25px;
 
   display: flex;
+
   align-items: flex-end;
+
   justify-content: space-around;
 
   border-bottom: 1px solid #edf0f5;
@@ -414,17 +730,23 @@ body {
 
 .bar-group {
   height: 100%;
+
   width: 45px;
 
   display: flex;
+
   align-items: flex-end;
+
   justify-content: center;
+
   gap: 4px;
 }
 
 .bar {
   width: 13px;
+
   background: #2563eb;
+
   border-radius: 5px 5px 0 0;
 }
 
@@ -434,11 +756,13 @@ body {
 
 .month-labels {
   display: flex;
+
   justify-content: space-around;
 
   margin-top: 8px;
 
   font-size: 10px;
+
   color: #7a87a1;
 }
 
@@ -448,7 +772,9 @@ body {
 
 .donut-area {
   display: flex;
+
   align-items: center;
+
   justify-content: center;
 
   gap: 35px;
@@ -482,7 +808,7 @@ body {
   width: 82px;
   height: 82px;
 
-  background: white;
+  background: #ffffff;
 
   border-radius: 50%;
 
@@ -492,22 +818,28 @@ body {
 
 .legend {
   display: flex;
+
   flex-direction: column;
+
   gap: 9px;
 
   font-size: 11px;
+
   color: #52617b;
 }
 
 .legend-item {
   display: flex;
+
   align-items: center;
+
   gap: 7px;
 }
 
 .legend-dot {
   width: 8px;
   height: 8px;
+
   border-radius: 50%;
 }
 
@@ -532,36 +864,14 @@ body {
 }
 
 /* =========================================================
-   COLLAPSED SIDEBAR
-   ========================================================= */
-
-.sidebar-collapsed .nav-text {
-  display: none;
-}
-
-.sidebar-collapsed .nav-label {
-  display: none;
-}
-
-.sidebar-collapsed .brand > div:last-child {
-  display: none;
-}
-
-.sidebar-collapsed .nav-item {
-  justify-content: center;
-}
-
-.sidebar-collapsed .collapse-button {
-  font-size: 18px;
-}
-
-/* =========================================================
    RESPONSIVE
    ========================================================= */
 
 @media (max-width: 1100px) {
+
   .kpi-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
   }
 
   .charts-grid {
@@ -574,8 +884,10 @@ body {
 }
 
 @media (max-width: 700px) {
+
   .sidebar {
     width: 72px;
+
     min-width: 72px;
   }
 
@@ -589,7 +901,7 @@ body {
     justify-content: center;
   }
 
-  .content {
+  .main-content {
     width: calc(100% - 72px);
   }
 
@@ -607,6 +919,7 @@ body {
 
   .welcome-row {
     align-items: flex-start;
+
     gap: 15px;
   }
 
