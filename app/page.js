@@ -80,10 +80,6 @@ export default function Dashboard() {
     setBranch("Select All");
   };
 
-  const goTo = (path) => {
-    window.location.href = path;
-  };
-
   return (
     <main className="content">
 
@@ -163,18 +159,6 @@ export default function Dashboard() {
             </p>
 
           </div>
-
-          {/* NEW TENDER BUTTON */}
-
-          <button
-            className="primary-btn"
-            type="button"
-            onClick={() =>
-              goTo("/all-tenders?add=true")
-            }
-          >
-            + New Tender
-          </button>
 
         </div>
 
