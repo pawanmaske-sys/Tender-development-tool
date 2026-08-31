@@ -62,9 +62,9 @@ const kpis = [
 ];
 
 export default function Dashboard() {
-  const [year, setYear] = useState("2026");
-  const [month, setMonth] = useState("August");
-
+const [year, setYear] = useState("Select All");
+const [month, setMonth] = useState("Select All");
+  
   const [business, setBusiness] = useState("Select All");
   const [status, setStatus] = useState("Select All");
   const [zsm, setZsm] = useState("Select All");
