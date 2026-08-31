@@ -1015,3 +1015,630 @@ body {
     flex: 1;
   }
 }
+
+
+/* =========================================================
+   ALL TENDERS PAGE
+   ========================================================= */
+
+.all-tenders-page {
+  width: 100%;
+  min-height: 100vh;
+  background: #f5f7fb;
+  color: #10213f;
+}
+
+/* PAGE HEADER */
+
+.all-tenders-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 22px;
+}
+
+.all-tenders-header h2 {
+  margin: 0;
+  font-size: 24px;
+  line-height: 1.2;
+  font-weight: 700;
+  color: #10213f;
+}
+
+.all-tenders-header p {
+  margin: 7px 0 0;
+  font-size: 13px;
+  color: #71809a;
+}
+
+/* ADD TENDER */
+
+.add-tender-btn {
+  border: 0;
+  background: #2563eb;
+  color: #ffffff;
+
+  height: 40px;
+  padding: 0 18px;
+
+  border-radius: 8px;
+
+  font-size: 12px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.18);
+}
+
+.add-tender-btn:hover {
+  background: #1d4ed8;
+}
+
+/* =========================================================
+   ALL TENDERS KPI
+   ========================================================= */
+
+.all-tenders-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.all-tenders-kpi-card {
+  min-height: 118px;
+
+  padding: 18px;
+
+  background: #ffffff;
+
+  border: 1px solid #dfe6f0;
+  border-radius: 12px;
+
+  box-shadow: 0 3px 12px rgba(16, 33, 63, 0.04);
+}
+
+.all-tenders-kpi-title {
+  font-size: 11px;
+  color: #63718a;
+}
+
+.all-tenders-kpi-value {
+  margin-top: 9px;
+
+  font-size: 23px;
+  line-height: 1.1;
+
+  font-weight: 700;
+
+  color: #10213f;
+}
+
+.all-tenders-kpi-sub {
+  margin-top: 7px;
+
+  font-size: 10px;
+  color: #71809a;
+}
+
+/* =========================================================
+   SEARCH & FILTERS
+   ========================================================= */
+
+.search-filter-card {
+  background: #ffffff;
+
+  border: 1px solid #dfe6f0;
+  border-radius: 12px;
+
+  padding: 18px;
+
+  margin-bottom: 20px;
+
+  box-shadow: 0 3px 12px rgba(16, 33, 63, 0.04);
+}
+
+.search-filter-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 17px;
+}
+
+.search-filter-header h3 {
+  margin: 0;
+
+  font-size: 14px;
+  font-weight: 700;
+
+  color: #10213f;
+}
+
+.search-filter-grid {
+  display: grid;
+
+  grid-template-columns: 1.5fr 1fr 1fr 1fr;
+
+  gap: 12px;
+}
+
+.search-filter-field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.search-filter-field label {
+  font-size: 10px;
+  color: #52617b;
+}
+
+.search-filter-field input,
+.search-filter-field select {
+  width: 100%;
+  height: 38px;
+
+  padding: 0 12px;
+
+  border: 1px solid #d3ddeb;
+  border-radius: 7px;
+
+  background: #ffffff;
+
+  color: #30415f;
+
+  font-family: inherit;
+  font-size: 11px;
+
+  outline: none;
+}
+
+.search-filter-field input::placeholder {
+  color: #9aa7bd;
+}
+
+.search-filter-field input:focus,
+.search-filter-field select:focus {
+  border-color: #2563eb;
+}
+
+/* RESET */
+
+.all-tenders-reset {
+  height: 34px;
+
+  border: 0;
+  border-radius: 7px;
+
+  padding: 0 14px;
+
+  background: #f1f3f7;
+  color: #52617b;
+
+  font-size: 11px;
+
+  cursor: pointer;
+}
+
+.all-tenders-reset:hover {
+  background: #e7ebf2;
+}
+
+/* =========================================================
+   TENDER LIST
+   ========================================================= */
+
+.tender-list-card {
+  background: #ffffff;
+
+  border: 1px solid #dfe6f0;
+  border-radius: 12px;
+
+  overflow: hidden;
+
+  box-shadow: 0 3px 12px rgba(16, 33, 63, 0.04);
+}
+
+.tender-list-header {
+  padding: 18px;
+
+  border-bottom: 1px solid #e7ebf2;
+}
+
+.tender-list-header h3 {
+  margin: 0;
+
+  font-size: 14px;
+  font-weight: 700;
+
+  color: #10213f;
+}
+
+.tender-list-count {
+  margin-top: 5px;
+
+  font-size: 10px;
+  color: #71809a;
+}
+
+/* TABLE */
+
+.tender-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.tender-table {
+  width: 100%;
+
+  border-collapse: collapse;
+
+  table-layout: fixed;
+
+  font-size: 11px;
+}
+
+.tender-table th {
+  height: 38px;
+
+  padding: 0 14px;
+
+  text-align: left;
+
+  background: #fbfcfe;
+
+  border-bottom: 1px solid #dfe6f0;
+
+  color: #52617b;
+
+  font-size: 10px;
+  font-weight: 600;
+
+  white-space: nowrap;
+}
+
+.tender-table td {
+  padding: 12px 14px;
+
+  border-bottom: 1px solid #edf0f5;
+
+  color: #30415f;
+
+  vertical-align: middle;
+
+  white-space: nowrap;
+}
+
+.tender-table tbody tr:hover {
+  background: #fafcff;
+}
+
+.tender-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+/* TENDER ID */
+
+.tender-id {
+  color: #2563eb;
+  font-weight: 600;
+}
+
+/* CLIENT */
+
+.client-name {
+  font-weight: 600;
+  color: #10213f;
+}
+
+.client-category {
+  margin-top: 2px;
+
+  font-size: 9px;
+  color: #71809a;
+}
+
+/* AMOUNT */
+
+.tender-amount {
+  font-weight: 600;
+  color: #10213f;
+}
+
+/* STATUS */
+
+.status-badge {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  min-height: 24px;
+
+  padding: 0 9px;
+
+  border-radius: 20px;
+
+  font-size: 9px;
+  font-weight: 600;
+
+  white-space: nowrap;
+}
+
+.status-submitted {
+  background: #eaf9f1;
+  color: #159447;
+}
+
+.status-process {
+  background: #edf4ff;
+  color: #2563eb;
+}
+
+.status-won {
+  background: #eaf9f1;
+  color: #159447;
+}
+
+.status-awaiting {
+  background: #f3edff;
+  color: #7c3aed;
+}
+
+.status-hold {
+  background: #fff7df;
+  color: #d79a00;
+}
+
+.status-lost {
+  background: #fff0f0;
+  color: #e52b2b;
+}
+
+/* VIEW BUTTON */
+
+.view-btn {
+  height: 30px;
+
+  padding: 0 13px;
+
+  border: 1px solid #d3ddeb;
+  border-radius: 7px;
+
+  background: #ffffff;
+
+  color: #2563eb;
+
+  font-size: 10px;
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.view-btn:hover {
+  background: #f5f8ff;
+  border-color: #2563eb;
+}
+
+/* =========================================================
+   ADD TENDER FORM / MODAL
+   ========================================================= */
+
+.add-tender-overlay {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 1000;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 20px;
+
+  background: rgba(15, 23, 42, 0.45);
+}
+
+.add-tender-modal {
+  width: min(720px, 100%);
+
+  max-height: 90vh;
+
+  overflow-y: auto;
+
+  background: #ffffff;
+
+  border-radius: 14px;
+
+  box-shadow: 0 20px 50px rgba(15, 23, 42, 0.22);
+}
+
+.add-tender-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 18px 20px;
+
+  border-bottom: 1px solid #e5eaf2;
+}
+
+.add-tender-modal-header h2 {
+  margin: 0;
+
+  font-size: 17px;
+  color: #10213f;
+}
+
+.close-modal-btn {
+  width: 32px;
+  height: 32px;
+
+  border: 0;
+  border-radius: 7px;
+
+  background: #f1f3f7;
+
+  color: #52617b;
+
+  font-size: 18px;
+
+  cursor: pointer;
+}
+
+.add-tender-form {
+  padding: 20px;
+}
+
+.add-tender-form-grid {
+  display: grid;
+
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  gap: 15px;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.form-field.full-width {
+  grid-column: 1 / -1;
+}
+
+.form-field label {
+  font-size: 11px;
+
+  font-weight: 600;
+
+  color: #52617b;
+}
+
+.form-field input,
+.form-field select,
+.form-field textarea {
+  width: 100%;
+
+  border: 1px solid #d3ddeb;
+  border-radius: 7px;
+
+  background: #ffffff;
+
+  color: #30415f;
+
+  padding: 10px 12px;
+
+  font-family: inherit;
+  font-size: 11px;
+
+  outline: none;
+}
+
+.form-field input,
+.form-field select {
+  height: 38px;
+}
+
+.form-field textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+.form-field input:focus,
+.form-field select:focus,
+.form-field textarea:focus {
+  border-color: #2563eb;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+
+  gap: 10px;
+
+  margin-top: 20px;
+
+  padding-top: 18px;
+
+  border-top: 1px solid #e5eaf2;
+}
+
+.cancel-btn {
+  height: 38px;
+
+  padding: 0 16px;
+
+  border: 1px solid #d3ddeb;
+  border-radius: 7px;
+
+  background: #ffffff;
+
+  color: #52617b;
+
+  font-size: 11px;
+
+  cursor: pointer;
+}
+
+.save-tender-btn {
+  height: 38px;
+
+  padding: 0 18px;
+
+  border: 0;
+  border-radius: 7px;
+
+  background: #2563eb;
+  color: #ffffff;
+
+  font-size: 11px;
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1100px) {
+  .all-tenders-kpi-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .search-filter-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  .all-tenders-header {
+    flex-direction: column;
+  }
+
+  .all-tenders-kpi-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .search-filter-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .add-tender-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .form-field.full-width {
+    grid-column: auto;
+  }
+
+  .page-body {
+    padding: 20px 16px;
+  }
+}
