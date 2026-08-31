@@ -75,7 +75,7 @@ const emptyForm = {
   client: "",
   branch: "",
   tenderType: "",
-  category: "",
+  serviceCategory: "",
   deadline: "",
   submissionMethod: "",
   potentialValue: "",
@@ -93,23 +93,30 @@ export default function AllTendersPage() {
   const [branch, setBranch] = useState("All Branches");
   const [category, setCategory] = useState("All Categories");
 
-  const [showForm, setShowForm] = useState(false);
+  const [showAddTender, setShowAddTender] = useState(false);
   const [form, setForm] = useState(emptyForm);
+
+  /* =========================================================
+     FILTER DATA
+     ========================================================= */
 
   const filteredTenders = useMemo(() => {
     return tenders.filter((tender) => {
-      const searchText = search.toLowerCase();
+      const searchValue = search.toLowerCase().trim();
 
       const matchesSearch =
-        tender.id.toLowerCase().includes(searchText) ||
-        tender.client.toLowerCase().includes(searchText) ||
-        tender.assigned.toLowerCase().includes(searchText);
+        !searchValue ||
+        tender.id.toLowerCase().includes(searchValue) ||
+        tender.client.toLowerCase().includes(searchValue) ||
+        tender.assigned.toLowerCase().includes(searchValue);
 
       const matchesStatus =
-        status === "All Status" || tender.status === status;
+        status === "All Status" ||
+        tender.status === status;
 
       const matchesBranch =
-        branch === "All Branches" || tender.branch === branch;
+        branch === "All Branches" ||
+        tender.branch === branch;
 
       const matchesCategory =
         category === "All Categories" ||
@@ -125,7 +132,7 @@ export default function AllTendersPage() {
   }, [tenders, search, status, branch, category]);
 
   const totalAmount = filteredTenders.reduce(
-    (sum, tender) => sum + tender.amount,
+    (total, tender) => total + tender.amount,
     0
   );
 
@@ -137,6 +144,10 @@ export default function AllTendersPage() {
     (tender) => tender.status === "In Process"
   ).length;
 
+  /* =========================================================
+     FILTER RESET
+     ========================================================= */
+
   const resetFilters = () => {
     setSearch("");
     setStatus("All Status");
@@ -144,50 +155,70 @@ export default function AllTendersPage() {
     setCategory("All Categories");
   };
 
-  const handleFormChange = (field, value) => {
+  /* =========================================================
+     ADD TENDER
+     ========================================================= */
+
+  const openAddTender = () => {
+    setForm(emptyForm);
+    setShowAddTender(true);
+  };
+
+  const closeAddTender = () => {
+    setShowAddTender(false);
+    setForm(emptyForm);
+  };
+
+  const updateForm = (field, value) => {
     setForm((previous) => ({
       ...previous,
       [field]: value,
     }));
   };
 
-  const openAddTender = () => {
-    setForm(emptyForm);
-    setShowForm(true);
-  };
-
-  const closeAddTender = () => {
-    setShowForm(false);
-    setForm(emptyForm);
-  };
-
-  const handleAddTender = (event) => {
+  const handleSubmitTender = (event) => {
     event.preventDefault();
 
-    if (!form.client || !form.branch || !form.category) {
-      alert("Please fill Client, Branch and Service Category.");
+    if (
+      !form.client.trim() ||
+      !form.branch ||
+      !form.serviceCategory
+    ) {
+      alert(
+        "Please fill Client, Branch and Service Category."
+      );
       return;
     }
 
+    const nextNumber =
+      5621 + tenders.length;
+
+    const formattedDeadline = form.deadline
+      ? new Date(
+          `${form.deadline}T00:00:00`
+        ).toLocaleDateString("en-GB", {
+          day: "2-digit",
+          month: "short",
+          year: "numeric",
+        })
+      : "-";
+
     const newTender = {
-      id: `T-${String(5627 + tenders.length - 6).padStart(5, "0")}`,
-      client: form.client,
+      id: `T-${String(nextNumber).padStart(5, "0")}`,
+      client: form.client.trim(),
       branch: form.branch,
       assigned: "Pawan",
-      deadline: form.deadline
-        ? new Date(form.deadline).toLocaleDateString("en-GB", {
-            day: "2-digit",
-            month: "short",
-            year: "numeric",
-          })
-        : "-",
+      deadline: formattedDeadline,
       amount: Number(form.potentialValue) || 0,
       status: "In Process",
       result: "-",
-      category: form.category,
+      category: form.serviceCategory,
     };
 
-    setTenders((previous) => [newTender, ...previous]);
+    setTenders((previous) => [
+      newTender,
+      ...previous,
+    ]);
 
     closeAddTender();
   };
@@ -197,7 +228,7 @@ export default function AllTendersPage() {
       <div className="all-tenders-page">
 
         {/* =====================================================
-            PAGE HEADER
+            HEADER
         ====================================================== */}
 
         <div className="page-header">
@@ -225,15 +256,19 @@ export default function AllTendersPage() {
         </div>
 
         {/* =====================================================
-            SUMMARY
+            SUMMARY CARDS
         ====================================================== */}
 
         <div className="summary-grid">
 
           <div className="summary-card">
             <span>Total Tenders</span>
-            <strong>{filteredTenders.length}</strong>
-            <small>Matching records</small>
+            <strong>
+              {filteredTenders.length}
+            </strong>
+            <small>
+              Matching records
+            </small>
           </div>
 
           <div className="summary-card">
@@ -241,19 +276,29 @@ export default function AllTendersPage() {
             <strong>
               ₹{totalAmount.toLocaleString("en-IN")}
             </strong>
-            <small>Filtered tender value</small>
+            <small>
+              Filtered tender value
+            </small>
           </div>
 
           <div className="summary-card">
             <span>Submitted</span>
-            <strong>{submittedCount}</strong>
-            <small>Currently submitted</small>
+            <strong>
+              {submittedCount}
+            </strong>
+            <small>
+              Currently submitted
+            </small>
           </div>
 
           <div className="summary-card">
             <span>In Process</span>
-            <strong>{inProcessCount}</strong>
-            <small>Currently working</small>
+            <strong>
+              {inProcessCount}
+            </strong>
+            <small>
+              Currently working
+            </small>
           </div>
 
         </div>
@@ -264,7 +309,7 @@ export default function AllTendersPage() {
 
         <div className="filter-panel">
 
-          <div className="filter-title">
+          <div className="filter-title-row">
 
             <h2>Search &amp; Filters</h2>
 
@@ -350,18 +395,20 @@ export default function AllTendersPage() {
         </div>
 
         {/* =====================================================
-            TENDER TABLE
+            TENDER LIST
         ====================================================== */}
 
         <div className="table-card">
 
           <div className="table-header">
 
-            <h2>Tender List</h2>
+            <div>
+              <h2>Tender List</h2>
 
-            <p>
-              {filteredTenders.length} records found
-            </p>
+              <p>
+                {filteredTenders.length} records found
+              </p>
+            </div>
 
           </div>
 
@@ -414,14 +461,23 @@ export default function AllTendersPage() {
                         </small>
                       </td>
 
-                      <td>{tender.branch}</td>
+                      <td>
+                        {tender.branch}
+                      </td>
 
-                      <td>{tender.assigned}</td>
+                      <td>
+                        {tender.assigned}
+                      </td>
 
-                      <td>{tender.deadline}</td>
+                      <td>
+                        {tender.deadline}
+                      </td>
 
                       <td className="amount">
-                        ₹{tender.amount.toLocaleString("en-IN")}
+                        ₹
+                        {tender.amount.toLocaleString(
+                          "en-IN"
+                        )}
                       </td>
 
                       <td>
@@ -434,7 +490,9 @@ export default function AllTendersPage() {
                         </span>
                       </td>
 
-                      <td>{tender.result}</td>
+                      <td>
+                        {tender.result}
+                      </td>
 
                       <td>
                         <button
@@ -442,7 +500,7 @@ export default function AllTendersPage() {
                           className="view-button"
                           onClick={() =>
                             alert(
-                              `Tender ${tender.id}\nClient: ${tender.client}`
+                              `Tender ID: ${tender.id}\nClient: ${tender.client}`
                             )
                           }
                         >
@@ -459,41 +517,44 @@ export default function AllTendersPage() {
             </table>
 
           </div>
-
         </div>
 
       </div>
 
       {/* =======================================================
-          ADD TENDER MODAL
+          ADD TENDER FORM
+          ONLY APPEARS AFTER CLICKING + ADD TENDER
       ======================================================== */}
 
-      {showForm && (
+      {showAddTender && (
         <div
-          className="tender-modal-overlay"
+          className="add-tender-overlay"
           onMouseDown={(event) => {
-            if (event.target === event.currentTarget) {
+            if (
+              event.target === event.currentTarget
+            ) {
               closeAddTender();
             }
           }}
         >
 
-          <div className="tender-modal">
+          <div className="add-tender-modal">
 
-            {/* MODAL HEADER */}
+            {/* FORM HEADER */}
 
-            <div className="tender-modal-header">
+            <div className="add-tender-header">
 
               <div>
                 <h2>Add Tender</h2>
+
                 <p>
-                  Enter the tender opportunity details below.
+                  Enter tender details
                 </p>
               </div>
 
               <button
                 type="button"
-                className="modal-close-button"
+                className="add-tender-close"
                 onClick={closeAddTender}
               >
                 ×
@@ -503,13 +564,15 @@ export default function AllTendersPage() {
 
             {/* FORM */}
 
-            <form onSubmit={handleAddTender}>
+            <form
+              onSubmit={handleSubmitTender}
+            >
 
-              <div className="tender-form-grid">
+              <div className="add-tender-form-grid">
 
                 {/* CLIENT */}
 
-                <div className="tender-form-field">
+                <div className="add-tender-field">
                   <label>
                     Client <span>*</span>
                   </label>
@@ -518,7 +581,7 @@ export default function AllTendersPage() {
                     type="text"
                     value={form.client}
                     onChange={(event) =>
-                      handleFormChange(
+                      updateForm(
                         "client",
                         event.target.value
                       )
@@ -529,7 +592,7 @@ export default function AllTendersPage() {
 
                 {/* BRANCH */}
 
-                <div className="tender-form-field">
+                <div className="add-tender-field">
                   <label>
                     Branch <span>*</span>
                   </label>
@@ -537,7 +600,7 @@ export default function AllTendersPage() {
                   <select
                     value={form.branch}
                     onChange={(event) =>
-                      handleFormChange(
+                      updateForm(
                         "branch",
                         event.target.value
                       )
@@ -567,13 +630,15 @@ export default function AllTendersPage() {
 
                 {/* TENDER TYPE */}
 
-                <div className="tender-form-field">
-                  <label>Tender Type</label>
+                <div className="add-tender-field">
+                  <label>
+                    Tender Type
+                  </label>
 
                   <select
                     value={form.tenderType}
                     onChange={(event) =>
-                      handleFormChange(
+                      updateForm(
                         "tenderType",
                         event.target.value
                       )
@@ -603,22 +668,22 @@ export default function AllTendersPage() {
 
                 {/* SERVICE CATEGORY */}
 
-                <div className="tender-form-field">
+                <div className="add-tender-field">
                   <label>
                     Service Category <span>*</span>
                   </label>
 
                   <select
-                    value={form.category}
+                    value={form.serviceCategory}
                     onChange={(event) =>
-                      handleFormChange(
-                        "category",
+                      updateForm(
+                        "serviceCategory",
                         event.target.value
                       )
                     }
                   >
                     <option value="">
-                      Select Category
+                      Select Service Category
                     </option>
 
                     <option value="IT Services">
@@ -641,14 +706,16 @@ export default function AllTendersPage() {
 
                 {/* DEADLINE */}
 
-                <div className="tender-form-field">
-                  <label>Deadline</label>
+                <div className="add-tender-field">
+                  <label>
+                    Deadline
+                  </label>
 
                   <input
                     type="date"
                     value={form.deadline}
                     onChange={(event) =>
-                      handleFormChange(
+                      updateForm(
                         "deadline",
                         event.target.value
                       )
@@ -658,20 +725,22 @@ export default function AllTendersPage() {
 
                 {/* SUBMISSION METHOD */}
 
-                <div className="tender-form-field">
-                  <label>Submission Method</label>
+                <div className="add-tender-field">
+                  <label>
+                    Submission Method
+                  </label>
 
                   <select
                     value={form.submissionMethod}
                     onChange={(event) =>
-                      handleFormChange(
+                      updateForm(
                         "submissionMethod",
                         event.target.value
                       )
                     }
                   >
                     <option value="">
-                      Select Method
+                      Select Submission Method
                     </option>
 
                     <option value="Online">
@@ -690,50 +759,56 @@ export default function AllTendersPage() {
 
                 {/* POTENTIAL VALUE */}
 
-                <div className="tender-form-field">
-                  <label>Potential Value</label>
+                <div className="add-tender-field">
+                  <label>
+                    Potential Value
+                  </label>
 
                   <input
                     type="number"
                     value={form.potentialValue}
                     onChange={(event) =>
-                      handleFormChange(
+                      updateForm(
                         "potentialValue",
                         event.target.value
                       )
                     }
-                    placeholder="₹ Enter amount"
+                    placeholder="Enter potential value"
                   />
                 </div>
 
                 {/* EMD / TENDER FEE */}
 
-                <div className="tender-form-field">
-                  <label>EMD / Tender Fee</label>
+                <div className="add-tender-field">
+                  <label>
+                    EMD / Tender Fee
+                  </label>
 
                   <input
                     type="text"
                     value={form.emdFee}
                     onChange={(event) =>
-                      handleFormChange(
+                      updateForm(
                         "emdFee",
                         event.target.value
                       )
                     }
-                    placeholder="Enter amount"
+                    placeholder="Enter EMD / tender fee"
                   />
                 </div>
 
                 {/* BID VALIDITY */}
 
-                <div className="tender-form-field">
-                  <label>Bid Validity</label>
+                <div className="add-tender-field">
+                  <label>
+                    Bid Validity
+                  </label>
 
                   <input
                     type="text"
                     value={form.bidValidity}
                     onChange={(event) =>
-                      handleFormChange(
+                      updateForm(
                         "bidValidity",
                         event.target.value
                       )
@@ -744,37 +819,41 @@ export default function AllTendersPage() {
 
                 {/* DOCUMENTS */}
 
-                <div className="tender-form-field">
-                  <label>Documents</label>
+                <div className="add-tender-field">
+                  <label>
+                    Documents
+                  </label>
 
                   <input
                     type="text"
                     value={form.documents}
                     onChange={(event) =>
-                      handleFormChange(
+                      updateForm(
                         "documents",
                         event.target.value
                       )
                     }
-                    placeholder="Document name / reference"
+                    placeholder="Enter document details"
                   />
                 </div>
 
                 {/* REMARKS */}
 
-                <div className="tender-form-field full-width">
-                  <label>Remarks</label>
+                <div className="add-tender-field add-tender-full">
+                  <label>
+                    Remarks
+                  </label>
 
                   <textarea
                     rows="4"
                     value={form.remarks}
                     onChange={(event) =>
-                      handleFormChange(
+                      updateForm(
                         "remarks",
                         event.target.value
                       )
                     }
-                    placeholder="Enter additional remarks..."
+                    placeholder="Enter remarks..."
                   />
                 </div>
 
@@ -782,11 +861,11 @@ export default function AllTendersPage() {
 
               {/* FORM FOOTER */}
 
-              <div className="tender-form-actions">
+              <div className="add-tender-actions">
 
                 <button
                   type="button"
-                  className="modal-cancel-button"
+                  className="add-tender-cancel"
                   onClick={closeAddTender}
                 >
                   Cancel
@@ -794,7 +873,7 @@ export default function AllTendersPage() {
 
                 <button
                   type="submit"
-                  className="modal-save-button"
+                  className="add-tender-save"
                 >
                   Add Tender
                 </button>
@@ -807,6 +886,247 @@ export default function AllTendersPage() {
 
         </div>
       )}
+
+      {/* =======================================================
+          MODAL CSS
+      ======================================================== */}
+
+      <style jsx>{`
+        .add-tender-overlay {
+          position: fixed;
+          inset: 0;
+          z-index: 9999;
+
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          padding: 20px;
+
+          background: rgba(15, 23, 42, 0.5);
+
+          overflow-y: auto;
+        }
+
+        .add-tender-modal {
+          width: min(900px, 100%);
+          max-height: calc(100vh - 40px);
+
+          overflow-y: auto;
+
+          background: #ffffff;
+
+          border-radius: 14px;
+
+          box-shadow:
+            0 20px 60px rgba(15, 23, 42, 0.25);
+        }
+
+        .add-tender-header {
+          position: sticky;
+          top: 0;
+          z-index: 2;
+
+          display: flex;
+          align-items: flex-start;
+          justify-content: space-between;
+
+          padding: 20px 24px;
+
+          background: #ffffff;
+
+          border-bottom: 1px solid #e5eaf2;
+        }
+
+        .add-tender-header h2 {
+          margin: 0;
+
+          font-size: 20px;
+
+          color: #10213f;
+        }
+
+        .add-tender-header p {
+          margin: 5px 0 0;
+
+          font-size: 12px;
+
+          color: #7583a0;
+        }
+
+        .add-tender-close {
+          width: 32px;
+          height: 32px;
+
+          border: 0;
+          border-radius: 7px;
+
+          background: #f1f3f7;
+
+          color: #52617b;
+
+          font-size: 22px;
+
+          cursor: pointer;
+        }
+
+        .add-tender-close:hover {
+          background: #e5eaf2;
+        }
+
+        .add-tender-modal form {
+          padding: 22px 24px 24px;
+        }
+
+        .add-tender-form-grid {
+          display: grid;
+
+          grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+          gap: 16px;
+        }
+
+        .add-tender-field {
+          display: flex;
+          flex-direction: column;
+          gap: 7px;
+        }
+
+        .add-tender-field.add-tender-full {
+          grid-column: 1 / -1;
+        }
+
+        .add-tender-field label {
+          font-size: 11px;
+          font-weight: 600;
+
+          color: #30415f;
+        }
+
+        .add-tender-field label span {
+          color: #ef4444;
+        }
+
+        .add-tender-field input,
+        .add-tender-field select,
+        .add-tender-field textarea {
+          width: 100%;
+
+          border: 1px solid #d7dfeb;
+
+          border-radius: 7px;
+
+          background: #ffffff;
+
+          color: #30415f;
+
+          font-family: inherit;
+
+          font-size: 12px;
+
+          outline: none;
+        }
+
+        .add-tender-field input,
+        .add-tender-field select {
+          height: 40px;
+          padding: 0 12px;
+        }
+
+        .add-tender-field textarea {
+          padding: 11px 12px;
+          resize: vertical;
+        }
+
+        .add-tender-field input:focus,
+        .add-tender-field select:focus,
+        .add-tender-field textarea:focus {
+          border-color: #2563eb;
+
+          box-shadow:
+            0 0 0 3px
+            rgba(37, 99, 235, 0.08);
+        }
+
+        .add-tender-actions {
+          display: flex;
+
+          justify-content: flex-end;
+
+          gap: 10px;
+
+          margin-top: 24px;
+          padding-top: 18px;
+
+          border-top: 1px solid #e5eaf2;
+        }
+
+        .add-tender-cancel,
+        .add-tender-save {
+          height: 38px;
+
+          padding: 0 18px;
+
+          border-radius: 7px;
+
+          font-family: inherit;
+
+          font-size: 12px;
+
+          font-weight: 600;
+
+          cursor: pointer;
+        }
+
+        .add-tender-cancel {
+          border: 1px solid #d7dfeb;
+
+          background: #ffffff;
+
+          color: #52617b;
+        }
+
+        .add-tender-cancel:hover {
+          background: #f5f7fb;
+        }
+
+        .add-tender-save {
+          border: 0;
+
+          background: #2563eb;
+
+          color: #ffffff;
+
+          box-shadow:
+            0 4px 10px
+            rgba(37, 99, 235, 0.18);
+        }
+
+        .add-tender-save:hover {
+          background: #1d4ed8;
+        }
+
+        @media (max-width: 700px) {
+          .add-tender-overlay {
+            padding: 10px;
+          }
+
+          .add-tender-form-grid {
+            grid-template-columns: 1fr;
+          }
+
+          .add-tender-field.add-tender-full {
+            grid-column: auto;
+          }
+
+          .add-tender-header,
+          .add-tender-modal form {
+            padding-left: 16px;
+            padding-right: 16px;
+          }
+        }
+      `}</style>
     </>
   );
 }
