@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 
-const tenders = [
+const initialTenders = [
   {
     id: "T-05621",
     client: "ABC Ltd",
@@ -89,6 +89,22 @@ function formatAmount(amount) {
   }).format(amount);
 }
 
+function formatDate(dateString) {
+  if (!dateString) return "-";
+
+  const date = new Date(dateString);
+
+  if (Number.isNaN(date.getTime())) {
+    return dateString;
+  }
+
+  return date.toLocaleDateString("en-GB", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
+}
+
 function StatusBadge({ status }) {
   return (
     <span
@@ -102,10 +118,28 @@ function StatusBadge({ status }) {
 }
 
 export default function AllTenders() {
+  const [tenders, setTenders] = useState(initialTenders);
+
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState("All Status");
   const [branch, setBranch] = useState("All Branches");
   const [category, setCategory] = useState("All Categories");
+
+  const [showAddTender, setShowAddTender] = useState(false);
+
+  const [newTender, setNewTender] = useState({
+    client: "",
+    branch: "",
+    tenderType: "",
+    serviceCategory: "",
+    deadline: "",
+    submissionMethod: "",
+    potentialValue: "",
+    emdFee: "",
+    bidValidity: "",
+    documents: "",
+    remarks: "",
+  });
 
   const branches = [
     "All Branches",
@@ -143,10 +177,10 @@ export default function AllTenders() {
         matchesCategory
       );
     });
-  }, [search, status, branch, category]);
+  }, [tenders, search, status, branch, category]);
 
   const totalAmount = filteredTenders.reduce(
-    (sum, tender) => sum + tender.amount,
+    (sum, tender) => sum + Number(tender.amount || 0),
     0
   );
 
@@ -157,6 +191,77 @@ export default function AllTenders() {
   const inProcessCount = filteredTenders.filter(
     (tender) => tender.status === "In Process"
   ).length;
+
+  const handleTenderChange = (event) => {
+    const { name, value } = event.target;
+
+    setNewTender((previous) => ({
+      ...previous,
+      [name]: value,
+    }));
+  };
+
+  const resetTenderForm = () => {
+    setNewTender({
+      client: "",
+      branch: "",
+      tenderType: "",
+      serviceCategory: "",
+      deadline: "",
+      submissionMethod: "",
+      potentialValue: "",
+      emdFee: "",
+      bidValidity: "",
+      documents: "",
+      remarks: "",
+    });
+  };
+
+  const handleAddTender = (event) => {
+    event.preventDefault();
+
+    const nextNumber =
+      Math.max(
+        ...tenders.map((tender) => {
+          const number = Number(
+            tender.id.replace("T-", "")
+          );
+
+          return Number.isNaN(number) ? 0 : number;
+        })
+      ) + 1;
+
+    const newTenderRecord = {
+      id: `T-${String(nextNumber).padStart(5, "0")}`,
+      client: newTender.client,
+      branch: newTender.branch,
+      assigned: "Pawan",
+      deadline: formatDate(newTender.deadline),
+      amount: Number(newTender.potentialValue || 0),
+      status: "In Process",
+      result: "-",
+      category: newTender.serviceCategory,
+      tenderType: newTender.tenderType,
+      submissionMethod: newTender.submissionMethod,
+      emdFee: newTender.emdFee,
+      bidValidity: newTender.bidValidity,
+      documents: newTender.documents,
+      remarks: newTender.remarks,
+    };
+
+    setTenders((previous) => [
+      newTenderRecord,
+      ...previous,
+    ]);
+
+    setShowAddTender(false);
+    resetTenderForm();
+
+    setSearch("");
+    setStatus("All Status");
+    setBranch("All Branches");
+    setCategory("All Categories");
+  };
 
   const resetFilters = () => {
     setSearch("");
@@ -185,13 +290,13 @@ export default function AllTenders() {
         <button
           type="button"
           className="new-tender-button"
+          onClick={() => setShowAddTender(true)}
         >
-          + New Tender
+          + Add Tender
         </button>
       </div>
 
-
-      {/* SUMMARY CARDS */}
+      {/* SUMMARY */}
       <section className="summary-grid">
 
         <div className="summary-card">
@@ -206,7 +311,6 @@ export default function AllTenders() {
           </small>
         </div>
 
-
         <div className="summary-card">
           <span>Total Potential Amount</span>
 
@@ -219,7 +323,6 @@ export default function AllTenders() {
           </small>
         </div>
 
-
         <div className="summary-card">
           <span>Submitted</span>
 
@@ -231,7 +334,6 @@ export default function AllTenders() {
             Currently submitted
           </small>
         </div>
-
 
         <div className="summary-card">
           <span>In Process</span>
@@ -247,12 +349,10 @@ export default function AllTenders() {
 
       </section>
 
-
       {/* SEARCH & FILTERS */}
-      <section className="filter-panel all-tenders-filter">
+      <section className="filter-panel">
 
         <div className="filter-title">
-
           <h2>
             Search & Filters
           </h2>
@@ -264,15 +364,11 @@ export default function AllTenders() {
           >
             Reset
           </button>
-
         </div>
-
 
         <div className="filter-grid">
 
-          {/* SEARCH */}
           <div className="filter-field search-field">
-
             <label>
               Search
             </label>
@@ -281,25 +377,21 @@ export default function AllTenders() {
               type="text"
               placeholder="Search Tender ID, Client or Assignee..."
               value={search}
-              onChange={(e) =>
-                setSearch(e.target.value)
+              onChange={(event) =>
+                setSearch(event.target.value)
               }
             />
-
           </div>
 
-
-          {/* STATUS */}
           <div className="filter-field">
-
             <label>
               Status
             </label>
 
             <select
               value={status}
-              onChange={(e) =>
-                setStatus(e.target.value)
+              onChange={(event) =>
+                setStatus(event.target.value)
               }
             >
               {statusOptions.map((option) => (
@@ -311,21 +403,17 @@ export default function AllTenders() {
                 </option>
               ))}
             </select>
-
           </div>
 
-
-          {/* BRANCH */}
           <div className="filter-field">
-
             <label>
               Branch
             </label>
 
             <select
               value={branch}
-              onChange={(e) =>
-                setBranch(e.target.value)
+              onChange={(event) =>
+                setBranch(event.target.value)
               }
             >
               {branches.map((option) => (
@@ -337,21 +425,17 @@ export default function AllTenders() {
                 </option>
               ))}
             </select>
-
           </div>
 
-
-          {/* CATEGORY */}
           <div className="filter-field">
-
             <label>
               Category
             </label>
 
             <select
               value={category}
-              onChange={(e) =>
-                setCategory(e.target.value)
+              onChange={(event) =>
+                setCategory(event.target.value)
               }
             >
               {categories.map((option) => (
@@ -363,21 +447,16 @@ export default function AllTenders() {
                 </option>
               ))}
             </select>
-
           </div>
 
         </div>
-
       </section>
-
 
       {/* TENDER TABLE */}
       <section className="table-card">
 
         <div className="table-header">
-
           <div>
-
             <h2>
               Tender List
             </h2>
@@ -385,11 +464,8 @@ export default function AllTenders() {
             <p>
               {filteredTenders.length} records found
             </p>
-
           </div>
-
         </div>
-
 
         <div className="table-wrapper">
 
@@ -409,13 +485,10 @@ export default function AllTenders() {
               </tr>
             </thead>
 
-
             <tbody>
 
               {filteredTenders.length > 0 ? (
-
                 filteredTenders.map((tender) => (
-
                   <tr key={tender.id}>
 
                     <td>
@@ -423,7 +496,6 @@ export default function AllTenders() {
                         {tender.id}
                       </strong>
                     </td>
-
 
                     <td>
                       <strong>
@@ -435,26 +507,21 @@ export default function AllTenders() {
                       </small>
                     </td>
 
-
                     <td>
                       {tender.branch}
                     </td>
-
 
                     <td>
                       {tender.assigned}
                     </td>
 
-
                     <td>
                       {tender.deadline}
                     </td>
 
-
                     <td className="amount">
                       {formatAmount(tender.amount)}
                     </td>
-
 
                     <td>
                       <StatusBadge
@@ -462,38 +529,35 @@ export default function AllTenders() {
                       />
                     </td>
 
-
                     <td>
                       {tender.result}
                     </td>
-
 
                     <td>
                       <button
                         type="button"
                         className="view-button"
+                        onClick={() =>
+                          alert(
+                            `Tender ${tender.id}\nClient: ${tender.client}`
+                          )
+                        }
                       >
                         View
                       </button>
                     </td>
 
                   </tr>
-
                 ))
-
               ) : (
-
                 <tr>
-
                   <td
                     colSpan="9"
                     className="empty-state"
                   >
                     No tenders found.
                   </td>
-
                 </tr>
-
               )}
 
             </tbody>
@@ -501,8 +565,345 @@ export default function AllTenders() {
           </table>
 
         </div>
-
       </section>
+
+      {/* =====================================================
+          ADD TENDER MODAL
+          ===================================================== */}
+
+      {showAddTender && (
+        <div
+          className="modal-overlay"
+          onMouseDown={(event) => {
+            if (
+              event.target === event.currentTarget
+            ) {
+              setShowAddTender(false);
+            }
+          }}
+        >
+
+          <div className="add-tender-modal">
+
+            {/* MODAL HEADER */}
+            <div className="modal-header">
+
+              <div>
+                <h2>
+                  Add Tender
+                </h2>
+
+                <p>
+                  Enter the tender details below.
+                </p>
+              </div>
+
+              <button
+                type="button"
+                className="modal-close"
+                onClick={() =>
+                  setShowAddTender(false)
+                }
+              >
+                ×
+              </button>
+
+            </div>
+
+            {/* FORM */}
+            <form onSubmit={handleAddTender}>
+
+              <div className="form-grid">
+
+                {/* CLIENT */}
+                <div className="form-field">
+                  <label>
+                    Client
+                  </label>
+
+                  <input
+                    type="text"
+                    name="client"
+                    placeholder="Enter client name"
+                    value={newTender.client}
+                    onChange={handleTenderChange}
+                    required
+                  />
+                </div>
+
+                {/* BRANCH */}
+                <div className="form-field">
+                  <label>
+                    Branch
+                  </label>
+
+                  <select
+                    name="branch"
+                    value={newTender.branch}
+                    onChange={handleTenderChange}
+                    required
+                  >
+                    <option value="">
+                      Select Branch
+                    </option>
+
+                    <option value="Pune">
+                      Pune
+                    </option>
+
+                    <option value="Mumbai">
+                      Mumbai
+                    </option>
+
+                    <option value="Delhi">
+                      Delhi
+                    </option>
+
+                    <option value="Bangalore">
+                      Bangalore
+                    </option>
+
+                    <option value="Nagpur">
+                      Nagpur
+                    </option>
+                  </select>
+                </div>
+
+                {/* TENDER TYPE */}
+                <div className="form-field">
+                  <label>
+                    Tender Type
+                  </label>
+
+                  <select
+                    name="tenderType"
+                    value={newTender.tenderType}
+                    onChange={handleTenderChange}
+                    required
+                  >
+                    <option value="">
+                      Select Tender Type
+                    </option>
+
+                    <option value="Open Tender">
+                      Open Tender
+                    </option>
+
+                    <option value="Limited Tender">
+                      Limited Tender
+                    </option>
+
+                    <option value="Government Tender">
+                      Government Tender
+                    </option>
+
+                    <option value="Private Tender">
+                      Private Tender
+                    </option>
+
+                    <option value="EOI">
+                      EOI
+                    </option>
+
+                    <option value="RFP">
+                      RFP
+                    </option>
+                  </select>
+                </div>
+
+                {/* SERVICE CATEGORY */}
+                <div className="form-field">
+                  <label>
+                    Service Category
+                  </label>
+
+                  <select
+                    name="serviceCategory"
+                    value={newTender.serviceCategory}
+                    onChange={handleTenderChange}
+                    required
+                  >
+                    <option value="">
+                      Select Category
+                    </option>
+
+                    <option value="IT Services">
+                      IT Services
+                    </option>
+
+                    <option value="Consulting">
+                      Consulting
+                    </option>
+
+                    <option value="Technology">
+                      Technology
+                    </option>
+
+                    <option value="Infrastructure">
+                      Infrastructure
+                    </option>
+
+                    <option value="Software">
+                      Software
+                    </option>
+
+                    <option value="Manpower">
+                      Manpower
+                    </option>
+                  </select>
+                </div>
+
+                {/* DEADLINE */}
+                <div className="form-field">
+                  <label>
+                    Deadline
+                  </label>
+
+                  <input
+                    type="date"
+                    name="deadline"
+                    value={newTender.deadline}
+                    onChange={handleTenderChange}
+                    required
+                  />
+                </div>
+
+                {/* SUBMISSION METHOD */}
+                <div className="form-field">
+                  <label>
+                    Submission Method
+                  </label>
+
+                  <select
+                    name="submissionMethod"
+                    value={newTender.submissionMethod}
+                    onChange={handleTenderChange}
+                    required
+                  >
+                    <option value="">
+                      Select Method
+                    </option>
+
+                    <option value="Online">
+                      Online
+                    </option>
+
+                    <option value="Offline">
+                      Offline
+                    </option>
+
+                    <option value="Online & Offline">
+                      Online & Offline
+                    </option>
+                  </select>
+                </div>
+
+                {/* POTENTIAL VALUE */}
+                <div className="form-field">
+                  <label>
+                    Potential Value
+                  </label>
+
+                  <input
+                    type="number"
+                    name="potentialValue"
+                    placeholder="Enter potential value"
+                    value={newTender.potentialValue}
+                    onChange={handleTenderChange}
+                    min="0"
+                  />
+                </div>
+
+                {/* EMD / TENDER FEE */}
+                <div className="form-field">
+                  <label>
+                    EMD / Tender Fee
+                  </label>
+
+                  <input
+                    type="text"
+                    name="emdFee"
+                    placeholder="Enter EMD / Tender Fee"
+                    value={newTender.emdFee}
+                    onChange={handleTenderChange}
+                  />
+                </div>
+
+                {/* BID VALIDITY */}
+                <div className="form-field">
+                  <label>
+                    Bid Validity
+                  </label>
+
+                  <input
+                    type="text"
+                    name="bidValidity"
+                    placeholder="Example: 90 Days"
+                    value={newTender.bidValidity}
+                    onChange={handleTenderChange}
+                  />
+                </div>
+
+                {/* DOCUMENTS */}
+                <div className="form-field">
+                  <label>
+                    Documents
+                  </label>
+
+                  <input
+                    type="text"
+                    name="documents"
+                    placeholder="Enter document details"
+                    value={newTender.documents}
+                    onChange={handleTenderChange}
+                  />
+                </div>
+
+                {/* REMARKS */}
+                <div className="form-field full-width">
+                  <label>
+                    Remarks
+                  </label>
+
+                  <textarea
+                    name="remarks"
+                    placeholder="Enter any additional remarks..."
+                    rows="4"
+                    value={newTender.remarks}
+                    onChange={handleTenderChange}
+                  />
+                </div>
+
+              </div>
+
+              {/* FORM BUTTONS */}
+              <div className="modal-footer">
+
+                <button
+                  type="button"
+                  className="cancel-button"
+                  onClick={() => {
+                    setShowAddTender(false);
+                    resetTenderForm();
+                  }}
+                >
+                  Cancel
+                </button>
+
+                <button
+                  type="submit"
+                  className="save-tender-button"
+                >
+                  + Add Tender
+                </button>
+
+              </div>
+
+            </form>
+
+          </div>
+        </div>
+      )}
 
     </main>
   );
