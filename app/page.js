@@ -71,29 +71,43 @@ const months = [
 ];
 
 export default function Dashboard() {
-  const [filter1, setFilter1] = useState("Select All");
-  const [filter2, setFilter2] = useState("Select All");
-  const [filter3, setFilter3] = useState("Select All");
-  const [filter4, setFilter4] = useState("Select All");
-  const [filter5, setFilter5] = useState("Select All");
-  const [filter6, setFilter6] = useState("Select All");
-  const [filter7, setFilter7] = useState("Select All");
+  /* =====================================================
+     FILTER STATES
+     ===================================================== */
+
+  const [year, setYear] = useState("2026");
+  const [month, setMonth] = useState("August");
+  const [business, setBusiness] = useState("All Business");
+  const [businessType, setBusinessType] = useState("All");
+  const [zsm, setZsm] = useState("All ZSM");
+  const [category, setCategory] = useState("All Categories");
+  const [location, setLocation] = useState("All");
+
+
+  /* =====================================================
+     RESET FILTERS
+     ===================================================== */
 
   const resetFilters = () => {
-    setFilter1("Select All");
-    setFilter2("Select All");
-    setFilter3("Select All");
-    setFilter4("Select All");
-    setFilter5("Select All");
-    setFilter6("Select All");
-    setFilter7("Select All");
+    setYear("2026");
+    setMonth("August");
+    setBusiness("All Business");
+    setBusinessType("All");
+    setZsm("All ZSM");
+    setCategory("All Categories");
+    setLocation("All");
   };
+
 
   return (
     <main className="content">
 
-      {/* TOP BAR */}
+      {/* =================================================
+          TOP BAR
+         ================================================= */}
+
       <header className="topbar">
+
         <div>
           <div className="breadcrumb">
             Home / Dashboard
@@ -104,12 +118,17 @@ export default function Dashboard() {
           </h1>
         </div>
 
+
         <div className="top-actions">
 
-          <button className="icon-btn" type="button">
+          <button
+            type="button"
+            className="icon-btn"
+          >
             ♧
             <span className="notification-dot"></span>
           </button>
+
 
           <div className="profile">
 
@@ -118,6 +137,7 @@ export default function Dashboard() {
             </div>
 
             <div>
+
               <div className="profile-name">
                 Pawan Maske
               </div>
@@ -125,6 +145,7 @@ export default function Dashboard() {
               <div className="profile-role">
                 Tender Executive
               </div>
+
             </div>
 
             <span className="chevron">
@@ -134,16 +155,25 @@ export default function Dashboard() {
           </div>
 
         </div>
+
       </header>
 
 
-      {/* PAGE BODY */}
+      {/* =================================================
+          PAGE BODY
+         ================================================= */}
+
       <div className="page-body">
 
-        {/* WELCOME */}
+
+        {/* =================================================
+            WELCOME
+           ================================================= */}
+
         <div className="welcome-row">
 
           <div>
+
             <h2>
               Good afternoon, Pawan 👋
             </h2>
@@ -151,7 +181,9 @@ export default function Dashboard() {
             <p>
               Here's your tender performance overview.
             </p>
+
           </div>
+
 
           <button
             type="button"
@@ -163,7 +195,10 @@ export default function Dashboard() {
         </div>
 
 
-        {/* FILTERS */}
+        {/* =================================================
+            FILTERS
+           ================================================= */}
+
         <section className="filter-panel">
 
           <div className="filter-row">
@@ -172,70 +207,268 @@ export default function Dashboard() {
               Filters
             </span>
 
-            {/* FILTER 1 */}
+
+            {/* =================================================
+                YEAR
+               ================================================= */}
+
             <select
               className="filter-select"
-              value={filter1}
-              onChange={(e) => setFilter1(e.target.value)}
+              value={year}
+              onChange={(e) => setYear(e.target.value)}
             >
-              <option>Select All</option>
+              <option value="Select All">
+                Select All
+              </option>
+
+              <option value="2026">
+                2026
+              </option>
+
+              <option value="2025">
+                2025
+              </option>
+
+              <option value="2024">
+                2024
+              </option>
+
+              <option value="2023">
+                2023
+              </option>
             </select>
 
-            {/* FILTER 2 */}
+
+            {/* =================================================
+                MONTH
+               ================================================= */}
+
             <select
               className="filter-select"
-              value={filter2}
-              onChange={(e) => setFilter2(e.target.value)}
+              value={month}
+              onChange={(e) => setMonth(e.target.value)}
             >
-              <option>Select All</option>
+              <option value="Select All">
+                Select All
+              </option>
+
+              <option value="January">
+                January
+              </option>
+
+              <option value="February">
+                February
+              </option>
+
+              <option value="March">
+                March
+              </option>
+
+              <option value="April">
+                April
+              </option>
+
+              <option value="May">
+                May
+              </option>
+
+              <option value="June">
+                June
+              </option>
+
+              <option value="July">
+                July
+              </option>
+
+              <option value="August">
+                August
+              </option>
+
+              <option value="September">
+                September
+              </option>
+
+              <option value="October">
+                October
+              </option>
+
+              <option value="November">
+                November
+              </option>
+
+              <option value="December">
+                December
+              </option>
             </select>
 
-            {/* FILTER 3 */}
+
+            {/* =================================================
+                BUSINESS
+               ================================================= */}
+
             <select
               className="filter-select"
-              value={filter3}
-              onChange={(e) => setFilter3(e.target.value)}
+              value={business}
+              onChange={(e) => setBusiness(e.target.value)}
             >
-              <option>Select All</option>
+              <option value="Select All">
+                Select All
+              </option>
+
+              <option value="All Business">
+                All Business
+              </option>
+
+              <option value="IT Services">
+                IT Services
+              </option>
+
+              <option value="Consulting">
+                Consulting
+              </option>
+
+              <option value="Infrastructure">
+                Infrastructure
+              </option>
+
+              <option value="Technology">
+                Technology
+              </option>
             </select>
 
-            {/* FILTER 4 */}
+
+            {/* =================================================
+                BUSINESS TYPE
+               ================================================= */}
+
             <select
               className="filter-select"
-              value={filter4}
-              onChange={(e) => setFilter4(e.target.value)}
+              value={businessType}
+              onChange={(e) => setBusinessType(e.target.value)}
             >
-              <option>Select All</option>
+              <option value="Select All">
+                Select All
+              </option>
+
+              <option value="All">
+                All
+              </option>
+
+              <option value="Government">
+                Government
+              </option>
+
+              <option value="Private">
+                Private
+              </option>
             </select>
 
-            {/* FILTER 5 */}
+
+            {/* =================================================
+                ZSM
+               ================================================= */}
+
             <select
               className="filter-select"
-              value={filter5}
-              onChange={(e) => setFilter5(e.target.value)}
+              value={zsm}
+              onChange={(e) => setZsm(e.target.value)}
             >
-              <option>Select All</option>
+              <option value="Select All">
+                Select All
+              </option>
+
+              <option value="All ZSM">
+                All ZSM
+              </option>
+
+              <option value="Rahul">
+                Rahul
+              </option>
+
+              <option value="Priya">
+                Priya
+              </option>
+
+              <option value="Amit">
+                Amit
+              </option>
             </select>
 
-            {/* FILTER 6 */}
+
+            {/* =================================================
+                CATEGORY
+               ================================================= */}
+
             <select
               className="filter-select"
-              value={filter6}
-              onChange={(e) => setFilter6(e.target.value)}
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
             >
-              <option>Select All</option>
+              <option value="Select All">
+                Select All
+              </option>
+
+              <option value="All Categories">
+                All Categories
+              </option>
+
+              <option value="IT Services">
+                IT Services
+              </option>
+
+              <option value="Consulting">
+                Consulting
+              </option>
+
+              <option value="Technology">
+                Technology
+              </option>
+
+              <option value="Infrastructure">
+                Infrastructure
+              </option>
             </select>
 
-            {/* FILTER 7 */}
+
+            {/* =================================================
+                LOCATION
+               ================================================= */}
+
             <select
               className="filter-select"
-              value={filter7}
-              onChange={(e) => setFilter7(e.target.value)}
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
             >
-              <option>Select All</option>
+              <option value="Select All">
+                Select All
+              </option>
+
+              <option value="All">
+                All
+              </option>
+
+              <option value="Pune">
+                Pune
+              </option>
+
+              <option value="Mumbai">
+                Mumbai
+              </option>
+
+              <option value="Delhi">
+                Delhi
+              </option>
+
+              <option value="Bangalore">
+                Bangalore
+              </option>
             </select>
 
-            {/* RESET */}
+
+            {/* =================================================
+                RESET
+               ================================================= */}
+
             <button
               type="button"
               className="reset-btn"
@@ -249,10 +482,14 @@ export default function Dashboard() {
         </section>
 
 
-        {/* KPI CARDS */}
+        {/* =================================================
+            KPI CARDS
+           ================================================= */}
+
         <section className="kpi-grid">
 
           {kpis.map((kpi) => (
+
             <div
               className="kpi-card"
               key={kpi.title}
@@ -272,24 +509,34 @@ export default function Dashboard() {
 
               </div>
 
+
               <div className="kpi-value">
                 {kpi.value}
               </div>
+
 
               <div className="kpi-sub">
                 {kpi.subtitle}
               </div>
 
             </div>
+
           ))}
 
         </section>
 
 
-        {/* CHARTS */}
+        {/* =================================================
+            CHARTS
+           ================================================= */}
+
         <section className="charts-grid">
 
-          {/* TENDER PERFORMANCE */}
+
+          {/* =================================================
+              TENDER PERFORMANCE
+             ================================================= */}
+
           <div className="chart-card">
 
             <div className="chart-header">
@@ -310,9 +557,11 @@ export default function Dashboard() {
 
 
             {/* BAR CHART */}
+
             <div className="bar-chart">
 
               {months.map((monthData) => (
+
                 <div
                   className="bar-group"
                   key={monthData.name}
@@ -335,18 +584,24 @@ export default function Dashboard() {
                   />
 
                 </div>
+
               ))}
 
             </div>
 
 
             {/* MONTH LABELS */}
+
             <div className="month-labels">
 
               {months.map((monthData) => (
-                <span key={monthData.name}>
+
+                <span
+                  key={monthData.name}
+                >
                   {monthData.name}
                 </span>
+
               ))}
 
             </div>
@@ -354,7 +609,10 @@ export default function Dashboard() {
           </div>
 
 
-          {/* OUTCOME DISTRIBUTION */}
+          {/* =================================================
+              OUTCOME DISTRIBUTION
+             ================================================= */}
+
           <div className="chart-card">
 
             <div className="chart-header">
@@ -378,31 +636,61 @@ export default function Dashboard() {
 
               <div className="donut"></div>
 
+
               <div className="legend">
 
                 <div className="legend-item">
+
                   <span className="legend-dot dot-green"></span>
-                  <span>Won</span>
+
+                  <span>
+                    Won
+                  </span>
+
                 </div>
 
+
                 <div className="legend-item">
+
                   <span className="legend-dot dot-blue"></span>
-                  <span>Submitted</span>
+
+                  <span>
+                    Submitted
+                  </span>
+
                 </div>
 
+
                 <div className="legend-item">
+
                   <span className="legend-dot dot-orange"></span>
-                  <span>In Process</span>
+
+                  <span>
+                    In Process
+                  </span>
+
                 </div>
 
+
                 <div className="legend-item">
+
                   <span className="legend-dot dot-purple"></span>
-                  <span>Result Awaited</span>
+
+                  <span>
+                    Result Awaited
+                  </span>
+
                 </div>
 
+
                 <div className="legend-item">
+
                   <span className="legend-dot dot-red"></span>
-                  <span>Lost</span>
+
+                  <span>
+                    Lost
+                  </span>
+
                 </div>
 
               </div>
