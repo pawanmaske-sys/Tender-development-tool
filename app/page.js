@@ -28,7 +28,7 @@ const kpis = [
     title: "In Process",
     value: "230",
     subtitle: "Currently working",
-    icon: "◉",
+    icon: "◔",
     iconClass: "orange",
   },
   {
@@ -56,55 +56,40 @@ const kpis = [
     title: "Lost",
     value: "94",
     subtitle: "Unsuccessful",
-    icon: "◉",
+    icon: "◔",
     iconClass: "orange",
   },
 ];
 
-const months = [
-  { name: "Jan", submitted: 55, won: 28 },
-  { name: "Feb", submitted: 78, won: 40 },
-  { name: "Mar", submitted: 65, won: 32 },
-  { name: "Apr", submitted: 98, won: 55 },
-  { name: "May", submitted: 75, won: 38 },
-  { name: "Jun", submitted: 105, won: 60 },
-];
-
 export default function Dashboard() {
-  /* =====================================================
-     FILTER STATES
-     ===================================================== */
-
-  const [year, setYear] = useState("2026");
-  const [month, setMonth] = useState("August");
-  const [business, setBusiness] = useState("All Business");
-  const [businessType, setBusinessType] = useState("All");
-  const [zsm, setZsm] = useState("All ZSM");
-  const [category, setCategory] = useState("All Categories");
-  const [location, setLocation] = useState("All");
-
-
-  /* =====================================================
-     RESET FILTERS
-     ===================================================== */
+  const [year, setYear] = useState("Select All");
+  const [month, setMonth] = useState("Select All");
+  const [business, setBusiness] = useState("Select All");
+  const [status, setStatus] = useState("Select All");
+  const [zsm, setZsm] = useState("Select All");
+  const [category, setCategory] = useState("Select All");
+  const [branch, setBranch] = useState("Select All");
 
   const resetFilters = () => {
-    setYear("2026");
-    setMonth("August");
-    setBusiness("All Business");
-    setBusinessType("All");
-    setZsm("All ZSM");
-    setCategory("All Categories");
-    setLocation("All");
+    setYear("Select All");
+    setMonth("Select All");
+    setBusiness("Select All");
+    setStatus("Select All");
+    setZsm("Select All");
+    setCategory("Select All");
+    setBranch("Select All");
   };
 
+  const goTo = (path) => {
+    window.location.href = path;
+  };
 
   return (
     <main className="content">
 
-      {/* =================================================
+      {/* =====================================================
           TOP BAR
-         ================================================= */}
+          ===================================================== */}
 
       <header className="topbar">
 
@@ -118,7 +103,6 @@ export default function Dashboard() {
           </h1>
         </div>
 
-
         <div className="top-actions">
 
           <button
@@ -129,7 +113,6 @@ export default function Dashboard() {
             <span className="notification-dot"></span>
           </button>
 
-
           <div className="profile">
 
             <div className="avatar">
@@ -137,7 +120,6 @@ export default function Dashboard() {
             </div>
 
             <div>
-
               <div className="profile-name">
                 Pawan Maske
               </div>
@@ -145,11 +127,10 @@ export default function Dashboard() {
               <div className="profile-role">
                 Tender Executive
               </div>
-
             </div>
 
             <span className="chevron">
-              ˅
+              ⌄
             </span>
 
           </div>
@@ -159,23 +140,22 @@ export default function Dashboard() {
       </header>
 
 
-      {/* =================================================
+      {/* =====================================================
           PAGE BODY
-         ================================================= */}
+          ===================================================== */}
 
-      <div className="page-body">
+      <main className="page-body">
 
-
-        {/* =================================================
+        {/* ===================================================
             WELCOME
-           ================================================= */}
+            =================================================== */}
 
         <div className="welcome-row">
 
           <div>
 
             <h2>
-              Good afternoon, Pawan 👋
+              Good afternoon, Pawan👋
             </h2>
 
             <p>
@@ -184,10 +164,14 @@ export default function Dashboard() {
 
           </div>
 
+          {/* NEW TENDER BUTTON */}
 
           <button
-            type="button"
             className="primary-btn"
+            type="button"
+            onClick={() =>
+              goTo("/all-tenders?add=true")
+            }
           >
             + New Tender
           </button>
@@ -195,9 +179,9 @@ export default function Dashboard() {
         </div>
 
 
-        {/* =================================================
+        {/* ===================================================
             FILTERS
-           ================================================= */}
+            =================================================== */}
 
         <section className="filter-panel">
 
@@ -208,15 +192,16 @@ export default function Dashboard() {
             </span>
 
 
-            {/* =================================================
-                YEAR
-               ================================================= */}
+            {/* YEAR */}
 
             <select
               className="filter-select"
               value={year}
-              onChange={(e) => setYear(e.target.value)}
+              onChange={(e) =>
+                setYear(e.target.value)
+              }
             >
+
               <option value="Select All">
                 Select All
               </option>
@@ -233,152 +218,140 @@ export default function Dashboard() {
                 2024
               </option>
 
-              <option value="2023">
-                2023
-              </option>
             </select>
 
 
-            {/* =================================================
-                MONTH
-               ================================================= */}
+            {/* MONTH */}
 
             <select
               className="filter-select"
               value={month}
-              onChange={(e) => setMonth(e.target.value)}
+              onChange={(e) =>
+                setMonth(e.target.value)
+              }
             >
+
               <option value="Select All">
                 Select All
-              </option>
-
-              <option value="January">
-                January
-              </option>
-
-              <option value="February">
-                February
-              </option>
-
-              <option value="March">
-                March
-              </option>
-
-              <option value="April">
-                April
-              </option>
-
-              <option value="May">
-                May
-              </option>
-
-              <option value="June">
-                June
-              </option>
-
-              <option value="July">
-                July
               </option>
 
               <option value="August">
                 August
               </option>
 
-              <option value="September">
-                September
+              <option value="July">
+                July
               </option>
 
-              <option value="October">
-                October
+              <option value="June">
+                June
               </option>
 
-              <option value="November">
-                November
+              <option value="May">
+                May
               </option>
 
-              <option value="December">
-                December
+              <option value="April">
+                April
               </option>
+
+              <option value="March">
+                March
+              </option>
+
+              <option value="February">
+                February
+              </option>
+
+              <option value="January">
+                January
+              </option>
+
             </select>
 
 
-            {/* =================================================
-                BUSINESS
-               ================================================= */}
+            {/* BUSINESS */}
 
             <select
               className="filter-select"
               value={business}
-              onChange={(e) => setBusiness(e.target.value)}
+              onChange={(e) =>
+                setBusiness(e.target.value)
+              }
             >
+
               <option value="Select All">
                 Select All
               </option>
 
-              <option value="All Business">
-                All Business
+              <option value="Corporate">
+                Corporate
               </option>
 
-              <option value="IT Services">
-                IT Services
-              </option>
-
-              <option value="Consulting">
-                Consulting
-              </option>
-
-              <option value="Infrastructure">
-                Infrastructure
-              </option>
-
-              <option value="Technology">
-                Technology
-              </option>
-            </select>
-
-
-            {/* =================================================
-                BUSINESS TYPE
-               ================================================= */}
-
-            <select
-              className="filter-select"
-              value={businessType}
-              onChange={(e) => setBusinessType(e.target.value)}
-            >
-              <option value="Select All">
-                Select All
-              </option>
-
-              <option value="All">
-                All
+              <option value="Retail">
+                Retail
               </option>
 
               <option value="Government">
                 Government
               </option>
 
-              <option value="Private">
-                Private
-              </option>
             </select>
 
 
-            {/* =================================================
-                ZSM
-               ================================================= */}
+            {/* STATUS */}
 
             <select
               className="filter-select"
-              value={zsm}
-              onChange={(e) => setZsm(e.target.value)}
+              value={status}
+              onChange={(e) =>
+                setStatus(e.target.value)
+              }
             >
+
               <option value="Select All">
                 Select All
               </option>
 
-              <option value="All ZSM">
-                All ZSM
+              <option value="Submitted">
+                Submitted
+              </option>
+
+              <option value="In Process">
+                In Process
+              </option>
+
+              <option value="Won">
+                Won
+              </option>
+
+              <option value="Lost">
+                Lost
+              </option>
+
+              <option value="On Hold">
+                On Hold
+              </option>
+
+              <option value="Result Awaited">
+                Result Awaited
+              </option>
+
+            </select>
+
+
+            {/* ZSM */}
+
+            <select
+              className="filter-select"
+              value={zsm}
+              onChange={(e) =>
+                setZsm(e.target.value)
+              }
+            >
+
+              <option value="Select All">
+                Select All
               </option>
 
               <option value="Rahul">
@@ -392,24 +365,22 @@ export default function Dashboard() {
               <option value="Amit">
                 Amit
               </option>
+
             </select>
 
 
-            {/* =================================================
-                CATEGORY
-               ================================================= */}
+            {/* CATEGORY */}
 
             <select
               className="filter-select"
               value={category}
-              onChange={(e) => setCategory(e.target.value)}
+              onChange={(e) =>
+                setCategory(e.target.value)
+              }
             >
+
               <option value="Select All">
                 Select All
-              </option>
-
-              <option value="All Categories">
-                All Categories
               </option>
 
               <option value="IT Services">
@@ -427,24 +398,22 @@ export default function Dashboard() {
               <option value="Infrastructure">
                 Infrastructure
               </option>
+
             </select>
 
 
-            {/* =================================================
-                LOCATION
-               ================================================= */}
+            {/* BRANCH */}
 
             <select
               className="filter-select"
-              value={location}
-              onChange={(e) => setLocation(e.target.value)}
+              value={branch}
+              onChange={(e) =>
+                setBranch(e.target.value)
+              }
             >
+
               <option value="Select All">
                 Select All
-              </option>
-
-              <option value="All">
-                All
               </option>
 
               <option value="Pune">
@@ -462,16 +431,19 @@ export default function Dashboard() {
               <option value="Bangalore">
                 Bangalore
               </option>
+
+              <option value="Nagpur">
+                Nagpur
+              </option>
+
             </select>
 
 
-            {/* =================================================
-                RESET
-               ================================================= */}
+            {/* RESET */}
 
             <button
-              type="button"
               className="reset-btn"
+              type="button"
               onClick={resetFilters}
             >
               Reset
@@ -482,41 +454,39 @@ export default function Dashboard() {
         </section>
 
 
-        {/* =================================================
+        {/* ===================================================
             KPI CARDS
-           ================================================= */}
+            =================================================== */}
 
         <section className="kpi-grid">
 
-          {kpis.map((kpi) => (
+          {kpis.map((item) => (
 
             <div
               className="kpi-card"
-              key={kpi.title}
+              key={item.title}
             >
 
               <div className="kpi-top">
 
                 <span>
-                  {kpi.title}
+                  {item.title}
                 </span>
 
-                <span
-                  className={`kpi-icon icon-${kpi.iconClass}`}
+                <div
+                  className={`kpi-icon icon-${item.iconClass}`}
                 >
-                  {kpi.icon}
-                </span>
+                  {item.icon}
+                </div>
 
               </div>
-
 
               <div className="kpi-value">
-                {kpi.value}
+                {item.value}
               </div>
 
-
               <div className="kpi-sub">
-                {kpi.subtitle}
+                {item.subtitle}
               </div>
 
             </div>
@@ -526,16 +496,16 @@ export default function Dashboard() {
         </section>
 
 
-        {/* =================================================
+        {/* ===================================================
             CHARTS
-           ================================================= */}
+            =================================================== */}
 
         <section className="charts-grid">
 
 
           {/* =================================================
               TENDER PERFORMANCE
-             ================================================= */}
+              ================================================= */}
 
           <div className="chart-card">
 
@@ -553,6 +523,28 @@ export default function Dashboard() {
 
               </div>
 
+              <select
+                className="year-select"
+                value={year === "Select All" ? "2026" : year}
+                onChange={(e) =>
+                  setYear(e.target.value)
+                }
+              >
+
+                <option value="2026">
+                  2026
+                </option>
+
+                <option value="2025">
+                  2025
+                </option>
+
+                <option value="2024">
+                  2024
+                </option>
+
+              </select>
+
             </div>
 
 
@@ -560,32 +552,32 @@ export default function Dashboard() {
 
             <div className="bar-chart">
 
-              {months.map((monthData) => (
-
-                <div
-                  className="bar-group"
-                  key={monthData.name}
-                >
+              {[35, 52, 42, 70, 50, 75].map(
+                (height, index) => (
 
                   <div
-                    className="bar"
-                    style={{
-                      height: `${monthData.submitted}%`,
-                    }}
-                    title={`Submitted: ${monthData.submitted}`}
-                  />
+                    className="bar-group"
+                    key={index}
+                  >
 
-                  <div
-                    className="bar secondary"
-                    style={{
-                      height: `${monthData.won}%`,
-                    }}
-                    title={`Won: ${monthData.won}`}
-                  />
+                    <div
+                      className="bar"
+                      style={{
+                        height: `${height}%`,
+                      }}
+                    ></div>
 
-                </div>
+                    <div
+                      className="bar secondary"
+                      style={{
+                        height: `${height / 2}%`,
+                      }}
+                    ></div>
 
-              ))}
+                  </div>
+
+                )
+              )}
 
             </div>
 
@@ -594,15 +586,29 @@ export default function Dashboard() {
 
             <div className="month-labels">
 
-              {months.map((monthData) => (
+              <span>
+                Jan
+              </span>
 
-                <span
-                  key={monthData.name}
-                >
-                  {monthData.name}
-                </span>
+              <span>
+                Feb
+              </span>
 
-              ))}
+              <span>
+                Mar
+              </span>
+
+              <span>
+                Apr
+              </span>
+
+              <span>
+                May
+              </span>
+
+              <span>
+                Jun
+              </span>
 
             </div>
 
@@ -611,7 +617,7 @@ export default function Dashboard() {
 
           {/* =================================================
               OUTCOME DISTRIBUTION
-             ================================================= */}
+              ================================================= */}
 
           <div className="chart-card">
 
@@ -634,62 +640,58 @@ export default function Dashboard() {
 
             <div className="donut-area">
 
-              <div className="donut"></div>
+              <div className="donut">
+              </div>
 
 
               <div className="legend">
 
                 <div className="legend-item">
 
-                  <span className="legend-dot dot-green"></span>
-
-                  <span>
-                    Won
+                  <span className="legend-dot dot-green">
                   </span>
+
+                  Won
 
                 </div>
 
 
                 <div className="legend-item">
 
-                  <span className="legend-dot dot-blue"></span>
-
-                  <span>
-                    Submitted
+                  <span className="legend-dot dot-blue">
                   </span>
+
+                  Submitted
 
                 </div>
 
 
                 <div className="legend-item">
 
-                  <span className="legend-dot dot-orange"></span>
-
-                  <span>
-                    In Process
+                  <span className="legend-dot dot-orange">
                   </span>
+
+                  In Process
 
                 </div>
 
 
                 <div className="legend-item">
 
-                  <span className="legend-dot dot-purple"></span>
-
-                  <span>
-                    Result Awaited
+                  <span className="legend-dot dot-purple">
                   </span>
+
+                  On Hold
 
                 </div>
 
 
                 <div className="legend-item">
 
-                  <span className="legend-dot dot-red"></span>
-
-                  <span>
-                    Lost
+                  <span className="legend-dot dot-red">
                   </span>
+
+                  Lost
 
                 </div>
 
@@ -701,7 +703,7 @@ export default function Dashboard() {
 
         </section>
 
-      </div>
+      </main>
 
     </main>
   );
