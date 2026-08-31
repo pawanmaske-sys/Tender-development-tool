@@ -1,321 +1,433 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useState } from "react";
 
-const initialTenders = [
+const kpis = [
   {
-    id: "T-05621",
-    client: "ABC Ltd",
-    branch: "Pune",
-    assigned: "Rahul",
-    deadline: "22 Aug 2026",
-    amount: 1250000,
-    status: "In Process",
-    result: "-",
-    category: "IT Services",
+    title: "Total Tenders",
+    value: "1,245",
+    subtitle: "All tenders",
+    icon: "↗",
+    iconClass: "blue",
   },
   {
-    id: "T-05622",
-    client: "XYZ Corporation",
-    branch: "Mumbai",
-    assigned: "Priya",
-    deadline: "25 Aug 2026",
-    amount: 850000,
-    status: "Submitted",
-    result: "-",
-    category: "Consulting",
+    title: "Potential Amount",
+    value: "₹25.4 Cr",
+    subtitle: "Total potential value",
+    icon: "₹",
+    iconClass: "green",
   },
   {
-    id: "T-05623",
-    client: "Global Tech",
-    branch: "Delhi",
-    assigned: "Amit",
-    deadline: "28 Aug 2026",
-    amount: 2100000,
-    status: "Result Awaited",
-    result: "-",
-    category: "Technology",
+    title: "Submitted",
+    value: "842",
+    subtitle: "67.6% of total",
+    icon: "✓",
+    iconClass: "purple",
   },
   {
-    id: "T-05624",
-    client: "Metro Industries",
-    branch: "Pune",
-    assigned: "Sneha",
-    deadline: "30 Aug 2026",
-    amount: 650000,
-    status: "Won",
-    result: "Won",
-    category: "Infrastructure",
+    title: "In Process",
+    value: "230",
+    subtitle: "Currently working",
+    icon: "◔",
+    iconClass: "orange",
   },
   {
-    id: "T-05625",
-    client: "Sunrise Pvt Ltd",
-    branch: "Bangalore",
-    assigned: "Rahul",
-    deadline: "02 Sep 2026",
-    amount: 1450000,
-    status: "On Hold",
-    result: "-",
-    category: "IT Services",
+    title: "Won",
+    value: "173",
+    subtitle: "13.9% of total",
+    icon: "↗",
+    iconClass: "blue",
   },
   {
-    id: "T-05626",
-    client: "Prime Solutions",
-    branch: "Mumbai",
-    assigned: "Priya",
-    deadline: "05 Sep 2026",
-    amount: 980000,
-    status: "Lost",
-    result: "Lost",
-    category: "Consulting",
+    title: "Result Awaited",
+    value: "42",
+    subtitle: "Need follow-up",
+    icon: "₹",
+    iconClass: "green",
+  },
+  {
+    title: "On Hold",
+    value: "38",
+    subtitle: "Currently on hold",
+    icon: "✓",
+    iconClass: "purple",
+  },
+  {
+    title: "Lost",
+    value: "94",
+    subtitle: "Unsuccessful",
+    icon: "◔",
+    iconClass: "orange",
   },
 ];
 
-const emptyForm = {
-  client: "",
-  branch: "",
-  tenderType: "",
-  serviceCategory: "",
-  deadline: "",
-  submissionMethod: "",
-  potentialValue: "",
-  emdFee: "",
-  bidValidity: "",
-  documents: "",
-  remarks: "",
-};
-
-export default function AllTendersPage() {
-  const [tenders, setTenders] = useState(initialTenders);
-
-  const [search, setSearch] = useState("");
-  const [status, setStatus] = useState("All Status");
-  const [branch, setBranch] = useState("All Branches");
-  const [category, setCategory] = useState("All Categories");
-
-  const [showAddTender, setShowAddTender] = useState(false);
-  const [form, setForm] = useState(emptyForm);
-
-  /* =========================================================
-     FILTER DATA
-     ========================================================= */
-
-  const filteredTenders = useMemo(() => {
-    return tenders.filter((tender) => {
-      const searchValue = search.toLowerCase().trim();
-
-      const matchesSearch =
-        !searchValue ||
-        tender.id.toLowerCase().includes(searchValue) ||
-        tender.client.toLowerCase().includes(searchValue) ||
-        tender.assigned.toLowerCase().includes(searchValue);
-
-      const matchesStatus =
-        status === "All Status" ||
-        tender.status === status;
-
-      const matchesBranch =
-        branch === "All Branches" ||
-        tender.branch === branch;
-
-      const matchesCategory =
-        category === "All Categories" ||
-        tender.category === category;
-
-      return (
-        matchesSearch &&
-        matchesStatus &&
-        matchesBranch &&
-        matchesCategory
-      );
-    });
-  }, [tenders, search, status, branch, category]);
-
-  const totalAmount = filteredTenders.reduce(
-    (total, tender) => total + tender.amount,
-    0
-  );
-
-  const submittedCount = filteredTenders.filter(
-    (tender) => tender.status === "Submitted"
-  ).length;
-
-  const inProcessCount = filteredTenders.filter(
-    (tender) => tender.status === "In Process"
-  ).length;
-
-  /* =========================================================
-     FILTER RESET
-     ========================================================= */
+export default function Dashboard() {
+  const [year, setYear] = useState("Select All");
+  const [month, setMonth] = useState("Select All");
+  const [business, setBusiness] = useState("Select All");
+  const [status, setStatus] = useState("Select All");
+  const [zsm, setZsm] = useState("Select All");
+  const [category, setCategory] = useState("Select All");
+  const [branch, setBranch] = useState("Select All");
 
   const resetFilters = () => {
-    setSearch("");
-    setStatus("All Status");
-    setBranch("All Branches");
-    setCategory("All Categories");
-  };
-
-  /* =========================================================
-     ADD TENDER
-     ========================================================= */
-
-  const openAddTender = () => {
-    setForm(emptyForm);
-    setShowAddTender(true);
-  };
-
-  const closeAddTender = () => {
-    setShowAddTender(false);
-    setForm(emptyForm);
-  };
-
-  const updateForm = (field, value) => {
-    setForm((previous) => ({
-      ...previous,
-      [field]: value,
-    }));
-  };
-
-  const handleSubmitTender = (event) => {
-    event.preventDefault();
-
-    if (
-      !form.client.trim() ||
-      !form.branch ||
-      !form.serviceCategory
-    ) {
-      alert(
-        "Please fill Client, Branch and Service Category."
-      );
-      return;
-    }
-
-    const nextNumber =
-      5621 + tenders.length;
-
-    const formattedDeadline = form.deadline
-      ? new Date(
-          `${form.deadline}T00:00:00`
-        ).toLocaleDateString("en-GB", {
-          day: "2-digit",
-          month: "short",
-          year: "numeric",
-        })
-      : "-";
-
-    const newTender = {
-      id: `T-${String(nextNumber).padStart(5, "0")}`,
-      client: form.client.trim(),
-      branch: form.branch,
-      assigned: "Pawan",
-      deadline: formattedDeadline,
-      amount: Number(form.potentialValue) || 0,
-      status: "In Process",
-      result: "-",
-      category: form.serviceCategory,
-    };
-
-    setTenders((previous) => [
-      newTender,
-      ...previous,
-    ]);
-
-    closeAddTender();
+    setYear("Select All");
+    setMonth("Select All");
+    setBusiness("Select All");
+    setStatus("Select All");
+    setZsm("Select All");
+    setCategory("Select All");
+    setBranch("Select All");
   };
 
   return (
-    <>
-      <div className="all-tenders-page">
+    <main className="content">
 
-        {/* =====================================================
-            HEADER
-        ====================================================== */}
+      {/* =====================================================
+          TOP BAR
+          ===================================================== */}
 
-        <div className="page-header">
+      <header className="topbar">
 
-          <div>
-            <div className="breadcrumb">
-              Home / Tenders / All Tenders
-            </div>
-
-            <h1>All Tenders</h1>
-
-            <p>
-              View and manage all tender opportunities.
-            </p>
+        <div>
+          <div className="breadcrumb">
+            Home / Dashboard
           </div>
+
+          <h1>
+            Dashboard
+          </h1>
+        </div>
+
+        <div className="top-actions">
 
           <button
             type="button"
-            className="new-tender-button"
-            onClick={openAddTender}
+            className="icon-btn"
           >
-            + Add Tender
+            ♧
+            <span className="notification-dot"></span>
           </button>
 
-        </div>
+          <div className="profile">
 
-        {/* =====================================================
-            SUMMARY CARDS
-        ====================================================== */}
+            <div className="avatar">
+              PM
+            </div>
 
-        <div className="summary-grid">
+            <div>
+              <div className="profile-name">
+                Pawan Maske
+              </div>
 
-          <div className="summary-card">
-            <span>Total Tenders</span>
-            <strong>
-              {filteredTenders.length}
-            </strong>
-            <small>
-              Matching records
-            </small>
-          </div>
+              <div className="profile-role">
+                Tender Executive
+              </div>
+            </div>
 
-          <div className="summary-card">
-            <span>Total Potential Amount</span>
-            <strong>
-              ₹{totalAmount.toLocaleString("en-IN")}
-            </strong>
-            <small>
-              Filtered tender value
-            </small>
-          </div>
+            <span className="chevron">
+              ⌄
+            </span>
 
-          <div className="summary-card">
-            <span>Submitted</span>
-            <strong>
-              {submittedCount}
-            </strong>
-            <small>
-              Currently submitted
-            </small>
-          </div>
-
-          <div className="summary-card">
-            <span>In Process</span>
-            <strong>
-              {inProcessCount}
-            </strong>
-            <small>
-              Currently working
-            </small>
           </div>
 
         </div>
 
-        {/* =====================================================
-            SEARCH & FILTERS
-        ====================================================== */}
+      </header>
 
-        <div className="filter-panel">
 
-          <div className="filter-title-row">
+      {/* =====================================================
+          PAGE BODY
+          ===================================================== */}
 
-            <h2>Search &amp; Filters</h2>
+      <main className="page-body">
+
+        {/* ===================================================
+            WELCOME
+            =================================================== */}
+
+        <div className="welcome-row">
+
+          <div>
+
+            <h2>
+              Good afternoon, Pawan👋
+            </h2>
+
+            <p>
+              Here's your tender performance overview.
+            </p>
+
+          </div>
+
+        </div>
+
+
+        {/* ===================================================
+            FILTERS
+            =================================================== */}
+
+        <section className="filter-panel">
+
+          <div className="filter-row">
+
+            <span className="filter-title">
+              Filters
+            </span>
+
+
+            {/* YEAR */}
+
+            <select
+              className="filter-select"
+              value={year}
+              onChange={(e) =>
+                setYear(e.target.value)
+              }
+            >
+
+              <option value="Select All">
+                Select All
+              </option>
+
+              <option value="2026">
+                2026
+              </option>
+
+              <option value="2025">
+                2025
+              </option>
+
+              <option value="2024">
+                2024
+              </option>
+
+            </select>
+
+
+            {/* MONTH */}
+
+            <select
+              className="filter-select"
+              value={month}
+              onChange={(e) =>
+                setMonth(e.target.value)
+              }
+            >
+
+              <option value="Select All">
+                Select All
+              </option>
+
+              <option value="August">
+                August
+              </option>
+
+              <option value="July">
+                July
+              </option>
+
+              <option value="June">
+                June
+              </option>
+
+              <option value="May">
+                May
+              </option>
+
+              <option value="April">
+                April
+              </option>
+
+              <option value="March">
+                March
+              </option>
+
+              <option value="February">
+                February
+              </option>
+
+              <option value="January">
+                January
+              </option>
+
+            </select>
+
+
+            {/* BUSINESS */}
+
+            <select
+              className="filter-select"
+              value={business}
+              onChange={(e) =>
+                setBusiness(e.target.value)
+              }
+            >
+
+              <option value="Select All">
+                Select All
+              </option>
+
+              <option value="Corporate">
+                Corporate
+              </option>
+
+              <option value="Retail">
+                Retail
+              </option>
+
+              <option value="Government">
+                Government
+              </option>
+
+            </select>
+
+
+            {/* STATUS */}
+
+            <select
+              className="filter-select"
+              value={status}
+              onChange={(e) =>
+                setStatus(e.target.value)
+              }
+            >
+
+              <option value="Select All">
+                Select All
+              </option>
+
+              <option value="Submitted">
+                Submitted
+              </option>
+
+              <option value="In Process">
+                In Process
+              </option>
+
+              <option value="Won">
+                Won
+              </option>
+
+              <option value="Lost">
+                Lost
+              </option>
+
+              <option value="On Hold">
+                On Hold
+              </option>
+
+              <option value="Result Awaited">
+                Result Awaited
+              </option>
+
+            </select>
+
+
+            {/* ZSM */}
+
+            <select
+              className="filter-select"
+              value={zsm}
+              onChange={(e) =>
+                setZsm(e.target.value)
+              }
+            >
+
+              <option value="Select All">
+                Select All
+              </option>
+
+              <option value="Rahul">
+                Rahul
+              </option>
+
+              <option value="Priya">
+                Priya
+              </option>
+
+              <option value="Amit">
+                Amit
+              </option>
+
+            </select>
+
+
+            {/* CATEGORY */}
+
+            <select
+              className="filter-select"
+              value={category}
+              onChange={(e) =>
+                setCategory(e.target.value)
+              }
+            >
+
+              <option value="Select All">
+                Select All
+              </option>
+
+              <option value="IT Services">
+                IT Services
+              </option>
+
+              <option value="Consulting">
+                Consulting
+              </option>
+
+              <option value="Technology">
+                Technology
+              </option>
+
+              <option value="Infrastructure">
+                Infrastructure
+              </option>
+
+            </select>
+
+
+            {/* BRANCH */}
+
+            <select
+              className="filter-select"
+              value={branch}
+              onChange={(e) =>
+                setBranch(e.target.value)
+              }
+            >
+
+              <option value="Select All">
+                Select All
+              </option>
+
+              <option value="Pune">
+                Pune
+              </option>
+
+              <option value="Mumbai">
+                Mumbai
+              </option>
+
+              <option value="Delhi">
+                Delhi
+              </option>
+
+              <option value="Bangalore">
+                Bangalore
+              </option>
+
+              <option value="Nagpur">
+                Nagpur
+              </option>
+
+            </select>
+
+
+            {/* RESET */}
 
             <button
+              className="reset-btn"
               type="button"
-              className="reset-button"
               onClick={resetFilters}
             >
               Reset
@@ -323,810 +435,260 @@ export default function AllTendersPage() {
 
           </div>
 
-          <div className="filter-grid">
+        </section>
 
-            <div className="filter-field">
-              <label>Search</label>
 
-              <input
-                type="text"
-                value={search}
-                onChange={(event) =>
-                  setSearch(event.target.value)
-                }
-                placeholder="Search Tender ID, Client or Assignee..."
-              />
-            </div>
+        {/* ===================================================
+            KPI CARDS
+            =================================================== */}
 
-            <div className="filter-field">
-              <label>Status</label>
+        <section className="kpi-grid">
 
-              <select
-                value={status}
-                onChange={(event) =>
-                  setStatus(event.target.value)
-                }
-              >
-                <option>All Status</option>
-                <option>In Process</option>
-                <option>Submitted</option>
-                <option>Result Awaited</option>
-                <option>Won</option>
-                <option>On Hold</option>
-                <option>Lost</option>
-              </select>
-            </div>
+          {kpis.map((item) => (
 
-            <div className="filter-field">
-              <label>Branch</label>
-
-              <select
-                value={branch}
-                onChange={(event) =>
-                  setBranch(event.target.value)
-                }
-              >
-                <option>All Branches</option>
-                <option>Pune</option>
-                <option>Mumbai</option>
-                <option>Delhi</option>
-                <option>Bangalore</option>
-              </select>
-            </div>
-
-            <div className="filter-field">
-              <label>Category</label>
-
-              <select
-                value={category}
-                onChange={(event) =>
-                  setCategory(event.target.value)
-                }
-              >
-                <option>All Categories</option>
-                <option>IT Services</option>
-                <option>Consulting</option>
-                <option>Technology</option>
-                <option>Infrastructure</option>
-              </select>
-            </div>
-
-          </div>
-        </div>
-
-        {/* =====================================================
-            TENDER LIST
-        ====================================================== */}
-
-        <div className="table-card">
-
-          <div className="table-header">
-
-            <div>
-              <h2>Tender List</h2>
-
-              <p>
-                {filteredTenders.length} records found
-              </p>
-            </div>
-
-          </div>
-
-          <div className="table-wrapper">
-
-            <table>
-
-              <thead>
-                <tr>
-                  <th>Tender ID</th>
-                  <th>Client</th>
-                  <th>Branch</th>
-                  <th>Assigned To</th>
-                  <th>Deadline</th>
-                  <th>Amount</th>
-                  <th>Status</th>
-                  <th>Result</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-
-              <tbody>
-
-                {filteredTenders.length === 0 ? (
-                  <tr>
-                    <td
-                      colSpan="9"
-                      className="empty-state"
-                    >
-                      No tenders found.
-                    </td>
-                  </tr>
-                ) : (
-                  filteredTenders.map((tender) => (
-                    <tr key={tender.id}>
-
-                      <td>
-                        <strong className="tender-id">
-                          {tender.id}
-                        </strong>
-                      </td>
-
-                      <td>
-                        <strong>
-                          {tender.client}
-                        </strong>
-
-                        <small>
-                          {tender.category}
-                        </small>
-                      </td>
-
-                      <td>
-                        {tender.branch}
-                      </td>
-
-                      <td>
-                        {tender.assigned}
-                      </td>
-
-                      <td>
-                        {tender.deadline}
-                      </td>
-
-                      <td className="amount">
-                        ₹
-                        {tender.amount.toLocaleString(
-                          "en-IN"
-                        )}
-                      </td>
-
-                      <td>
-                        <span
-                          className={`status-badge status-${tender.status
-                            .toLowerCase()
-                            .replaceAll(" ", "-")}`}
-                        >
-                          {tender.status}
-                        </span>
-                      </td>
-
-                      <td>
-                        {tender.result}
-                      </td>
-
-                      <td>
-                        <button
-                          type="button"
-                          className="view-button"
-                          onClick={() =>
-                            alert(
-                              `Tender ID: ${tender.id}\nClient: ${tender.client}`
-                            )
-                          }
-                        >
-                          View
-                        </button>
-                      </td>
-
-                    </tr>
-                  ))
-                )}
-
-              </tbody>
-
-            </table>
-
-          </div>
-        </div>
-
-      </div>
-
-      {/* =======================================================
-          ADD TENDER FORM
-          ONLY APPEARS AFTER CLICKING + ADD TENDER
-      ======================================================== */}
-
-      {showAddTender && (
-        <div
-          className="add-tender-overlay"
-          onMouseDown={(event) => {
-            if (
-              event.target === event.currentTarget
-            ) {
-              closeAddTender();
-            }
-          }}
-        >
-
-          <div className="add-tender-modal">
-
-            {/* FORM HEADER */}
-
-            <div className="add-tender-header">
-
-              <div>
-                <h2>Add Tender</h2>
-
-                <p>
-                  Enter tender details
-                </p>
-              </div>
-
-              <button
-                type="button"
-                className="add-tender-close"
-                onClick={closeAddTender}
-              >
-                ×
-              </button>
-
-            </div>
-
-            {/* FORM */}
-
-            <form
-              onSubmit={handleSubmitTender}
+            <div
+              className="kpi-card"
+              key={item.title}
             >
 
-              <div className="add-tender-form-grid">
+              <div className="kpi-top">
 
-                {/* CLIENT */}
+                <span>
+                  {item.title}
+                </span>
 
-                <div className="add-tender-field">
-                  <label>
-                    Client <span>*</span>
-                  </label>
-
-                  <input
-                    type="text"
-                    value={form.client}
-                    onChange={(event) =>
-                      updateForm(
-                        "client",
-                        event.target.value
-                      )
-                    }
-                    placeholder="Enter client name"
-                  />
-                </div>
-
-                {/* BRANCH */}
-
-                <div className="add-tender-field">
-                  <label>
-                    Branch <span>*</span>
-                  </label>
-
-                  <select
-                    value={form.branch}
-                    onChange={(event) =>
-                      updateForm(
-                        "branch",
-                        event.target.value
-                      )
-                    }
-                  >
-                    <option value="">
-                      Select Branch
-                    </option>
-
-                    <option value="Pune">
-                      Pune
-                    </option>
-
-                    <option value="Mumbai">
-                      Mumbai
-                    </option>
-
-                    <option value="Delhi">
-                      Delhi
-                    </option>
-
-                    <option value="Bangalore">
-                      Bangalore
-                    </option>
-                  </select>
-                </div>
-
-                {/* TENDER TYPE */}
-
-                <div className="add-tender-field">
-                  <label>
-                    Tender Type
-                  </label>
-
-                  <select
-                    value={form.tenderType}
-                    onChange={(event) =>
-                      updateForm(
-                        "tenderType",
-                        event.target.value
-                      )
-                    }
-                  >
-                    <option value="">
-                      Select Tender Type
-                    </option>
-
-                    <option value="Government">
-                      Government
-                    </option>
-
-                    <option value="Private">
-                      Private
-                    </option>
-
-                    <option value="Corporate">
-                      Corporate
-                    </option>
-
-                    <option value="E-Tender">
-                      E-Tender
-                    </option>
-                  </select>
-                </div>
-
-                {/* SERVICE CATEGORY */}
-
-                <div className="add-tender-field">
-                  <label>
-                    Service Category <span>*</span>
-                  </label>
-
-                  <select
-                    value={form.serviceCategory}
-                    onChange={(event) =>
-                      updateForm(
-                        "serviceCategory",
-                        event.target.value
-                      )
-                    }
-                  >
-                    <option value="">
-                      Select Service Category
-                    </option>
-
-                    <option value="IT Services">
-                      IT Services
-                    </option>
-
-                    <option value="Consulting">
-                      Consulting
-                    </option>
-
-                    <option value="Technology">
-                      Technology
-                    </option>
-
-                    <option value="Infrastructure">
-                      Infrastructure
-                    </option>
-                  </select>
-                </div>
-
-                {/* DEADLINE */}
-
-                <div className="add-tender-field">
-                  <label>
-                    Deadline
-                  </label>
-
-                  <input
-                    type="date"
-                    value={form.deadline}
-                    onChange={(event) =>
-                      updateForm(
-                        "deadline",
-                        event.target.value
-                      )
-                    }
-                  />
-                </div>
-
-                {/* SUBMISSION METHOD */}
-
-                <div className="add-tender-field">
-                  <label>
-                    Submission Method
-                  </label>
-
-                  <select
-                    value={form.submissionMethod}
-                    onChange={(event) =>
-                      updateForm(
-                        "submissionMethod",
-                        event.target.value
-                      )
-                    }
-                  >
-                    <option value="">
-                      Select Submission Method
-                    </option>
-
-                    <option value="Online">
-                      Online
-                    </option>
-
-                    <option value="Offline">
-                      Offline
-                    </option>
-
-                    <option value="Online + Offline">
-                      Online + Offline
-                    </option>
-                  </select>
-                </div>
-
-                {/* POTENTIAL VALUE */}
-
-                <div className="add-tender-field">
-                  <label>
-                    Potential Value
-                  </label>
-
-                  <input
-                    type="number"
-                    value={form.potentialValue}
-                    onChange={(event) =>
-                      updateForm(
-                        "potentialValue",
-                        event.target.value
-                      )
-                    }
-                    placeholder="Enter potential value"
-                  />
-                </div>
-
-                {/* EMD / TENDER FEE */}
-
-                <div className="add-tender-field">
-                  <label>
-                    EMD / Tender Fee
-                  </label>
-
-                  <input
-                    type="text"
-                    value={form.emdFee}
-                    onChange={(event) =>
-                      updateForm(
-                        "emdFee",
-                        event.target.value
-                      )
-                    }
-                    placeholder="Enter EMD / tender fee"
-                  />
-                </div>
-
-                {/* BID VALIDITY */}
-
-                <div className="add-tender-field">
-                  <label>
-                    Bid Validity
-                  </label>
-
-                  <input
-                    type="text"
-                    value={form.bidValidity}
-                    onChange={(event) =>
-                      updateForm(
-                        "bidValidity",
-                        event.target.value
-                      )
-                    }
-                    placeholder="e.g. 90 Days"
-                  />
-                </div>
-
-                {/* DOCUMENTS */}
-
-                <div className="add-tender-field">
-                  <label>
-                    Documents
-                  </label>
-
-                  <input
-                    type="text"
-                    value={form.documents}
-                    onChange={(event) =>
-                      updateForm(
-                        "documents",
-                        event.target.value
-                      )
-                    }
-                    placeholder="Enter document details"
-                  />
-                </div>
-
-                {/* REMARKS */}
-
-                <div className="add-tender-field add-tender-full">
-                  <label>
-                    Remarks
-                  </label>
-
-                  <textarea
-                    rows="4"
-                    value={form.remarks}
-                    onChange={(event) =>
-                      updateForm(
-                        "remarks",
-                        event.target.value
-                      )
-                    }
-                    placeholder="Enter remarks..."
-                  />
+                <div
+                  className={`kpi-icon icon-${item.iconClass}`}
+                >
+                  {item.icon}
                 </div>
 
               </div>
 
-              {/* FORM FOOTER */}
+              <div className="kpi-value">
+                {item.value}
+              </div>
 
-              <div className="add-tender-actions">
+              <div className="kpi-sub">
+                {item.subtitle}
+              </div>
 
-                <button
-                  type="button"
-                  className="add-tender-cancel"
-                  onClick={closeAddTender}
-                >
-                  Cancel
-                </button>
+            </div>
 
-                <button
-                  type="submit"
-                  className="add-tender-save"
-                >
-                  Add Tender
-                </button>
+          ))}
+
+        </section>
+
+
+        {/* ===================================================
+            CHARTS
+            =================================================== */}
+
+        <section className="charts-grid">
+
+
+          {/* =================================================
+              TENDER PERFORMANCE
+              ================================================= */}
+
+          <div className="chart-card">
+
+            <div className="chart-header">
+
+              <div>
+
+                <h2 className="chart-title">
+                  Tender Performance
+                </h2>
+
+                <div className="chart-subtitle">
+                  Monthly submitted vs won tenders
+                </div>
 
               </div>
 
-            </form>
+              <select
+                className="year-select"
+                value={year === "Select All" ? "2026" : year}
+                onChange={(e) =>
+                  setYear(e.target.value)
+                }
+              >
+
+                <option value="2026">
+                  2026
+                </option>
+
+                <option value="2025">
+                  2025
+                </option>
+
+                <option value="2024">
+                  2024
+                </option>
+
+              </select>
+
+            </div>
+
+
+            {/* BAR CHART */}
+
+            <div className="bar-chart">
+
+              {[35, 52, 42, 70, 50, 75].map(
+                (height, index) => (
+
+                  <div
+                    className="bar-group"
+                    key={index}
+                  >
+
+                    <div
+                      className="bar"
+                      style={{
+                        height: `${height}%`,
+                      }}
+                    ></div>
+
+                    <div
+                      className="bar secondary"
+                      style={{
+                        height: `${height / 2}%`,
+                      }}
+                    ></div>
+
+                  </div>
+
+                )
+              )}
+
+            </div>
+
+
+            {/* MONTH LABELS */}
+
+            <div className="month-labels">
+
+              <span>
+                Jan
+              </span>
+
+              <span>
+                Feb
+              </span>
+
+              <span>
+                Mar
+              </span>
+
+              <span>
+                Apr
+              </span>
+
+              <span>
+                May
+              </span>
+
+              <span>
+                Jun
+              </span>
+
+            </div>
 
           </div>
 
-        </div>
-      )}
 
-      {/* =======================================================
-          MODAL CSS
-      ======================================================== */}
+          {/* =================================================
+              OUTCOME DISTRIBUTION
+              ================================================= */}
 
-      <style jsx>{`
-        .add-tender-overlay {
-          position: fixed;
-          inset: 0;
-          z-index: 9999;
+          <div className="chart-card">
 
-          display: flex;
-          align-items: center;
-          justify-content: center;
+            <div className="chart-header">
 
-          padding: 20px;
+              <div>
 
-          background: rgba(15, 23, 42, 0.5);
+                <h2 className="chart-title">
+                  Outcome Distribution
+                </h2>
 
-          overflow-y: auto;
-        }
+                <div className="chart-subtitle">
+                  Current tender result mix
+                </div>
 
-        .add-tender-modal {
-          width: min(900px, 100%);
-          max-height: calc(100vh - 40px);
+              </div>
 
-          overflow-y: auto;
+            </div>
 
-          background: #ffffff;
 
-          border-radius: 14px;
+            <div className="donut-area">
 
-          box-shadow:
-            0 20px 60px rgba(15, 23, 42, 0.25);
-        }
+              <div className="donut">
+              </div>
 
-        .add-tender-header {
-          position: sticky;
-          top: 0;
-          z-index: 2;
 
-          display: flex;
-          align-items: flex-start;
-          justify-content: space-between;
+              <div className="legend">
 
-          padding: 20px 24px;
+                <div className="legend-item">
 
-          background: #ffffff;
+                  <span className="legend-dot dot-green">
+                  </span>
 
-          border-bottom: 1px solid #e5eaf2;
-        }
+                  Won
 
-        .add-tender-header h2 {
-          margin: 0;
+                </div>
 
-          font-size: 20px;
 
-          color: #10213f;
-        }
+                <div className="legend-item">
 
-        .add-tender-header p {
-          margin: 5px 0 0;
+                  <span className="legend-dot dot-blue">
+                  </span>
 
-          font-size: 12px;
+                  Submitted
 
-          color: #7583a0;
-        }
+                </div>
 
-        .add-tender-close {
-          width: 32px;
-          height: 32px;
 
-          border: 0;
-          border-radius: 7px;
+                <div className="legend-item">
 
-          background: #f1f3f7;
+                  <span className="legend-dot dot-orange">
+                  </span>
 
-          color: #52617b;
+                  In Process
 
-          font-size: 22px;
+                </div>
 
-          cursor: pointer;
-        }
 
-        .add-tender-close:hover {
-          background: #e5eaf2;
-        }
+                <div className="legend-item">
 
-        .add-tender-modal form {
-          padding: 22px 24px 24px;
-        }
+                  <span className="legend-dot dot-purple">
+                  </span>
 
-        .add-tender-form-grid {
-          display: grid;
+                  On Hold
 
-          grid-template-columns:
-            repeat(2, minmax(0, 1fr));
+                </div>
 
-          gap: 16px;
-        }
 
-        .add-tender-field {
-          display: flex;
-          flex-direction: column;
-          gap: 7px;
-        }
+                <div className="legend-item">
 
-        .add-tender-field.add-tender-full {
-          grid-column: 1 / -1;
-        }
+                  <span className="legend-dot dot-red">
+                  </span>
 
-        .add-tender-field label {
-          font-size: 11px;
-          font-weight: 600;
+                  Lost
 
-          color: #30415f;
-        }
+                </div>
 
-        .add-tender-field label span {
-          color: #ef4444;
-        }
+              </div>
 
-        .add-tender-field input,
-        .add-tender-field select,
-        .add-tender-field textarea {
-          width: 100%;
+            </div>
 
-          border: 1px solid #d7dfeb;
+          </div>
 
-          border-radius: 7px;
+        </section>
 
-          background: #ffffff;
+      </main>
 
-          color: #30415f;
-
-          font-family: inherit;
-
-          font-size: 12px;
-
-          outline: none;
-        }
-
-        .add-tender-field input,
-        .add-tender-field select {
-          height: 40px;
-          padding: 0 12px;
-        }
-
-        .add-tender-field textarea {
-          padding: 11px 12px;
-          resize: vertical;
-        }
-
-        .add-tender-field input:focus,
-        .add-tender-field select:focus,
-        .add-tender-field textarea:focus {
-          border-color: #2563eb;
-
-          box-shadow:
-            0 0 0 3px
-            rgba(37, 99, 235, 0.08);
-        }
-
-        .add-tender-actions {
-          display: flex;
-
-          justify-content: flex-end;
-
-          gap: 10px;
-
-          margin-top: 24px;
-          padding-top: 18px;
-
-          border-top: 1px solid #e5eaf2;
-        }
-
-        .add-tender-cancel,
-        .add-tender-save {
-          height: 38px;
-
-          padding: 0 18px;
-
-          border-radius: 7px;
-
-          font-family: inherit;
-
-          font-size: 12px;
-
-          font-weight: 600;
-
-          cursor: pointer;
-        }
-
-        .add-tender-cancel {
-          border: 1px solid #d7dfeb;
-
-          background: #ffffff;
-
-          color: #52617b;
-        }
-
-        .add-tender-cancel:hover {
-          background: #f5f7fb;
-        }
-
-        .add-tender-save {
-          border: 0;
-
-          background: #2563eb;
-
-          color: #ffffff;
-
-          box-shadow:
-            0 4px 10px
-            rgba(37, 99, 235, 0.18);
-        }
-
-        .add-tender-save:hover {
-          background: #1d4ed8;
-        }
-
-        @media (max-width: 700px) {
-          .add-tender-overlay {
-            padding: 10px;
-          }
-
-          .add-tender-form-grid {
-            grid-template-columns: 1fr;
-          }
-
-          .add-tender-field.add-tender-full {
-            grid-column: auto;
-          }
-
-          .add-tender-header,
-          .add-tender-modal form {
-            padding-left: 16px;
-            padding-right: 16px;
-          }
-        }
-      `}</style>
-    </>
+    </main>
   );
 }
