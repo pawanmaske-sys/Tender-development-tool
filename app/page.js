@@ -62,9 +62,8 @@ const kpis = [
 ];
 
 export default function Dashboard() {
-const [year, setYear] = useState("Select All");
-const [month, setMonth] = useState("Select All");
-  
+  const [year, setYear] = useState("Select All");
+  const [month, setMonth] = useState("Select All");
   const [business, setBusiness] = useState("Select All");
   const [status, setStatus] = useState("Select All");
   const [zsm, setZsm] = useState("Select All");
@@ -72,9 +71,8 @@ const [month, setMonth] = useState("Select All");
   const [branch, setBranch] = useState("Select All");
 
   const resetFilters = () => {
-    setYear("2026");
-    setMonth("August");
-
+    setYear("Select All");
+    setMonth("Select All");
     setBusiness("Select All");
     setStatus("Select All");
     setZsm("Select All");
@@ -89,10 +87,7 @@ const [month, setMonth] = useState("Select All");
   return (
     <main className="content">
 
-      {/* =====================================================
-          TOP BAR
-          ===================================================== */}
-
+      {/* TOP BAR */}
       <header className="topbar">
 
         <div>
@@ -122,7 +117,6 @@ const [month, setMonth] = useState("Select All");
             </div>
 
             <div>
-
               <div className="profile-name">
                 Pawan Maske
               </div>
@@ -130,7 +124,6 @@ const [month, setMonth] = useState("Select All");
               <div className="profile-role">
                 Tender Executive
               </div>
-
             </div>
 
             <span className="chevron">
@@ -144,21 +137,13 @@ const [month, setMonth] = useState("Select All");
       </header>
 
 
-      {/* =====================================================
-          PAGE BODY
-          ===================================================== */}
-
+      {/* PAGE BODY */}
       <main className="page-body">
 
-
-        {/* ===================================================
-            WELCOME
-            =================================================== */}
-
+        {/* WELCOME */}
         <div className="welcome-row">
 
           <div>
-
             <h2>
               Good afternoon, Pawan👋
             </h2>
@@ -166,7 +151,6 @@ const [month, setMonth] = useState("Select All");
             <p>
               Here's your tender performance overview.
             </p>
-
           </div>
 
           <button
@@ -180,10 +164,7 @@ const [month, setMonth] = useState("Select All");
         </div>
 
 
-        {/* ===================================================
-            FILTERS
-            =================================================== */}
-
+        {/* FILTERS */}
         <section className="filter-panel">
 
           <div className="filter-row">
@@ -194,12 +175,15 @@ const [month, setMonth] = useState("Select All");
 
 
             {/* YEAR */}
-
             <select
               className="filter-select"
               value={year}
               onChange={(e) => setYear(e.target.value)}
             >
+              <option value="Select All">
+                Select All
+              </option>
+
               <option value="2026">
                 2026
               </option>
@@ -215,12 +199,15 @@ const [month, setMonth] = useState("Select All");
 
 
             {/* MONTH */}
-
             <select
               className="filter-select"
               value={month}
               onChange={(e) => setMonth(e.target.value)}
             >
+              <option value="Select All">
+                Select All
+              </option>
+
               <option value="August">
                 August
               </option>
@@ -240,7 +227,6 @@ const [month, setMonth] = useState("Select All");
 
 
             {/* BUSINESS */}
-
             <select
               className="filter-select"
               value={business}
@@ -265,7 +251,6 @@ const [month, setMonth] = useState("Select All");
 
 
             {/* STATUS */}
-
             <select
               className="filter-select"
               value={status}
@@ -302,7 +287,6 @@ const [month, setMonth] = useState("Select All");
 
 
             {/* ZSM */}
-
             <select
               className="filter-select"
               value={zsm}
@@ -327,7 +311,6 @@ const [month, setMonth] = useState("Select All");
 
 
             {/* CATEGORY */}
-
             <select
               className="filter-select"
               value={category}
@@ -356,7 +339,6 @@ const [month, setMonth] = useState("Select All");
 
 
             {/* BRANCH */}
-
             <select
               className="filter-select"
               value={branch}
@@ -385,7 +367,6 @@ const [month, setMonth] = useState("Select All");
 
 
             {/* RESET */}
-
             <button
               className="reset-btn"
               type="button"
@@ -399,10 +380,7 @@ const [month, setMonth] = useState("Select All");
         </section>
 
 
-        {/* ===================================================
-            KPI CARDS
-            =================================================== */}
-
+        {/* KPI CARDS */}
         <section className="kpi-grid">
 
           {kpis.map((item) => (
@@ -441,17 +419,10 @@ const [month, setMonth] = useState("Select All");
         </section>
 
 
-        {/* ===================================================
-            CHARTS
-            =================================================== */}
-
+        {/* CHARTS */}
         <section className="charts-grid">
 
-
-          {/* =================================================
-              TENDER PERFORMANCE
-              ================================================= */}
-
+          {/* TENDER PERFORMANCE */}
           <div className="chart-card">
 
             <div className="chart-header">
@@ -473,6 +444,10 @@ const [month, setMonth] = useState("Select All");
                 value={year}
                 onChange={(e) => setYear(e.target.value)}
               >
+
+                <option value="Select All">
+                  Select All
+                </option>
 
                 <option value="2026">
                   2026
@@ -533,10 +508,7 @@ const [month, setMonth] = useState("Select All");
           </div>
 
 
-          {/* =================================================
-              OUTCOME DISTRIBUTION
-              ================================================= */}
-
+          {/* OUTCOME DISTRIBUTION */}
           <div className="chart-card">
 
             <div className="chart-header">
@@ -564,47 +536,28 @@ const [month, setMonth] = useState("Select All");
               <div className="legend">
 
                 <div className="legend-item">
-
                   <span className="legend-dot dot-green"></span>
-
                   Won
-
                 </div>
 
-
                 <div className="legend-item">
-
                   <span className="legend-dot dot-blue"></span>
-
                   Submitted
-
                 </div>
 
-
                 <div className="legend-item">
-
                   <span className="legend-dot dot-orange"></span>
-
                   In Process
-
                 </div>
 
-
                 <div className="legend-item">
-
                   <span className="legend-dot dot-purple"></span>
-
                   On Hold
-
                 </div>
 
-
                 <div className="legend-item">
-
                   <span className="legend-dot dot-red"></span>
-
                   Lost
-
                 </div>
 
               </div>
