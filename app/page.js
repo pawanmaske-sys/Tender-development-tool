@@ -1,694 +1,1064 @@
-"use client";
-
-import { useState } from "react";
-
-const kpis = [
-  {
-    title: "Total Tenders",
-    value: "1,245",
-    subtitle: "All tenders",
-    icon: "↗",
-    iconClass: "blue",
-  },
-  {
-    title: "Potential Amount",
-    value: "₹25.4 Cr",
-    subtitle: "Total potential value",
-    icon: "₹",
-    iconClass: "green",
-  },
-  {
-    title: "Submitted",
-    value: "842",
-    subtitle: "67.6% of total",
-    icon: "✓",
-    iconClass: "purple",
-  },
-  {
-    title: "In Process",
-    value: "230",
-    subtitle: "Currently working",
-    icon: "◔",
-    iconClass: "orange",
-  },
-  {
-    title: "Won",
-    value: "173",
-    subtitle: "13.9% of total",
-    icon: "↗",
-    iconClass: "blue",
-  },
-  {
-    title: "Result Awaited",
-    value: "42",
-    subtitle: "Need follow-up",
-    icon: "₹",
-    iconClass: "green",
-  },
-  {
-    title: "On Hold",
-    value: "38",
-    subtitle: "Currently on hold",
-    icon: "✓",
-    iconClass: "purple",
-  },
-  {
-    title: "Lost",
-    value: "94",
-    subtitle: "Unsuccessful",
-    icon: "◔",
-    iconClass: "orange",
-  },
-];
-
-export default function Dashboard() {
-  const [year, setYear] = useState("Select All");
-  const [month, setMonth] = useState("Select All");
-  const [business, setBusiness] = useState("Select All");
-  const [status, setStatus] = useState("Select All");
-  const [zsm, setZsm] = useState("Select All");
-  const [category, setCategory] = useState("Select All");
-  const [branch, setBranch] = useState("Select All");
-
-  const resetFilters = () => {
-    setYear("Select All");
-    setMonth("Select All");
-    setBusiness("Select All");
-    setStatus("Select All");
-    setZsm("Select All");
-    setCategory("Select All");
-    setBranch("Select All");
-  };
-
-  return (
-    <main className="content">
-
-      {/* =====================================================
-          TOP BAR
-          ===================================================== */}
-
-      <header className="topbar">
-
-        <div>
-          <div className="breadcrumb">
-            Home / Dashboard
-          </div>
-
-          <h1>
-            Dashboard
-          </h1>
-        </div>
-
-        <div className="top-actions">
+/* =========================================================
+   TENDERHUB DASHBOARD - GLOBAL CSS
+   ========================================================= */
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f5f7fb;
+  color: #10213f;
+}
 
-          <button
-            type="button"
-            className="icon-btn"
-          >
-            ♧
-            <span className="notification-dot"></span>
-          </button>
+/* =========================================================
+   APPLICATION LAYOUT
+   ========================================================= */
 
-          <div className="profile">
+.app-layout {
+  display: flex;
+  width: 100%;
+  min-height: 100vh;
+  background: #f5f7fb;
+}
 
-            <div className="avatar">
-              PM
-            </div>
+/* =========================================================
+   SIDEBAR
+   ========================================================= */
 
-            <div>
-              <div className="profile-name">
-                Pawan Maske
-              </div>
+.sidebar {
+  width: 245px;
+  min-width: 245px;
+  min-height: 100vh;
 
-              <div className="profile-role">
-                Tender Executive
-              </div>
-            </div>
+  background: #101a2d;
+  color: #ffffff;
 
-            <span className="chevron">
-              ⌄
-            </span>
+  flex-shrink: 0;
+  overflow: hidden;
 
-          </div>
+  transition: width 0.2s ease;
+}
 
-        </div>
+.sidebar.sidebar-collapsed {
+  width: 72px;
+  min-width: 72px;
+}
 
-      </header>
+/* =========================================================
+   SIDEBAR BRAND
+   ========================================================= */
 
+.brand {
+  height: 82px;
 
-      {/* =====================================================
-          PAGE BODY
-          ===================================================== */}
+  display: flex;
+  align-items: center;
 
-      <main className="page-body">
+  gap: 12px;
+  padding: 0 22px;
+}
 
-        {/* ===================================================
-            WELCOME
-            =================================================== */}
+.brand-logo {
+  width: 38px;
+  height: 38px;
+  min-width: 38px;
 
-        <div className="welcome-row">
+  border-radius: 10px;
 
-          <div>
+  background: #2563eb;
+  color: #ffffff;
 
-            <h2>
-              Good afternoon, Pawan👋
-            </h2>
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-            <p>
-              Here's your tender performance overview.
-            </p>
+  font-size: 20px;
+  font-weight: 700;
+}
 
-          </div>
+.brand-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #ffffff;
+  white-space: nowrap;
+}
 
-        </div>
+.brand-sub {
+  margin-top: 3px;
 
+  font-size: 10px;
+  color: #9aa7bd;
 
-        {/* ===================================================
-            FILTERS
-            =================================================== */}
+  white-space: nowrap;
+}
 
-        <section className="filter-panel">
+/* =========================================================
+   COLLAPSE BUTTON
+   ========================================================= */
 
-          <div className="filter-row">
+.collapse-button {
+  width: calc(100% - 28px);
+  height: 36px;
 
-            <span className="filter-title">
-              Filters
-            </span>
+  margin: 0 14px 16px;
 
+  border: 1px solid #26344c;
+  border-radius: 8px;
 
-            {/* YEAR */}
+  background: transparent;
+  color: #cbd5e1;
 
-            <select
-              className="filter-select"
-              value={year}
-              onChange={(e) =>
-                setYear(e.target.value)
-              }
-            >
+  font-size: 12px;
+  cursor: pointer;
 
-              <option value="Select All">
-                Select All
-              </option>
+  transition: background 0.2s ease, color 0.2s ease;
+}
 
-              <option value="2026">
-                2026
-              </option>
+.collapse-button:hover {
+  background: #1c2a43;
+  color: #ffffff;
+}
 
-              <option value="2025">
-                2025
-              </option>
+/* =========================================================
+   SIDEBAR NAVIGATION
+   ========================================================= */
 
-              <option value="2024">
-                2024
-              </option>
+.nav {
+  padding: 0 14px 30px;
+}
 
-            </select>
+.nav-label {
+  padding: 22px 16px 10px;
 
+  font-size: 10px;
+  font-weight: 700;
 
-            {/* MONTH */}
+  letter-spacing: 1.2px;
 
-            <select
-              className="filter-select"
-              value={month}
-              onChange={(e) =>
-                setMonth(e.target.value)
-              }
-            >
+  color: #6f7d95;
+}
 
-              <option value="Select All">
-                Select All
-              </option>
+.nav-item {
+  width: 100%;
+  height: 42px;
 
-              <option value="August">
-                August
-              </option>
+  display: flex;
+  align-items: center;
 
-              <option value="July">
-                July
-              </option>
+  gap: 14px;
 
-              <option value="June">
-                June
-              </option>
+  margin-bottom: 4px;
+  padding: 0 14px;
 
-              <option value="May">
-                May
-              </option>
+  border: 0;
+  border-radius: 8px;
 
-              <option value="April">
-                April
-              </option>
+  background: transparent;
+  color: #b8c2d3;
 
-              <option value="March">
-                March
-              </option>
+  font-family: inherit;
+  font-size: 12px;
 
-              <option value="February">
-                February
-              </option>
+  text-align: left;
+  cursor: pointer;
 
-              <option value="January">
-                January
-              </option>
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+}
 
-            </select>
+.nav-item:hover {
+  background: #18253b;
+  color: #ffffff;
+}
 
+.nav-item.active {
+  background: #2563eb;
+  color: #ffffff;
+}
 
-            {/* BUSINESS */}
+.nav-icon {
+  width: 18px;
+  min-width: 18px;
 
-            <select
-              className="filter-select"
-              value={business}
-              onChange={(e) =>
-                setBusiness(e.target.value)
-              }
-            >
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-              <option value="Select All">
-                Select All
-              </option>
+  font-size: 13px;
+}
 
-              <option value="Corporate">
-                Corporate
-              </option>
+.nav-text {
+  white-space: nowrap;
+}
 
-              <option value="Retail">
-                Retail
-              </option>
+/* =========================================================
+   COLLAPSED SIDEBAR
+   ========================================================= */
 
-              <option value="Government">
-                Government
-              </option>
+.sidebar-collapsed .brand {
+  justify-content: center;
+  padding: 0;
+}
 
-            </select>
+.sidebar-collapsed .brand > div:last-child {
+  display: none;
+}
 
+.sidebar-collapsed .nav-text,
+.sidebar-collapsed .nav-label {
+  display: none;
+}
 
-            {/* STATUS */}
+.sidebar-collapsed .nav-item {
+  justify-content: center;
+  padding: 0;
+}
 
-            <select
-              className="filter-select"
-              value={status}
-              onChange={(e) =>
-                setStatus(e.target.value)
-              }
-            >
+.sidebar-collapsed .collapse-button {
+  width: 42px;
 
-              <option value="Select All">
-                Select All
-              </option>
+  margin-left: 15px;
+  margin-right: 15px;
 
-              <option value="Submitted">
-                Submitted
-              </option>
+  font-size: 18px;
+}
 
-              <option value="In Process">
-                In Process
-              </option>
+/* =========================================================
+   MAIN CONTENT
+   ========================================================= */
 
-              <option value="Won">
-                Won
-              </option>
+.main-content {
+  flex: 1;
+  min-width: 0;
+  min-height: 100vh;
 
-              <option value="Lost">
-                Lost
-              </option>
+  background: #f5f7fb;
+}
 
-              <option value="On Hold">
-                On Hold
-              </option>
+/* =========================================================
+   TOP BAR
+   ========================================================= */
 
-              <option value="Result Awaited">
-                Result Awaited
-              </option>
+.topbar {
+  height: 82px;
 
-            </select>
+  background: #ffffff;
 
+  border-bottom: 1px solid #e5eaf2;
 
-            {/* ZSM */}
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 
-            <select
-              className="filter-select"
-              value={zsm}
-              onChange={(e) =>
-                setZsm(e.target.value)
-              }
-            >
+  padding: 0 32px;
+}
 
-              <option value="Select All">
-                Select All
-              </option>
+.breadcrumb {
+  font-size: 12px;
+  color: #7583a0;
 
-              <option value="Rahul">
-                Rahul
-              </option>
+  margin-bottom: 6px;
+}
 
-              <option value="Priya">
-                Priya
-              </option>
+.topbar h1 {
+  margin: 0;
 
-              <option value="Amit">
-                Amit
-              </option>
+  font-size: 22px;
+  font-weight: 700;
 
-            </select>
+  color: #10213f;
+}
 
+/* =========================================================
+   TOP ACTIONS
+   ========================================================= */
 
-            {/* CATEGORY */}
+.top-actions {
+  display: flex;
+  align-items: center;
 
-            <select
-              className="filter-select"
-              value={category}
-              onChange={(e) =>
-                setCategory(e.target.value)
-              }
-            >
+  gap: 22px;
+}
 
-              <option value="Select All">
-                Select All
-              </option>
+.icon-btn {
+  position: relative;
 
-              <option value="IT Services">
-                IT Services
-              </option>
+  border: 0;
+  background: transparent;
 
-              <option value="Consulting">
-                Consulting
-              </option>
+  font-size: 20px;
 
-              <option value="Technology">
-                Technology
-              </option>
+  cursor: pointer;
+}
 
-              <option value="Infrastructure">
-                Infrastructure
-              </option>
+.notification-dot {
+  position: absolute;
 
-            </select>
+  width: 6px;
+  height: 6px;
 
+  border-radius: 50%;
 
-            {/* BRANCH */}
+  background: #ef4444;
 
-            <select
-              className="filter-select"
-              value={branch}
-              onChange={(e) =>
-                setBranch(e.target.value)
-              }
-            >
+  top: 1px;
+  right: 1px;
+}
 
-              <option value="Select All">
-                Select All
-              </option>
+.profile {
+  display: flex;
+  align-items: center;
 
-              <option value="Pune">
-                Pune
-              </option>
+  gap: 10px;
+}
 
-              <option value="Mumbai">
-                Mumbai
-              </option>
+.avatar {
+  width: 38px;
+  height: 38px;
 
-              <option value="Delhi">
-                Delhi
-              </option>
+  border-radius: 50%;
 
-              <option value="Bangalore">
-                Bangalore
-              </option>
+  background: #e8f0ff;
+  color: #2563eb;
 
-              <option value="Nagpur">
-                Nagpur
-              </option>
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-            </select>
+  font-size: 13px;
+  font-weight: 700;
+}
 
+.profile-name {
+  font-size: 13px;
+  font-weight: 700;
 
-            {/* RESET */}
+  color: #10213f;
+}
 
-            <button
-              className="reset-btn"
-              type="button"
-              onClick={resetFilters}
-            >
-              Reset
-            </button>
+.profile-role {
+  font-size: 10px;
 
-          </div>
+  color: #7583a0;
 
-        </section>
+  margin-top: 2px;
+}
 
+.chevron {
+  font-size: 14px;
+  color: #7c879d;
+}
 
-        {/* ===================================================
-            KPI CARDS
-            =================================================== */}
+/* =========================================================
+   PAGE BODY
+   ========================================================= */
 
-        <section className="kpi-grid">
+.page-body {
+  padding: 28px 32px 40px;
+}
 
-          {kpis.map((item) => (
+/* =========================================================
+   WELCOME
+   ========================================================= */
 
-            <div
-              className="kpi-card"
-              key={item.title}
-            >
+.welcome-row {
+  display: flex;
 
-              <div className="kpi-top">
+  justify-content: space-between;
+  align-items: center;
 
-                <span>
-                  {item.title}
-                </span>
+  margin-bottom: 22px;
+}
 
-                <div
-                  className={`kpi-icon icon-${item.iconClass}`}
-                >
-                  {item.icon}
-                </div>
+.welcome-row h2 {
+  margin: 0 0 6px;
 
-              </div>
+  font-size: 23px;
 
-              <div className="kpi-value">
-                {item.value}
-              </div>
+  color: #10213f;
+}
 
-              <div className="kpi-sub">
-                {item.subtitle}
-              </div>
+.welcome-row p {
+  margin: 0;
 
-            </div>
+  font-size: 13px;
 
-          ))}
+  color: #7583a0;
+}
 
-        </section>
+/* =========================================================
+   BUTTONS
+   ========================================================= */
 
+.primary-btn {
+  border: 0;
 
-        {/* ===================================================
-            CHARTS
-            =================================================== */}
+  background: #2563eb;
+  color: #ffffff;
 
-        <section className="charts-grid">
+  padding: 11px 18px;
 
+  border-radius: 8px;
 
-          {/* =================================================
-              TENDER PERFORMANCE
-              ================================================= */}
+  font-size: 12px;
+  font-weight: 600;
 
-          <div className="chart-card">
+  cursor: pointer;
 
-            <div className="chart-header">
+  box-shadow: 0 4px 10px rgba(37, 99, 235, 0.18);
+}
 
-              <div>
+.primary-btn:hover {
+  background: #1d4ed8;
+}
 
-                <h2 className="chart-title">
-                  Tender Performance
-                </h2>
+.reset-btn {
+  height: 36px;
 
-                <div className="chart-subtitle">
-                  Monthly submitted vs won tenders
-                </div>
+  border: 0;
+  border-radius: 7px;
 
-              </div>
+  padding: 0 15px;
 
-              <select
-                className="year-select"
-                value={year === "Select All" ? "2026" : year}
-                onChange={(e) =>
-                  setYear(e.target.value)
-                }
-              >
+  background: #f1f3f7;
+  color: #52617b;
 
-                <option value="2026">
-                  2026
-                </option>
+  font-size: 12px;
 
-                <option value="2025">
-                  2025
-                </option>
+  cursor: pointer;
+}
 
-                <option value="2024">
-                  2024
-                </option>
+.reset-btn:hover {
+  background: #e7ebf2;
+}
 
-              </select>
+/* =========================================================
+   FILTER PANEL
+   ========================================================= */
 
-            </div>
+.filter-panel {
+  background: #ffffff;
 
+  border: 1px solid #e1e7f0;
 
-            {/* BAR CHART */}
+  border-radius: 12px;
 
-            <div className="bar-chart">
+  padding: 12px;
 
-              {[35, 52, 42, 70, 50, 75].map(
-                (height, index) => (
+  margin-bottom: 20px;
+}
 
-                  <div
-                    className="bar-group"
-                    key={index}
-                  >
+.filter-row {
+  display: flex;
 
-                    <div
-                      className="bar"
-                      style={{
-                        height: `${height}%`,
-                      }}
-                    ></div>
+  align-items: center;
 
-                    <div
-                      className="bar secondary"
-                      style={{
-                        height: `${height / 2}%`,
-                      }}
-                    ></div>
+  gap: 8px;
 
-                  </div>
+  flex-wrap: wrap;
+}
 
-                )
-              )}
+.filter-title {
+  font-size: 12px;
+  font-weight: 700;
 
-            </div>
+  color: #10213f;
 
+  margin-right: 2px;
+}
 
-            {/* MONTH LABELS */}
+.filter-select {
+  height: 36px;
 
-            <div className="month-labels">
+  min-width: 92px;
 
-              <span>
-                Jan
-              </span>
+  border: 1px solid #d7dfeb;
 
-              <span>
-                Feb
-              </span>
+  border-radius: 7px;
 
-              <span>
-                Mar
-              </span>
+  background: #ffffff;
 
-              <span>
-                Apr
-              </span>
+  color: #30415f;
 
-              <span>
-                May
-              </span>
+  padding: 0 12px;
 
-              <span>
-                Jun
-              </span>
+  font-size: 12px;
 
-            </div>
+  outline: none;
+}
 
-          </div>
+.filter-select:focus {
+  border-color: #2563eb;
+}
 
+/* =========================================================
+   KPI GRID
+   ========================================================= */
 
-          {/* =================================================
-              OUTCOME DISTRIBUTION
-              ================================================= */}
+.kpi-grid {
+  display: grid;
 
-          <div className="chart-card">
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr));
 
-            <div className="chart-header">
+  gap: 14px;
 
-              <div>
+  margin-bottom: 20px;
+}
 
-                <h2 className="chart-title">
-                  Outcome Distribution
-                </h2>
+/* =========================================================
+   KPI CARD - COMPACT
+   ========================================================= */
 
-                <div className="chart-subtitle">
-                  Current tender result mix
-                </div>
+.kpi-card {
+  position: relative;
 
-              </div>
+  width: 100%;
 
-            </div>
+  height: 88px;
+  min-height: 88px;
 
+  padding: 12px 14px 10px;
 
-            <div className="donut-area">
+  background: #ffffff;
 
-              <div className="donut">
-              </div>
+  border: 1px solid #e1e7f0;
 
+  border-radius: 11px;
 
-              <div className="legend">
+  overflow: hidden;
 
-                <div className="legend-item">
+  box-shadow:
+    0 2px 7px rgba(16, 33, 63, 0.05);
 
-                  <span className="legend-dot dot-green">
-                  </span>
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease;
+}
 
-                  Won
+.kpi-card:hover {
+  transform: translateY(-1px);
 
-                </div>
+  box-shadow:
+    0 5px 12px rgba(16, 33, 63, 0.08);
+}
 
+/* =========================================================
+   KPI LEFT COLOUR STRIP
+   ========================================================= */
 
-                <div className="legend-item">
+.kpi-card::before {
+  content: "";
 
-                  <span className="legend-dot dot-blue">
-                  </span>
+  position: absolute;
 
-                  Submitted
+  top: 0;
+  left: 0;
+  bottom: 0;
 
-                </div>
+  width: 3px;
 
+  background: #2563eb;
+}
 
-                <div className="legend-item">
+/* =========================================================
+   KPI TOP ROW
+   ========================================================= */
 
-                  <span className="legend-dot dot-orange">
-                  </span>
+.kpi-top {
+  width: 100%;
 
-                  In Process
+  display: flex;
 
-                </div>
+  align-items: flex-start;
 
+  justify-content: space-between;
 
-                <div className="legend-item">
+  text-align: left;
+}
 
-                  <span className="legend-dot dot-purple">
-                  </span>
+/* =========================================================
+   KPI TITLE
+   ========================================================= */
 
-                  On Hold
+.kpi-top > span:first-child,
+.kpi-title {
+  display: block;
 
-                </div>
+  padding-top: 2px;
 
+  font-size: 10px;
 
-                <div className="legend-item">
+  font-weight: 500;
 
-                  <span className="legend-dot dot-red">
-                  </span>
+  line-height: 1.2;
 
-                  Lost
+  color: #62718d;
+}
 
-                </div>
+/* =========================================================
+   KPI ICON - SMALL TOP RIGHT
+   ========================================================= */
 
-              </div>
+.kpi-icon {
+  width: 27px;
+  height: 27px;
 
-            </div>
+  min-width: 27px;
 
-          </div>
+  margin: 0;
 
-        </section>
+  border-radius: 50%;
 
-      </main>
+  display: flex;
 
-    </main>
-  );
+  align-items: center;
+  justify-content: center;
+
+  font-size: 12px;
+
+  font-weight: 700;
+}
+
+.kpi-icon svg {
+  width: 15px;
+  height: 15px;
+
+  display: block;
+}
+
+/* =========================================================
+   KPI VALUE
+   ========================================================= */
+
+.kpi-value {
+  margin-top: 6px;
+
+  text-align: left;
+
+  font-size: 22px;
+
+  line-height: 1;
+
+  font-weight: 700;
+
+  letter-spacing: -0.4px;
+
+  color: #10213f;
+}
+
+/* =========================================================
+   KPI SUBTITLE
+   ========================================================= */
+
+.kpi-sub {
+  margin-top: 4px;
+
+  text-align: left;
+
+  font-size: 9px;
+
+  line-height: 1.2;
+
+  color: #7a87a1;
+}
+
+/* =========================================================
+   KPI 1 - BLUE
+   ========================================================= */
+
+.kpi-card:nth-child(1)::before {
+  background: #2563eb;
+}
+
+.kpi-card:nth-child(1) .kpi-icon {
+  background: #edf4ff;
+  color: #2563eb;
+}
+
+/* =========================================================
+   KPI 2 - GREEN
+   ========================================================= */
+
+.kpi-card:nth-child(2)::before {
+  background: #16a34a;
+}
+
+.kpi-card:nth-child(2) .kpi-icon {
+  background: #edf9f1;
+  color: #16a34a;
+}
+
+/* =========================================================
+   KPI 3 - PURPLE
+   ========================================================= */
+
+.kpi-card:nth-child(3)::before {
+  background: #7c3aed;
+}
+
+.kpi-card:nth-child(3) .kpi-icon {
+  background: #f3edff;
+  color: #7c3aed;
+}
+
+/* =========================================================
+   KPI 4 - ORANGE
+   ========================================================= */
+
+.kpi-card:nth-child(4)::before {
+  background: #f97316;
+}
+
+.kpi-card:nth-child(4) .kpi-icon {
+  background: #fff2e6;
+  color: #f97316;
+}
+
+/* =========================================================
+   KPI 5 - GREEN
+   ========================================================= */
+
+.kpi-card:nth-child(5)::before {
+  background: #16a34a;
+}
+
+.kpi-card:nth-child(5) .kpi-icon {
+  background: #edf9f1;
+  color: #16a34a;
+}
+
+/* =========================================================
+   KPI 6 - TEAL
+   ========================================================= */
+
+.kpi-card:nth-child(6)::before {
+  background: #0faaa9;
+}
+
+.kpi-card:nth-child(6) .kpi-icon {
+  background: #eafafa;
+  color: #0faaa9;
+}
+
+/* =========================================================
+   KPI 7 - AMBER
+   ========================================================= */
+
+.kpi-card:nth-child(7)::before {
+  background: #e5a500;
+}
+
+.kpi-card:nth-child(7) .kpi-icon {
+  background: #fff8df;
+  color: #d79a00;
+}
+
+/* =========================================================
+   KPI 8 - RED
+   ========================================================= */
+
+.kpi-card:nth-child(8)::before {
+  background: #ef2b2b;
+}
+
+.kpi-card:nth-child(8) .kpi-icon {
+  background: #fff0f0;
+  color: #e52b2b;
+}
+
+/* =========================================================
+   CHARTS
+   ========================================================= */
+
+.charts-grid {
+  display: grid;
+
+  grid-template-columns: 1.5fr 1fr;
+
+  gap: 14px;
+}
+
+.chart-card {
+  background: #ffffff;
+
+  border: 1px solid #e1e7f0;
+
+  border-radius: 12px;
+
+  min-height: 280px;
+
+  padding: 18px;
+}
+
+.chart-header {
+  display: flex;
+
+  align-items: flex-start;
+
+  justify-content: space-between;
+}
+
+.chart-title {
+  margin: 0;
+
+  font-size: 14px;
+
+  font-weight: 700;
+
+  color: #10213f;
+}
+
+.chart-subtitle {
+  margin-top: 5px;
+
+  font-size: 10px;
+
+  color: #7a87a1;
+}
+
+.year-select {
+  height: 36px;
+
+  border: 1px solid #d7dfeb;
+
+  border-radius: 7px;
+
+  background: #ffffff;
+
+  padding: 0 12px;
+
+  color: #30415f;
+
+  font-size: 12px;
+}
+
+/* =========================================================
+   BAR CHART
+   ========================================================= */
+
+.bar-chart {
+  height: 150px;
+
+  margin-top: 25px;
+
+  display: flex;
+
+  align-items: flex-end;
+
+  justify-content: space-around;
+
+  border-bottom: 1px solid #edf0f5;
+}
+
+.bar-group {
+  height: 100%;
+
+  width: 45px;
+
+  display: flex;
+
+  align-items: flex-end;
+
+  justify-content: center;
+
+  gap: 4px;
+}
+
+.bar {
+  width: 13px;
+
+  background: #2563eb;
+
+  border-radius: 5px 5px 0 0;
+}
+
+.bar.secondary {
+  background: #93c5fd;
+}
+
+.month-labels {
+  display: flex;
+
+  justify-content: space-around;
+
+  margin-top: 8px;
+
+  font-size: 10px;
+
+  color: #7a87a1;
+}
+
+/* =========================================================
+   DONUT
+   ========================================================= */
+
+.donut-area {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 35px;
+
+  margin-top: 25px;
+}
+
+.donut {
+  width: 145px;
+  height: 145px;
+
+  border-radius: 50%;
+
+  background:
+    conic-gradient(
+      #16a34a 0deg 95deg,
+      #2563eb 95deg 185deg,
+      #f97316 185deg 245deg,
+      #7c3aed 245deg 290deg,
+      #ef4444 290deg 360deg
+    );
+
+  position: relative;
+}
+
+.donut::after {
+  content: "";
+
+  position: absolute;
+
+  width: 82px;
+  height: 82px;
+
+  background: #ffffff;
+
+  border-radius: 50%;
+
+  top: 31px;
+  left: 31px;
+}
+
+.legend {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 9px;
+
+  font-size: 11px;
+
+  color: #52617b;
+}
+
+.legend-item {
+  display: flex;
+
+  align-items: center;
+
+  gap: 7px;
+}
+
+.legend-dot {
+  width: 8px;
+  height: 8px;
+
+  border-radius: 50%;
+}
+
+.dot-green {
+  background: #16a34a;
+}
+
+.dot-blue {
+  background: #2563eb;
+}
+
+.dot-orange {
+  background: #f97316;
+}
+
+.dot-purple {
+  background: #7c3aed;
+}
+
+.dot-red {
+  background: #ef4444;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1100px) {
+  .kpi-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+  .charts-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .filter-row {
+    gap: 6px;
+  }
+}
+
+@media (max-width: 700px) {
+  .sidebar {
+    width: 72px;
+    min-width: 72px;
+  }
+
+  .sidebar .nav-text,
+  .sidebar .nav-label,
+  .sidebar .brand > div:last-child {
+    display: none;
+  }
+
+  .sidebar .nav-item {
+    justify-content: center;
+  }
+
+  .main-content {
+    width: calc(100% - 72px);
+  }
+
+  .topbar {
+    padding: 0 16px;
+  }
+
+  .page-body {
+    padding: 20px 16px;
+  }
+
+  .kpi-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .kpi-card {
+    height: 88px;
+    min-height: 88px;
+  }
+
+  .welcome-row {
+    align-items: flex-start;
+
+    gap: 15px;
+  }
+
+  .filter-select {
+    flex: 1;
+  }
 }
