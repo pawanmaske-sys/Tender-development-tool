@@ -1,5 +1,10 @@
 /* =========================================================
-   TENDERHUB - GLOBAL STYLES
+   TENDERHUB - GLOBAL CSS
+   Dashboard + Sidebar + KPI + Charts
+   ========================================================= */
+
+/* =========================================================
+   GLOBAL RESET
    ========================================================= */
 
 * {
@@ -13,14 +18,30 @@ body {
   min-height: 100%;
 }
 
+html {
+  width: 100%;
+}
+
 body {
+  width: 100%;
   font-family: Arial, Helvetica, sans-serif;
   background: #f5f7fb;
   color: #10213f;
 }
 
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
 /* =========================================================
-   MAIN APP LAYOUT
+   MAIN APPLICATION
    ========================================================= */
 
 .app-layout {
@@ -38,7 +59,7 @@ body {
   overflow-x: hidden;
 }
 
-/* Keep compatibility if older classes are used */
+/* Backward compatibility */
 
 .app-shell {
   display: flex;
@@ -68,9 +89,11 @@ body {
 
   flex-shrink: 0;
 
-  transition: width 0.2s ease;
-
   overflow: hidden;
+
+  transition:
+    width 0.2s ease,
+    min-width 0.2s ease;
 }
 
 .sidebar.sidebar-collapsed {
@@ -79,7 +102,7 @@ body {
 }
 
 /* =========================================================
-   BRAND
+   SIDEBAR BRAND
    ========================================================= */
 
 .brand {
@@ -114,7 +137,9 @@ body {
 .brand-title {
   font-size: 16px;
   font-weight: 700;
+
   color: #ffffff;
+
   white-space: nowrap;
 }
 
@@ -122,6 +147,7 @@ body {
   margin-top: 3px;
 
   font-size: 10px;
+
   color: #9aa7bd;
 
   white-space: nowrap;
@@ -138,12 +164,13 @@ body {
   margin: 0 14px 16px;
 
   border: 1px solid #27344a;
+
   border-radius: 8px;
 
   background: transparent;
+
   color: #cbd5e1;
 
-  font-family: inherit;
   font-size: 12px;
 
   cursor: pointer;
@@ -192,9 +219,11 @@ body {
   padding: 0 14px;
 
   border: 0;
+
   border-radius: 8px;
 
   background: transparent;
+
   color: #b8c2d3;
 
   font-family: inherit;
@@ -291,6 +320,7 @@ body {
 
 .breadcrumb {
   font-size: 12px;
+
   color: #7583a0;
 
   margin-bottom: 6px;
@@ -300,18 +330,20 @@ body {
   margin: 0;
 
   font-size: 22px;
+
   font-weight: 700;
 
   color: #10213f;
 }
 
 /* =========================================================
-   TOP ACTIONS
+   TOP RIGHT
    ========================================================= */
 
 .top-actions {
   display: flex;
   align-items: center;
+
   gap: 22px;
 }
 
@@ -319,6 +351,7 @@ body {
   position: relative;
 
   border: 0;
+
   background: transparent;
 
   font-size: 20px;
@@ -343,6 +376,7 @@ body {
 .profile {
   display: flex;
   align-items: center;
+
   gap: 10px;
 }
 
@@ -353,6 +387,7 @@ body {
   border-radius: 50%;
 
   background: #e8f0ff;
+
   color: #2563eb;
 
   display: flex;
@@ -365,12 +400,15 @@ body {
 
 .profile-name {
   font-size: 13px;
+
   font-weight: 700;
+
   color: #10213f;
 }
 
 .profile-role {
   font-size: 10px;
+
   color: #7583a0;
 
   margin-top: 2px;
@@ -378,6 +416,7 @@ body {
 
 .chevron {
   font-size: 14px;
+
   color: #7c879d;
 }
 
@@ -390,12 +429,14 @@ body {
 }
 
 /* =========================================================
-   WELCOME
+   WELCOME AREA
    ========================================================= */
 
 .welcome-row {
   display: flex;
+
   justify-content: space-between;
+
   align-items: center;
 
   margin-bottom: 22px;
@@ -418,13 +459,14 @@ body {
 }
 
 /* =========================================================
-   BUTTON
+   PRIMARY BUTTON
    ========================================================= */
 
 .primary-btn {
   border: 0;
 
   background: #2563eb;
+
   color: #ffffff;
 
   padding: 11px 18px;
@@ -432,11 +474,13 @@ body {
   border-radius: 8px;
 
   font-size: 12px;
+
   font-weight: 600;
 
   cursor: pointer;
 
-  box-shadow: 0 4px 10px rgba(37, 99, 235, 0.18);
+  box-shadow:
+    0 4px 10px rgba(37, 99, 235, 0.18);
 }
 
 .primary-btn:hover {
@@ -444,7 +488,7 @@ body {
 }
 
 /* =========================================================
-   FILTERS
+   FILTER PANEL
    ========================================================= */
 
 .filter-panel {
@@ -461,6 +505,7 @@ body {
 
 .filter-row {
   display: flex;
+
   align-items: center;
 
   gap: 8px;
@@ -470,6 +515,7 @@ body {
 
 .filter-title {
   font-size: 12px;
+
   font-weight: 700;
 
   color: #10213f;
@@ -530,11 +576,12 @@ body {
 .kpi-grid {
   display: grid;
 
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr));
 
-  gap: 18px;
+  gap: 14px;
 
-  margin-bottom: 22px;
+  margin-bottom: 20px;
 }
 
 /* =========================================================
@@ -544,28 +591,31 @@ body {
 .kpi-card {
   position: relative;
 
-  min-height: 235px;
+  height: 190px;
 
-  padding: 22px;
+  min-height: 190px;
+
+  padding: 14px 18px 12px;
 
   background: #ffffff;
 
   border: 1px solid #e3e8f0;
 
-  border-radius: 17px;
+  border-radius: 15px;
 
   overflow: hidden;
 
   box-shadow:
-    0 8px 22px rgba(16, 33, 63, 0.07);
+    0 5px 16px rgba(16, 33, 63, 0.06);
 
   transition:
     transform 0.2s ease,
-    box-shadow 0.2s ease,
-    border-color 0.2s ease;
+    box-shadow 0.2s ease;
 }
 
-/* TOP COLOUR STRIP */
+/* =========================================================
+   KPI TOP COLOUR STRIP
+   ========================================================= */
 
 .kpi-card::before {
   content: "";
@@ -581,19 +631,19 @@ body {
   background: #2563eb;
 }
 
-/* HOVER */
+/* =========================================================
+   KPI HOVER
+   ========================================================= */
 
 .kpi-card:hover {
-  transform: translateY(-3px);
+  transform: translateY(-2px);
 
   box-shadow:
-    0 14px 30px rgba(16, 33, 63, 0.11);
-
-  border-color: #d5dce8;
+    0 9px 20px rgba(16, 33, 63, 0.09);
 }
 
 /* =========================================================
-   KPI TOP
+   KPI CONTENT
    ========================================================= */
 
 .kpi-top {
@@ -602,20 +652,23 @@ body {
   flex-direction: column;
 
   align-items: center;
+
   justify-content: center;
 
   text-align: center;
 
-  padding-top: 15px;
+  padding-top: 7px;
 }
 
 /* =========================================================
-   KPI ICON
+   KPI ICON CIRCLE
    ========================================================= */
 
 .kpi-icon {
-  width: 92px;
-  height: 92px;
+  width: 62px;
+  height: 62px;
+
+  min-width: 62px;
 
   border-radius: 50%;
 
@@ -624,14 +677,14 @@ body {
   align-items: center;
   justify-content: center;
 
-  margin-bottom: 17px;
+  margin-bottom: 8px;
 
   flex-shrink: 0;
 }
 
 .kpi-icon svg {
-  width: 52px;
-  height: 52px;
+  width: 34px;
+  height: 34px;
 
   display: block;
 }
@@ -641,25 +694,25 @@ body {
    ========================================================= */
 
 .kpi-title {
-  font-size: 17px;
+  font-size: 14px;
 
   font-weight: 500;
 
   color: #10213f;
 
-  line-height: 1.3;
+  line-height: 1.25;
 }
 
 /* Compatibility */
 
 .kpi-top > span:first-child {
-  font-size: 17px;
+  font-size: 14px;
 
   font-weight: 500;
 
   color: #10213f;
 
-  line-height: 1.3;
+  line-height: 1.25;
 }
 
 /* =========================================================
@@ -667,17 +720,17 @@ body {
    ========================================================= */
 
 .kpi-value {
-  margin-top: 17px;
+  margin-top: 8px;
 
   text-align: center;
 
-  font-size: 34px;
+  font-size: 28px;
 
   line-height: 1;
 
   font-weight: 700;
 
-  letter-spacing: -1px;
+  letter-spacing: -0.5px;
 
   color: #10213f;
 }
@@ -687,20 +740,18 @@ body {
    ========================================================= */
 
 .kpi-sub {
-  margin-top: 12px;
+  margin-top: 7px;
 
   text-align: center;
 
-  font-size: 11px;
+  font-size: 10px;
 
   color: #71809a;
 }
 
 /* =========================================================
-   KPI COLOURS
+   KPI 1 - BLUE
    ========================================================= */
-
-/* BLUE */
 
 .kpi-card:nth-child(1)::before {
   background: #2563eb;
@@ -711,7 +762,9 @@ body {
   color: #2563eb;
 }
 
-/* GREEN */
+/* =========================================================
+   KPI 2 - GREEN
+   ========================================================= */
 
 .kpi-card:nth-child(2)::before {
   background: #16a34a;
@@ -722,7 +775,9 @@ body {
   color: #16a34a;
 }
 
-/* PURPLE */
+/* =========================================================
+   KPI 3 - PURPLE
+   ========================================================= */
 
 .kpi-card:nth-child(3)::before {
   background: #7c3aed;
@@ -733,7 +788,9 @@ body {
   color: #7c3aed;
 }
 
-/* ORANGE */
+/* =========================================================
+   KPI 4 - ORANGE
+   ========================================================= */
 
 .kpi-card:nth-child(4)::before {
   background: #f97316;
@@ -744,7 +801,9 @@ body {
   color: #f97316;
 }
 
-/* GREEN */
+/* =========================================================
+   KPI 5 - GREEN
+   ========================================================= */
 
 .kpi-card:nth-child(5)::before {
   background: #16a34a;
@@ -755,7 +814,9 @@ body {
   color: #16a34a;
 }
 
-/* TEAL */
+/* =========================================================
+   KPI 6 - TEAL
+   ========================================================= */
 
 .kpi-card:nth-child(6)::before {
   background: #0faaa9;
@@ -766,7 +827,9 @@ body {
   color: #0faaa9;
 }
 
-/* AMBER */
+/* =========================================================
+   KPI 7 - AMBER
+   ========================================================= */
 
 .kpi-card:nth-child(7)::before {
   background: #e5a500;
@@ -777,7 +840,9 @@ body {
   color: #d79a00;
 }
 
-/* RED */
+/* =========================================================
+   KPI 8 - RED
+   ========================================================= */
 
 .kpi-card:nth-child(8)::before {
   background: #ef2b2b;
@@ -789,7 +854,7 @@ body {
 }
 
 /* =========================================================
-   CHARTS
+   CHART GRID
    ========================================================= */
 
 .charts-grid {
@@ -799,6 +864,10 @@ body {
 
   gap: 14px;
 }
+
+/* =========================================================
+   CHART CARD
+   ========================================================= */
 
 .chart-card {
   background: #ffffff;
@@ -911,7 +980,7 @@ body {
 }
 
 /* =========================================================
-   DONUT
+   DONUT CHART
    ========================================================= */
 
 .donut-area {
@@ -1008,13 +1077,30 @@ body {
 }
 
 /* =========================================================
-   RESPONSIVE
+   GENERAL FORM ELEMENTS
+   ========================================================= */
+
+input,
+select,
+textarea {
+  font-size: 12px;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+}
+
+/* =========================================================
+   RESPONSIVE - TABLET
    ========================================================= */
 
 @media (max-width: 1100px) {
 
   .kpi-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
   }
 
   .charts-grid {
@@ -1025,6 +1111,10 @@ body {
     gap: 6px;
   }
 }
+
+/* =========================================================
+   RESPONSIVE - MOBILE
+   ========================================================= */
 
 @media (max-width: 700px) {
 
@@ -1039,8 +1129,14 @@ body {
     display: none;
   }
 
+  .sidebar .brand {
+    justify-content: center;
+    padding: 0;
+  }
+
   .sidebar .nav-item {
     justify-content: center;
+    padding: 0;
   }
 
   .main-content,
@@ -1071,20 +1167,23 @@ body {
   }
 
   .kpi-card {
-    min-height: 210px;
+    height: 185px;
+    min-height: 185px;
   }
 
   .kpi-icon {
-    width: 78px;
-    height: 78px;
+    width: 58px;
+    height: 58px;
+
+    min-width: 58px;
   }
 
   .kpi-icon svg {
-    width: 44px;
-    height: 44px;
+    width: 32px;
+    height: 32px;
   }
 
   .kpi-value {
-    font-size: 34px;
+    font-size: 26px;
   }
 }
