@@ -1,5 +1,6 @@
 /* =========================================================
    TENDERHUB - GLOBAL STYLES
+   Dashboard + All Tenders + Sidebar
    ========================================================= */
 
 * {
@@ -23,12 +24,19 @@ body {
    APPLICATION LAYOUT
    ========================================================= */
 
-.app-layout,
-.app-shell {
+.app-layout {
   display: flex;
   width: 100%;
   min-height: 100vh;
   background: #f5f7fb;
+}
+
+.main-content {
+  flex: 1;
+  min-width: 0;
+  min-height: 100vh;
+  background: #f5f7fb;
+  overflow-x: hidden;
 }
 
 /* =========================================================
@@ -44,9 +52,12 @@ body {
   color: #ffffff;
 
   flex-shrink: 0;
+
   overflow: hidden;
 
-  transition: width 0.2s ease;
+  transition:
+    width 0.2s ease,
+    min-width 0.2s ease;
 }
 
 .sidebar.sidebar-collapsed {
@@ -65,6 +76,7 @@ body {
   align-items: center;
 
   gap: 12px;
+
   padding: 0 22px;
 }
 
@@ -89,7 +101,9 @@ body {
 .brand-title {
   font-size: 16px;
   font-weight: 700;
+
   color: #ffffff;
+
   white-space: nowrap;
 }
 
@@ -97,6 +111,7 @@ body {
   margin-top: 3px;
 
   font-size: 10px;
+
   color: #9aa7bd;
 
   white-space: nowrap;
@@ -112,14 +127,20 @@ body {
 
   margin: 0 14px 16px;
 
-  border: 1px solid #26344c;
+  border: 1px solid #29364d;
   border-radius: 8px;
 
   background: transparent;
   color: #cbd5e1;
 
+  font-family: inherit;
   font-size: 12px;
+
   cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
 }
 
 .collapse-button:hover {
@@ -128,7 +149,7 @@ body {
 }
 
 /* =========================================================
-   NAVIGATION
+   SIDEBAR NAVIGATION
    ========================================================= */
 
 .nav {
@@ -156,18 +177,21 @@ body {
   gap: 14px;
 
   margin-bottom: 4px;
+
   padding: 0 14px;
 
   border: 0;
   border-radius: 8px;
 
   background: transparent;
+
   color: #b8c2d3;
 
   font-family: inherit;
   font-size: 12px;
 
   text-align: left;
+
   cursor: pointer;
 
   transition:
@@ -200,9 +224,7 @@ body {
   white-space: nowrap;
 }
 
-/* =========================================================
-   COLLAPSED SIDEBAR
-   ========================================================= */
+/* COLLAPSED SIDEBAR */
 
 .sidebar-collapsed .brand {
   justify-content: center;
@@ -213,7 +235,10 @@ body {
   display: none;
 }
 
-.sidebar-collapsed .nav-text,
+.sidebar-collapsed .nav-text {
+  display: none;
+}
+
 .sidebar-collapsed .nav-label {
   display: none;
 }
@@ -225,23 +250,11 @@ body {
 
 .sidebar-collapsed .collapse-button {
   width: 42px;
+
   margin-left: 15px;
   margin-right: 15px;
 
   font-size: 18px;
-}
-
-/* =========================================================
-   MAIN CONTENT
-   ========================================================= */
-
-.main-content,
-.content {
-  flex: 1;
-  min-width: 0;
-  min-height: 100vh;
-
-  background: #f5f7fb;
 }
 
 /* =========================================================
@@ -251,20 +264,23 @@ body {
 .topbar {
   height: 82px;
 
-  background: #ffffff;
-  border-bottom: 1px solid #e5eaf2;
-
   display: flex;
   align-items: center;
   justify-content: space-between;
 
   padding: 0 32px;
+
+  background: #ffffff;
+
+  border-bottom: 1px solid #e5eaf2;
 }
 
 .breadcrumb {
-  font-size: 12px;
-  color: #7583a0;
   margin-bottom: 6px;
+
+  font-size: 12px;
+
+  color: #7583a0;
 }
 
 .topbar h1 {
@@ -276,13 +292,10 @@ body {
   color: #10213f;
 }
 
-/* =========================================================
-   TOP RIGHT
-   ========================================================= */
-
 .top-actions {
   display: flex;
   align-items: center;
+
   gap: 22px;
 }
 
@@ -293,6 +306,7 @@ body {
   background: transparent;
 
   font-size: 20px;
+
   cursor: pointer;
 }
 
@@ -342,10 +356,11 @@ body {
 }
 
 .profile-role {
-  font-size: 10px;
-  color: #7583a0;
-
   margin-top: 2px;
+
+  font-size: 10px;
+
+  color: #7583a0;
 }
 
 .chevron {
@@ -362,7 +377,7 @@ body {
 }
 
 /* =========================================================
-   WELCOME
+   DASHBOARD WELCOME
    ========================================================= */
 
 .welcome-row {
@@ -377,6 +392,7 @@ body {
   margin: 0 0 6px;
 
   font-size: 23px;
+
   color: #10213f;
 }
 
@@ -384,68 +400,25 @@ body {
   margin: 0;
 
   font-size: 13px;
+
   color: #7583a0;
 }
 
 /* =========================================================
-   BUTTONS
-   ========================================================= */
-
-.primary-btn {
-  border: 0;
-
-  background: #2563eb;
-  color: #ffffff;
-
-  padding: 11px 18px;
-
-  border-radius: 8px;
-
-  font-size: 12px;
-  font-weight: 600;
-
-  cursor: pointer;
-
-  box-shadow: 0 4px 10px rgba(37, 99, 235, 0.18);
-}
-
-.primary-btn:hover {
-  background: #1d4ed8;
-}
-
-.reset-btn {
-  height: 36px;
-
-  border: 0;
-  border-radius: 7px;
-
-  padding: 0 15px;
-
-  background: #f1f3f7;
-  color: #52617b;
-
-  font-size: 12px;
-
-  cursor: pointer;
-}
-
-.reset-btn:hover {
-  background: #e7ebf2;
-}
-
-/* =========================================================
-   FILTERS
+   DASHBOARD FILTERS
    ========================================================= */
 
 .filter-panel {
-  background: #ffffff;
-
-  border: 1px solid #e1e7f0;
-  border-radius: 12px;
+  margin-bottom: 20px;
 
   padding: 12px;
 
-  margin-bottom: 20px;
+  background: #ffffff;
+
+  border: 1px solid #dfe6f0;
+  border-radius: 12px;
+
+  box-shadow: 0 3px 12px rgba(16, 33, 63, 0.03);
 }
 
 .filter-row {
@@ -458,38 +431,65 @@ body {
 }
 
 .filter-title {
+  margin-right: 2px;
+
   font-size: 12px;
   font-weight: 700;
 
   color: #10213f;
-
-  margin-right: 2px;
 }
 
 .filter-select {
   height: 36px;
 
-  min-width: 92px;
-
-  border: 1px solid #d7dfeb;
-  border-radius: 7px;
-
-  background: #ffffff;
-  color: #30415f;
+  min-width: 96px;
 
   padding: 0 12px;
 
-  font-size: 12px;
+  border: 1px solid #d3ddeb;
+  border-radius: 7px;
+
+  background: #ffffff;
+
+  color: #30415f;
+
+  font-family: inherit;
+  font-size: 11px;
 
   outline: none;
+
+  cursor: pointer;
 }
 
 .filter-select:focus {
   border-color: #2563eb;
 }
 
+.reset-btn {
+  height: 36px;
+
+  padding: 0 15px;
+
+  border: 0;
+  border-radius: 7px;
+
+  background: #f1f3f7;
+
+  color: #52617b;
+
+  font-family: inherit;
+  font-size: 11px;
+
+  cursor: pointer;
+}
+
+.reset-btn:hover {
+  background: #e7ebf2;
+}
+
 /* =========================================================
-   KPI GRID
+   DASHBOARD KPI CARDS
+   SMALL COMPACT STYLE
    ========================================================= */
 
 .kpi-grid {
@@ -502,41 +502,27 @@ body {
   margin-bottom: 20px;
 }
 
-/* =========================================================
-   KPI CARD - COMPACT STYLE
-   ========================================================= */
-
 .kpi-card {
   position: relative;
 
-  height: 115px;
-  min-height: 115px;
+  min-height: 116px;
 
-  padding: 15px 16px;
+  padding: 17px;
 
   background: #ffffff;
 
-  border: 1px solid #e1e7f0;
+  border: 1px solid #dfe6f0;
+
   border-radius: 12px;
 
   overflow: hidden;
 
-  box-shadow: 0 3px 10px rgba(16, 33, 63, 0.05);
+  box-shadow: 0 3px 12px rgba(16, 33, 63, 0.05);
 
   transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
+    transform 0.18s ease,
+    box-shadow 0.18s ease;
 }
-
-.kpi-card:hover {
-  transform: translateY(-2px);
-
-  box-shadow: 0 8px 18px rgba(16, 33, 63, 0.09);
-}
-
-/* =========================================================
-   KPI TOP COLOUR LINE
-   ========================================================= */
 
 .kpi-card::before {
   content: "";
@@ -545,213 +531,154 @@ body {
 
   top: 0;
   left: 0;
-  bottom: 0;
+  right: 0;
 
-  width: 3px;
+  height: 4px;
 
   background: #2563eb;
 }
 
-/* =========================================================
-   KPI TOP
-   ========================================================= */
+.kpi-card:hover {
+  transform: translateY(-2px);
+
+  box-shadow: 0 8px 20px rgba(16, 33, 63, 0.08);
+}
+
+/* KPI TOP */
 
 .kpi-top {
-  width: 100%;
-
   display: flex;
+
   align-items: flex-start;
   justify-content: space-between;
 
-  text-align: left;
+  min-height: 32px;
 }
 
-/* =========================================================
-   KPI TITLE
-   ========================================================= */
-
-.kpi-top > span:first-child,
 .kpi-title {
-  display: block;
-
-  padding-top: 2px;
+  padding-top: 3px;
 
   font-size: 11px;
   font-weight: 500;
 
-  color: #62718d;
+  color: #52617b;
 
   line-height: 1.3;
 }
 
-/* =========================================================
-   KPI ICON
-   ========================================================= */
+/* KPI ICON - TOP RIGHT */
 
 .kpi-icon {
   width: 30px;
   height: 30px;
 
-  min-width: 30px;
-
-  border-radius: 8px;
+  flex-shrink: 0;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  margin: 0;
+  border-radius: 9px;
 
   font-size: 14px;
   font-weight: 700;
 }
 
-.kpi-icon svg {
-  width: 17px;
-  height: 17px;
-
-  display: block;
-}
-
-/* =========================================================
-   KPI VALUE
-   ========================================================= */
+/* KPI VALUE */
 
 .kpi-value {
   margin-top: 9px;
 
-  text-align: left;
-
   font-size: 24px;
-  line-height: 1;
+
+  line-height: 1.05;
 
   font-weight: 700;
 
-  letter-spacing: -0.5px;
+  letter-spacing: -0.4px;
 
   color: #10213f;
 }
 
-/* =========================================================
-   KPI SUBTITLE
-   ========================================================= */
+/* KPI SUBTITLE */
 
 .kpi-sub {
   margin-top: 5px;
 
-  text-align: left;
+  font-size: 9px;
 
-  font-size: 10px;
-
-  color: #7a87a1;
+  color: #71809a;
 }
 
 /* =========================================================
-   KPI 1 - BLUE
+   KPI COLORS
    ========================================================= */
 
-.kpi-card:nth-child(1)::before {
+.kpi-blue::before {
   background: #2563eb;
 }
 
-.kpi-card:nth-child(1) .kpi-icon {
+.kpi-blue .kpi-icon {
   background: #edf4ff;
   color: #2563eb;
 }
 
-/* =========================================================
-   KPI 2 - GREEN
-   ========================================================= */
-
-.kpi-card:nth-child(2)::before {
+.kpi-green::before {
   background: #16a34a;
 }
 
-.kpi-card:nth-child(2) .kpi-icon {
+.kpi-green .kpi-icon {
   background: #edf9f1;
   color: #16a34a;
 }
 
-/* =========================================================
-   KPI 3 - PURPLE
-   ========================================================= */
-
-.kpi-card:nth-child(3)::before {
+.kpi-purple::before {
   background: #7c3aed;
 }
 
-.kpi-card:nth-child(3) .kpi-icon {
+.kpi-purple .kpi-icon {
   background: #f3edff;
   color: #7c3aed;
 }
 
-/* =========================================================
-   KPI 4 - ORANGE
-   ========================================================= */
-
-.kpi-card:nth-child(4)::before {
+.kpi-orange::before {
   background: #f97316;
 }
 
-.kpi-card:nth-child(4) .kpi-icon {
+.kpi-orange .kpi-icon {
   background: #fff2e6;
   color: #f97316;
 }
 
-/* =========================================================
-   KPI 5 - GREEN
-   ========================================================= */
-
-.kpi-card:nth-child(5)::before {
-  background: #16a34a;
-}
-
-.kpi-card:nth-child(5) .kpi-icon {
-  background: #edf9f1;
-  color: #16a34a;
-}
-
-/* =========================================================
-   KPI 6 - TEAL
-   ========================================================= */
-
-.kpi-card:nth-child(6)::before {
+.kpi-teal::before {
   background: #0faaa9;
 }
 
-.kpi-card:nth-child(6) .kpi-icon {
+.kpi-teal .kpi-icon {
   background: #eafafa;
   color: #0faaa9;
 }
 
-/* =========================================================
-   KPI 7 - AMBER
-   ========================================================= */
-
-.kpi-card:nth-child(7)::before {
+.kpi-amber::before {
   background: #e5a500;
 }
 
-.kpi-card:nth-child(7) .kpi-icon {
+.kpi-amber .kpi-icon {
   background: #fff8df;
   color: #d79a00;
 }
 
-/* =========================================================
-   KPI 8 - RED
-   ========================================================= */
-
-.kpi-card:nth-child(8)::before {
+.kpi-red::before {
   background: #ef2b2b;
 }
 
-.kpi-card:nth-child(8) .kpi-icon {
+.kpi-red .kpi-icon {
   background: #fff0f0;
   color: #e52b2b;
 }
 
 /* =========================================================
-   CHARTS
+   DASHBOARD CHARTS
    ========================================================= */
 
 .charts-grid {
@@ -763,20 +690,22 @@ body {
 }
 
 .chart-card {
-  background: #ffffff;
-
-  border: 1px solid #e1e7f0;
-  border-radius: 12px;
-
   min-height: 280px;
 
   padding: 18px;
+
+  background: #ffffff;
+
+  border: 1px solid #dfe6f0;
+
+  border-radius: 12px;
+
+  box-shadow: 0 3px 12px rgba(16, 33, 63, 0.04);
 }
 
 .chart-header {
   display: flex;
   align-items: flex-start;
-
   justify-content: space-between;
 }
 
@@ -800,21 +729,20 @@ body {
 .year-select {
   height: 36px;
 
-  border: 1px solid #d7dfeb;
+  padding: 0 12px;
+
+  border: 1px solid #d3ddeb;
   border-radius: 7px;
 
   background: #ffffff;
 
-  padding: 0 12px;
-
   color: #30415f;
 
-  font-size: 12px;
+  font-family: inherit;
+  font-size: 11px;
 }
 
-/* =========================================================
-   BAR CHART
-   ========================================================= */
+/* BAR CHART */
 
 .bar-chart {
   height: 150px;
@@ -829,8 +757,8 @@ body {
 }
 
 .bar-group {
-  height: 100%;
   width: 45px;
+  height: 100%;
 
   display: flex;
   align-items: flex-end;
@@ -853,7 +781,6 @@ body {
 
 .month-labels {
   display: flex;
-
   justify-content: space-around;
 
   margin-top: 8px;
@@ -863,13 +790,10 @@ body {
   color: #7a87a1;
 }
 
-/* =========================================================
-   DONUT CHART
-   ========================================================= */
+/* DONUT */
 
 .donut-area {
   display: flex;
-
   align-items: center;
   justify-content: center;
 
@@ -879,6 +803,8 @@ body {
 }
 
 .donut {
+  position: relative;
+
   width: 145px;
   height: 145px;
 
@@ -892,8 +818,6 @@ body {
       #7c3aed 245deg 290deg,
       #ef4444 290deg 360deg
     );
-
-  position: relative;
 }
 
 .donut::after {
@@ -904,17 +828,16 @@ body {
   width: 82px;
   height: 82px;
 
+  top: 31px;
+  left: 31px;
+
   background: #ffffff;
 
   border-radius: 50%;
-
-  top: 31px;
-  left: 31px;
 }
 
 .legend {
   display: flex;
-
   flex-direction: column;
 
   gap: 9px;
@@ -926,7 +849,6 @@ body {
 
 .legend-item {
   display: flex;
-
   align-items: center;
 
   gap: 7px;
@@ -960,110 +882,63 @@ body {
 }
 
 /* =========================================================
-   RESPONSIVE
-   ========================================================= */
-
-@media (max-width: 1100px) {
-  .kpi-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .charts-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (max-width: 700px) {
-  .sidebar {
-    width: 72px;
-    min-width: 72px;
-  }
-
-  .sidebar .nav-text,
-  .sidebar .nav-label,
-  .sidebar .brand > div:last-child {
-    display: none;
-  }
-
-  .sidebar .nav-item {
-    justify-content: center;
-  }
-
-  .main-content,
-  .content {
-    width: calc(100% - 72px);
-  }
-
-  .topbar {
-    padding: 0 16px;
-  }
-
-  .page-body {
-    padding: 20px 16px;
-  }
-
-  .kpi-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .welcome-row {
-    align-items: flex-start;
-    gap: 15px;
-  }
-
-  .filter-select {
-    flex: 1;
-  }
-}
-
-
-/* =========================================================
    ALL TENDERS PAGE
    ========================================================= */
 
 .all-tenders-page {
   width: 100%;
   min-height: 100vh;
+
   background: #f5f7fb;
+
   color: #10213f;
 }
 
-/* PAGE HEADER */
+/* HEADER */
 
 .all-tenders-header {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
+
   gap: 20px;
+
   margin-bottom: 22px;
 }
 
 .all-tenders-header h2 {
   margin: 0;
+
   font-size: 24px;
   line-height: 1.2;
+
   font-weight: 700;
+
   color: #10213f;
 }
 
 .all-tenders-header p {
   margin: 7px 0 0;
+
   font-size: 13px;
+
   color: #71809a;
 }
 
 /* ADD TENDER */
 
 .add-tender-btn {
+  height: 40px;
+
+  padding: 0 18px;
+
   border: 0;
+  border-radius: 8px;
+
   background: #2563eb;
   color: #ffffff;
 
-  height: 40px;
-  padding: 0 18px;
-
-  border-radius: 8px;
-
+  font-family: inherit;
   font-size: 12px;
   font-weight: 600;
 
@@ -1082,8 +957,11 @@ body {
 
 .all-tenders-kpi-grid {
   display: grid;
+
   grid-template-columns: repeat(4, minmax(0, 1fr));
+
   gap: 14px;
+
   margin-bottom: 20px;
 }
 
@@ -1095,6 +973,7 @@ body {
   background: #ffffff;
 
   border: 1px solid #dfe6f0;
+
   border-radius: 12px;
 
   box-shadow: 0 3px 12px rgba(16, 33, 63, 0.04);
@@ -1102,6 +981,7 @@ body {
 
 .all-tenders-kpi-title {
   font-size: 11px;
+
   color: #63718a;
 }
 
@@ -1109,6 +989,7 @@ body {
   margin-top: 9px;
 
   font-size: 23px;
+
   line-height: 1.1;
 
   font-weight: 700;
@@ -1120,6 +1001,7 @@ body {
   margin-top: 7px;
 
   font-size: 10px;
+
   color: #71809a;
 }
 
@@ -1128,14 +1010,15 @@ body {
    ========================================================= */
 
 .search-filter-card {
-  background: #ffffff;
-
-  border: 1px solid #dfe6f0;
-  border-radius: 12px;
+  margin-bottom: 20px;
 
   padding: 18px;
 
-  margin-bottom: 20px;
+  background: #ffffff;
+
+  border: 1px solid #dfe6f0;
+
+  border-radius: 12px;
 
   box-shadow: 0 3px 12px rgba(16, 33, 63, 0.04);
 }
@@ -1168,11 +1051,13 @@ body {
 .search-filter-field {
   display: flex;
   flex-direction: column;
+
   gap: 7px;
 }
 
 .search-filter-field label {
   font-size: 10px;
+
   color: #52617b;
 }
 
@@ -1184,6 +1069,7 @@ body {
   padding: 0 12px;
 
   border: 1px solid #d3ddeb;
+
   border-radius: 7px;
 
   background: #ffffff;
@@ -1205,19 +1091,19 @@ body {
   border-color: #2563eb;
 }
 
-/* RESET */
-
 .all-tenders-reset {
   height: 34px;
+
+  padding: 0 14px;
 
   border: 0;
   border-radius: 7px;
 
-  padding: 0 14px;
-
   background: #f1f3f7;
+
   color: #52617b;
 
+  font-family: inherit;
   font-size: 11px;
 
   cursor: pointer;
@@ -1232,12 +1118,13 @@ body {
    ========================================================= */
 
 .tender-list-card {
+  overflow: hidden;
+
   background: #ffffff;
 
   border: 1px solid #dfe6f0;
-  border-radius: 12px;
 
-  overflow: hidden;
+  border-radius: 12px;
 
   box-shadow: 0 3px 12px rgba(16, 33, 63, 0.04);
 }
@@ -1261,13 +1148,17 @@ body {
   margin-top: 5px;
 
   font-size: 10px;
+
   color: #71809a;
 }
 
-/* TABLE */
+/* =========================================================
+   TENDER TABLE
+   ========================================================= */
 
 .tender-table-wrapper {
   width: 100%;
+
   overflow-x: auto;
 }
 
@@ -1286,8 +1177,6 @@ body {
 
   padding: 0 14px;
 
-  text-align: left;
-
   background: #fbfcfe;
 
   border-bottom: 1px solid #dfe6f0;
@@ -1296,6 +1185,8 @@ body {
 
   font-size: 10px;
   font-weight: 600;
+
+  text-align: left;
 
   white-space: nowrap;
 }
@@ -1320,35 +1211,35 @@ body {
   border-bottom: 0;
 }
 
-/* TENDER ID */
-
 .tender-id {
   color: #2563eb;
+
   font-weight: 600;
 }
 
-/* CLIENT */
-
 .client-name {
-  font-weight: 600;
   color: #10213f;
+
+  font-weight: 600;
 }
 
 .client-category {
   margin-top: 2px;
 
   font-size: 9px;
+
   color: #71809a;
 }
 
-/* AMOUNT */
-
 .tender-amount {
-  font-weight: 600;
   color: #10213f;
+
+  font-weight: 600;
 }
 
-/* STATUS */
+/* =========================================================
+   STATUS BADGES
+   ========================================================= */
 
 .status-badge {
   display: inline-flex;
@@ -1406,12 +1297,14 @@ body {
   padding: 0 13px;
 
   border: 1px solid #d3ddeb;
+
   border-radius: 7px;
 
   background: #ffffff;
 
   color: #2563eb;
 
+  font-family: inherit;
   font-size: 10px;
   font-weight: 600;
 
@@ -1420,11 +1313,12 @@ body {
 
 .view-btn:hover {
   background: #f5f8ff;
+
   border-color: #2563eb;
 }
 
 /* =========================================================
-   ADD TENDER FORM / MODAL
+   ADD TENDER MODAL
    ========================================================= */
 
 .add-tender-overlay {
@@ -1471,6 +1365,7 @@ body {
   margin: 0;
 
   font-size: 17px;
+
   color: #10213f;
 }
 
@@ -1479,6 +1374,7 @@ body {
   height: 32px;
 
   border: 0;
+
   border-radius: 7px;
 
   background: #f1f3f7;
@@ -1505,6 +1401,7 @@ body {
 .form-field {
   display: flex;
   flex-direction: column;
+
   gap: 7px;
 }
 
@@ -1525,14 +1422,15 @@ body {
 .form-field textarea {
   width: 100%;
 
+  padding: 10px 12px;
+
   border: 1px solid #d3ddeb;
+
   border-radius: 7px;
 
   background: #ffffff;
 
   color: #30415f;
-
-  padding: 10px 12px;
 
   font-family: inherit;
   font-size: 11px;
@@ -1547,6 +1445,7 @@ body {
 
 .form-field textarea {
   min-height: 80px;
+
   resize: vertical;
 }
 
@@ -1575,12 +1474,14 @@ body {
   padding: 0 16px;
 
   border: 1px solid #d3ddeb;
+
   border-radius: 7px;
 
   background: #ffffff;
 
   color: #52617b;
 
+  font-family: inherit;
   font-size: 11px;
 
   cursor: pointer;
@@ -1592,15 +1493,22 @@ body {
   padding: 0 18px;
 
   border: 0;
+
   border-radius: 7px;
 
   background: #2563eb;
+
   color: #ffffff;
 
+  font-family: inherit;
   font-size: 11px;
   font-weight: 600;
 
   cursor: pointer;
+}
+
+.save-tender-btn:hover {
+  background: #1d4ed8;
 }
 
 /* =========================================================
@@ -1608,18 +1516,53 @@ body {
    ========================================================= */
 
 @media (max-width: 1100px) {
+  .kpi-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .all-tenders-kpi-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  .charts-grid {
+    grid-template-columns: 1fr;
+  }
+
   .search-filter-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .filter-row {
+    gap: 6px;
   }
 }
 
 @media (max-width: 700px) {
-  .all-tenders-header {
-    flex-direction: column;
+  .sidebar {
+    width: 72px;
+    min-width: 72px;
+  }
+
+  .sidebar .nav-text,
+  .sidebar .nav-label,
+  .sidebar .brand > div:last-child {
+    display: none;
+  }
+
+  .sidebar .nav-item {
+    justify-content: center;
+  }
+
+  .topbar {
+    padding: 0 16px;
+  }
+
+  .page-body {
+    padding: 20px 16px;
+  }
+
+  .kpi-grid {
+    grid-template-columns: 1fr;
   }
 
   .all-tenders-kpi-grid {
@@ -1628,6 +1571,16 @@ body {
 
   .search-filter-grid {
     grid-template-columns: 1fr;
+  }
+
+  .welcome-row {
+    align-items: flex-start;
+
+    gap: 15px;
+  }
+
+  .all-tenders-header {
+    flex-direction: column;
   }
 
   .add-tender-form-grid {
@@ -1638,7 +1591,7 @@ body {
     grid-column: auto;
   }
 
-  .page-body {
-    padding: 20px 16px;
+  .filter-select {
+    flex: 1;
   }
 }
