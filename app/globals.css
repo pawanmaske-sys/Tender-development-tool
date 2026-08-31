@@ -1636,3 +1636,371 @@ body {
     grid-column: auto;
   }
 }
+
+/* =========================================================
+   DASHBOARD CHARTS - RESTORE CHART STRUCTURE
+   ========================================================= */
+
+/* CHART GRID */
+
+.charts-grid {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 14px;
+  width: 100%;
+  margin-top: 0;
+}
+
+/* CHART CARD */
+
+.chart-card {
+  position: relative;
+
+  min-width: 0;
+  min-height: 280px;
+
+  padding: 18px;
+
+  background: #ffffff;
+
+  border: 1px solid #dfe6f0;
+
+  border-radius: 12px;
+
+  box-shadow: 0 3px 12px rgba(16, 33, 63, 0.04);
+
+  overflow: hidden;
+}
+
+/* CHART HEADER */
+
+.chart-header {
+  width: 100%;
+
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  gap: 15px;
+}
+
+.chart-title {
+  margin: 0;
+
+  font-size: 14px;
+  line-height: 1.3;
+
+  font-weight: 700;
+
+  color: #10213f;
+}
+
+.chart-subtitle {
+  margin-top: 5px;
+
+  font-size: 10px;
+  line-height: 1.3;
+
+  color: #7a87a1;
+}
+
+/* YEAR SELECT */
+
+.year-select {
+  width: 72px;
+  height: 36px;
+
+  flex-shrink: 0;
+
+  padding: 0 10px;
+
+  border: 1px solid #d3ddeb;
+
+  border-radius: 7px;
+
+  background: #ffffff;
+
+  color: #30415f;
+
+  font-family: Arial, Helvetica, sans-serif;
+
+  font-size: 11px;
+
+  outline: none;
+
+  cursor: pointer;
+}
+
+/* =========================================================
+   BAR CHART
+   ========================================================= */
+
+.bar-chart {
+  width: 100%;
+  height: 155px;
+
+  margin-top: 25px;
+
+  display: flex;
+
+  align-items: flex-end;
+
+  justify-content: space-around;
+
+  gap: 8px;
+
+  border-bottom: 1px solid #e7ebf2;
+
+  position: relative;
+}
+
+/* EACH MONTH */
+
+.bar-group {
+  width: 48px;
+  height: 100%;
+
+  flex: 1;
+
+  max-width: 55px;
+
+  display: flex;
+
+  align-items: flex-end;
+
+  justify-content: center;
+
+  gap: 4px;
+}
+
+/* MAIN BAR */
+
+.bar {
+  width: 14px;
+
+  min-height: 4px;
+
+  background: #2563eb;
+
+  border-radius: 5px 5px 0 0;
+
+  transition: height 0.3s ease;
+}
+
+/* SECOND BAR */
+
+.bar.secondary {
+  width: 14px;
+
+  min-height: 4px;
+
+  background: #93c5fd;
+
+  border-radius: 5px 5px 0 0;
+
+  transition: height 0.3s ease;
+}
+
+/* MONTH LABELS */
+
+.month-labels {
+  width: 100%;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-around;
+
+  gap: 8px;
+
+  margin-top: 8px;
+
+  font-size: 10px;
+
+  line-height: 1.2;
+
+  color: #7a87a1;
+
+  text-align: center;
+}
+
+.month-labels span {
+  flex: 1;
+
+  min-width: 0;
+
+  display: block;
+}
+
+/* =========================================================
+   OUTCOME DISTRIBUTION
+   ========================================================= */
+
+.donut-area {
+  width: 100%;
+
+  min-height: 205px;
+
+  margin-top: 18px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 30px;
+}
+
+/* DONUT */
+
+.donut {
+  position: relative;
+
+  width: 145px;
+  height: 145px;
+
+  flex-shrink: 0;
+
+  border-radius: 50%;
+
+  background:
+    conic-gradient(
+      #16a34a 0deg 50deg,
+      #2563eb 50deg 115deg,
+      #7c3aed 115deg 300deg,
+      #f97316 300deg 325deg,
+      #ef4444 325deg 360deg
+    );
+
+  box-shadow:
+    0 4px 14px rgba(16, 33, 63, 0.08);
+}
+
+/* DONUT CENTER */
+
+.donut::after {
+  content: "";
+
+  position: absolute;
+
+  width: 82px;
+  height: 82px;
+
+  top: 50%;
+  left: 50%;
+
+  transform: translate(-50%, -50%);
+
+  background: #ffffff;
+
+  border-radius: 50%;
+}
+
+/* LEGEND */
+
+.legend {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 10px;
+
+  min-width: 120px;
+
+  font-size: 11px;
+
+  line-height: 1.3;
+
+  color: #52617b;
+}
+
+/* LEGEND ITEM */
+
+.legend-item {
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  white-space: nowrap;
+}
+
+/* LEGEND DOT */
+
+.legend-dot {
+  width: 9px;
+  height: 9px;
+
+  flex-shrink: 0;
+
+  border-radius: 50%;
+}
+
+/* LEGEND COLORS */
+
+.dot-green {
+  background: #16a34a;
+}
+
+.dot-blue {
+  background: #2563eb;
+}
+
+.dot-orange {
+  background: #f97316;
+}
+
+.dot-purple {
+  background: #7c3aed;
+}
+
+.dot-red {
+  background: #ef4444;
+}
+
+/* =========================================================
+   CHART RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1100px) {
+  .charts-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .chart-card {
+    min-height: 260px;
+  }
+}
+
+@media (max-width: 700px) {
+  .chart-card {
+    padding: 14px;
+  }
+
+  .bar-chart {
+    height: 135px;
+  }
+
+  .bar {
+    width: 11px;
+  }
+
+  .bar.secondary {
+    width: 11px;
+  }
+
+  .donut-area {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .legend {
+    width: 100%;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
