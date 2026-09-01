@@ -46,6 +46,23 @@ const branchOptions = [
   "Hyderabad",
 ];
 
+const permissionRows = [
+  ["Dashboard", "View", "View", "View", "Full", "View"],
+  ["All Tenders", "View", "View", "Edit", "Full", "View"],
+  ["Tender Sources", "View", "View", "Full", "Full", "View"],
+  ["Evaluation", "Edit", "View", "Approve", "Full", "View"],
+  ["Bid Workspace", "Edit", "View", "Approve", "Full", "View"],
+  ["AI Proposal Maker", "Edit", "View", "Approve", "Full", "View"],
+  ["Submission", "Edit", "View", "Approve", "Full", "View"],
+  ["TSR", "View", "Edit", "Approve", "Full", "View"],
+  ["Reports & Analytics", "View", "View", "View", "Full", "View"],
+  ["Targets", "View", "View", "Edit", "Full", "View"],
+  ["Data Quality", "View", "View", "View", "Full", "View"],
+  ["Masters", "No Access", "No Access", "View", "Full", "View"],
+  ["Users & Roles", "No Access", "No Access", "No Access", "Full", "No Access"],
+  ["Audit History", "No Access", "View", "View", "Full", "View"],
+];
+
 export default function UsersRolesPage() {
   const [users, setUsers] = useState([]);
 
@@ -84,6 +101,7 @@ export default function UsersRolesPage() {
       status: "Active",
     });
 
+    setMessage("");
     setShowModal(true);
   }
 
@@ -98,12 +116,14 @@ export default function UsersRolesPage() {
       status: user.status,
     });
 
+    setMessage("");
     setShowModal(true);
   }
 
   function closeModal() {
     setShowModal(false);
     setEditingUser(null);
+    setMessage("");
   }
 
   function handleChange(event) {
@@ -118,8 +138,13 @@ export default function UsersRolesPage() {
   function saveUser(event) {
     event.preventDefault();
 
-    if (!form.name.trim() || !form.email.trim()) {
-      setMessage("Please enter user name and email.");
+    if (!form.name.trim()) {
+      setMessage("Please enter the user name.");
+      return;
+    }
+
+    if (!form.email.trim()) {
+      setMessage("Please enter the email address.");
       return;
     }
 
@@ -139,7 +164,11 @@ export default function UsersRolesPage() {
     } else {
       const newUser = {
         id: Date.now(),
-        ...form,
+        name: form.name.trim(),
+        email: form.email.trim(),
+        role: form.role,
+        branch: form.branch,
+        status: form.status,
       };
 
       setUsers((previous) => [...previous, newUser]);
@@ -162,7 +191,9 @@ export default function UsersRolesPage() {
           ? {
               ...user,
               status:
-                user.status === "Active" ? "Inactive" : "Active",
+                user.status === "Active"
+                  ? "Inactive"
+                  : "Active",
             }
           : user
       )
@@ -182,11 +213,46 @@ export default function UsersRolesPage() {
       previous.filter((user) => user.id !== userId)
     );
 
-    setMessage("User deleted.");
+    setMessage("User deleted successfully.");
 
     setTimeout(() => {
       setMessage("");
     }, 3000);
+  }
+
+  function permissionStyle(value) {
+    if (value === "Full") {
+      return {
+        color: "#166534",
+        background: "#dcfce7",
+      };
+    }
+
+    if (value === "Approve") {
+      return {
+        color: "#1d4ed8",
+        background: "#dbeafe",
+      };
+    }
+
+    if (value === "Edit") {
+      return {
+        color: "#92400e",
+        background: "#fef3c7",
+      };
+    }
+
+    if (value === "No Access") {
+      return {
+        color: "#94a3b8",
+        background: "#f1f5f9",
+      };
+    }
+
+    return {
+      color: "#475569",
+      background: "#f8fafc",
+    };
   }
 
   return (
@@ -232,9 +298,9 @@ export default function UsersRolesPage() {
         </p>
       </div>
 
-      {/* SUCCESS / ERROR MESSAGE */}
+      {/* MESSAGE */}
 
-      {message && (
+      {message && !showModal && (
         <div
           style={{
             marginBottom: "20px",
@@ -310,8 +376,6 @@ export default function UsersRolesPage() {
           marginBottom: "24px",
         }}
       >
-        {/* REGISTER HEADER */}
-
         <div
           style={{
             padding: "20px 24px",
@@ -368,7 +432,7 @@ export default function UsersRolesPage() {
           style={{
             display: "grid",
             gridTemplateColumns:
-              "1.3fr 1.6fr 1.2fr 1fr 0.8fr 1fr",
+              "1.3fr 1.6fr 1.2fr 1fr 0.8fr 1.2fr",
             gap: "12px",
             padding: "14px 24px",
             background: "#f8fafc",
@@ -386,7 +450,7 @@ export default function UsersRolesPage() {
           <div>Action</div>
         </div>
 
-        {/* USER ROWS */}
+        {/* USER DATA */}
 
         {users.length === 0 ? (
           <div
@@ -398,6 +462,7 @@ export default function UsersRolesPage() {
             }}
           >
             No users have been configured yet.
+
             <div
               style={{
                 marginTop: "8px",
@@ -414,10 +479,11 @@ export default function UsersRolesPage() {
               style={{
                 display: "grid",
                 gridTemplateColumns:
-                  "1.3fr 1.6fr 1.2fr 1fr 0.8fr 1fr",
+                  "1.3fr 1.6fr 1.2fr 1fr 0.8fr 1.2fr",
                 gap: "12px",
                 padding: "16px 24px",
-                borderBottom: "1px solid #e2e8f0",
+                borderBottom:
+                  "1px solid #e2e8f0",
                 alignItems: "center",
                 fontSize: "13px",
                 color: "#334155",
@@ -432,7 +498,13 @@ export default function UsersRolesPage() {
                 {user.name}
               </div>
 
-              <div>{user.email}</div>
+              <div
+                style={{
+                  wordBreak: "break-word",
+                }}
+              >
+                {user.email}
+              </div>
 
               <div>{user.role}</div>
 
@@ -469,10 +541,13 @@ export default function UsersRolesPage() {
               >
                 <button
                   type="button"
-                  onClick={() => openEditUser(user)}
+                  onClick={() =>
+                    openEditUser(user)
+                  }
                   style={{
                     padding: "6px 9px",
-                    border: "1px solid #cbd5e1",
+                    border:
+                      "1px solid #cbd5e1",
                     borderRadius: "6px",
                     background: "#ffffff",
                     color: "#334155",
@@ -485,10 +560,13 @@ export default function UsersRolesPage() {
 
                 <button
                   type="button"
-                  onClick={() => toggleStatus(user.id)}
+                  onClick={() =>
+                    toggleStatus(user.id)
+                  }
                   style={{
                     padding: "6px 9px",
-                    border: "1px solid #cbd5e1",
+                    border:
+                      "1px solid #cbd5e1",
                     borderRadius: "6px",
                     background: "#ffffff",
                     color: "#334155",
@@ -503,10 +581,13 @@ export default function UsersRolesPage() {
 
                 <button
                   type="button"
-                  onClick={() => deleteUser(user.id)}
+                  onClick={() =>
+                    deleteUser(user.id)
+                  }
                   style={{
                     padding: "6px 9px",
-                    border: "1px solid #fecaca",
+                    border:
+                      "1px solid #fecaca",
                     borderRadius: "6px",
                     background: "#fff1f2",
                     color: "#b91c1c",
@@ -522,7 +603,7 @@ export default function UsersRolesPage() {
         )}
       </div>
 
-      {/* ROLES */}
+      {/* SYSTEM ROLES */}
 
       <div
         style={{
@@ -530,6 +611,7 @@ export default function UsersRolesPage() {
           border: "1px solid #e2e8f0",
           borderRadius: "12px",
           padding: "24px",
+          marginBottom: "24px",
         }}
       >
         <h2
@@ -566,7 +648,8 @@ export default function UsersRolesPage() {
               key={item.role}
               style={{
                 padding: "20px",
-                border: "1px solid #e2e8f0",
+                border:
+                  "1px solid #e2e8f0",
                 borderRadius: "10px",
                 background: "#f8fafc",
               }}
@@ -575,7 +658,8 @@ export default function UsersRolesPage() {
                 style={{
                   display: "flex",
                   alignItems: "center",
-                  justifyContent: "space-between",
+                  justifyContent:
+                    "space-between",
                   gap: "12px",
                 }}
               >
@@ -620,11 +704,213 @@ export default function UsersRolesPage() {
                   color: "#475569",
                 }}
               >
-                <strong>Primary access:</strong>{" "}
+                <strong>
+                  Primary access:
+                </strong>{" "}
                 {item.access}
               </div>
             </div>
           ))}
+        </div>
+      </div>
+
+      {/* ROLE PERMISSIONS */}
+
+      <div
+        style={{
+          background: "#ffffff",
+          border: "1px solid #e2e8f0",
+          borderRadius: "12px",
+          overflow: "hidden",
+          marginBottom: "24px",
+        }}
+      >
+        <div
+          style={{
+            padding: "20px 24px",
+            borderBottom:
+              "1px solid #e2e8f0",
+          }}
+        >
+          <h2
+            style={{
+              margin: 0,
+              fontSize: "18px",
+              color: "#0f172a",
+            }}
+          >
+            Role Permissions
+          </h2>
+
+          <p
+            style={{
+              margin: "6px 0 0",
+              color: "#64748b",
+              fontSize: "13px",
+            }}
+          >
+            Review module access assigned to
+            each system role.
+          </p>
+        </div>
+
+        <div
+          style={{
+            overflowX: "auto",
+          }}
+        >
+          <table
+            style={{
+              width: "100%",
+              minWidth: "1050px",
+              borderCollapse:
+                "collapse",
+              fontSize: "12px",
+            }}
+          >
+            <thead>
+              <tr
+                style={{
+                  background: "#f8fafc",
+                }}
+              >
+                <th
+                  style={{
+                    padding:
+                      "14px 20px",
+                    textAlign: "left",
+                    borderBottom:
+                      "1px solid #e2e8f0",
+                    color: "#475569",
+                    minWidth: "180px",
+                  }}
+                >
+                  Module
+                </th>
+
+                {[
+                  "Bid Team Member",
+                  "Result Editor",
+                  "Team Lead / Bid Manager",
+                  "Admin",
+                  "Management",
+                ].map((role) => (
+                  <th
+                    key={role}
+                    style={{
+                      padding:
+                        "14px 12px",
+                      textAlign:
+                        "center",
+                      borderBottom:
+                        "1px solid #e2e8f0",
+                      color: "#475569",
+                      minWidth: "135px",
+                    }}
+                  >
+                    {role}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+
+            <tbody>
+              {permissionRows.map(
+                (row) => (
+                  <tr key={row[0]}>
+                    <td
+                      style={{
+                        padding:
+                          "13px 20px",
+                        borderBottom:
+                          "1px solid #e2e8f0",
+                        color: "#334155",
+                        fontWeight:
+                          "600",
+                      }}
+                    >
+                      {row[0]}
+                    </td>
+
+                    {row
+                      .slice(1)
+                      .map(
+                        (
+                          permission,
+                          index
+                        ) => {
+                          const style =
+                            permissionStyle(
+                              permission
+                            );
+
+                          return (
+                            <td
+                              key={
+                                index
+                              }
+                              style={{
+                                padding:
+                                  "13px 12px",
+                                borderBottom:
+                                  "1px solid #e2e8f0",
+                                textAlign:
+                                  "center",
+                              }}
+                            >
+                              <span
+                                style={{
+                                  display:
+                                    "inline-block",
+                                  padding:
+                                    "5px 9px",
+                                  borderRadius:
+                                    "999px",
+                                  fontSize:
+                                    "11px",
+                                  fontWeight:
+                                    "600",
+                                  color:
+                                    style.color,
+                                  background:
+                                    style.background,
+                                }}
+                              >
+                                {
+                                  permission
+                                }
+                              </span>
+                            </td>
+                          );
+                        }
+                      )}
+                  </tr>
+                )
+              )}
+            </tbody>
+          </table>
+        </div>
+
+        <div
+          style={{
+            padding:
+              "14px 20px",
+            background:
+              "#f8fafc",
+            color: "#64748b",
+            fontSize: "12px",
+          }}
+        >
+          <strong>
+            Access levels:
+          </strong>{" "}
+          View = read only
+          &nbsp;•&nbsp; Edit =
+          create/update
+          &nbsp;•&nbsp; Approve =
+          approval actions
+          &nbsp;•&nbsp; Full =
+          full module access
         </div>
       </div>
 
@@ -635,10 +921,13 @@ export default function UsersRolesPage() {
           style={{
             position: "fixed",
             inset: 0,
-            background: "rgba(15, 23, 42, 0.45)",
+            background:
+              "rgba(15, 23, 42, 0.45)",
             display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
+            alignItems:
+              "center",
+            justifyContent:
+              "center",
             padding: "20px",
             zIndex: 1000,
           }}
@@ -658,11 +947,15 @@ export default function UsersRolesPage() {
 
             <div
               style={{
-                padding: "20px 24px",
-                borderBottom: "1px solid #e2e8f0",
+                padding:
+                  "20px 24px",
+                borderBottom:
+                  "1px solid #e2e8f0",
                 display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
+                alignItems:
+                  "center",
+                justifyContent:
+                  "space-between",
               }}
             >
               <div>
@@ -680,12 +973,14 @@ export default function UsersRolesPage() {
 
                 <p
                   style={{
-                    margin: "5px 0 0",
+                    margin:
+                      "5px 0 0",
                     color: "#64748b",
                     fontSize: "12px",
                   }}
                 >
-                  Enter user details and assign access.
+                  Enter user details
+                  and assign access.
                 </p>
               </div>
 
@@ -697,7 +992,8 @@ export default function UsersRolesPage() {
                   height: "32px",
                   border: "none",
                   borderRadius: "7px",
-                  background: "#f1f5f9",
+                  background:
+                    "#f1f5f9",
                   color: "#475569",
                   fontSize: "18px",
                   cursor: "pointer",
@@ -712,7 +1008,8 @@ export default function UsersRolesPage() {
             <form onSubmit={saveUser}>
               <div
                 style={{
-                  padding: "24px",
+                  padding:
+                    "24px",
                   display: "grid",
                   gap: "16px",
                 }}
@@ -722,11 +1019,16 @@ export default function UsersRolesPage() {
                 <div>
                   <label
                     style={{
-                      display: "block",
-                      marginBottom: "6px",
-                      fontSize: "12px",
-                      fontWeight: "600",
-                      color: "#334155",
+                      display:
+                        "block",
+                      marginBottom:
+                        "6px",
+                      fontSize:
+                        "12px",
+                      fontWeight:
+                        "600",
+                      color:
+                        "#334155",
                     }}
                   >
                     Full Name *
@@ -735,18 +1037,26 @@ export default function UsersRolesPage() {
                   <input
                     type="text"
                     name="name"
-                    value={form.name}
-                    onChange={handleChange}
+                    value={
+                      form.name
+                    }
+                    onChange={
+                      handleChange
+                    }
                     placeholder="Enter full name"
                     style={{
-                      width: "100%",
-                      boxSizing: "border-box",
-                      padding: "11px 12px",
+                      width:
+                        "100%",
+                      boxSizing:
+                        "border-box",
+                      padding:
+                        "11px 12px",
                       border:
                         "1px solid #cbd5e1",
-                      borderRadius: "8px",
-                      fontSize: "13px",
-                      outline: "none",
+                      borderRadius:
+                        "8px",
+                      fontSize:
+                        "13px",
                     }}
                   />
                 </div>
@@ -756,11 +1066,16 @@ export default function UsersRolesPage() {
                 <div>
                   <label
                     style={{
-                      display: "block",
-                      marginBottom: "6px",
-                      fontSize: "12px",
-                      fontWeight: "600",
-                      color: "#334155",
+                      display:
+                        "block",
+                      marginBottom:
+                        "6px",
+                      fontSize:
+                        "12px",
+                      fontWeight:
+                        "600",
+                      color:
+                        "#334155",
                     }}
                   >
                     Email *
@@ -769,18 +1084,26 @@ export default function UsersRolesPage() {
                   <input
                     type="email"
                     name="email"
-                    value={form.email}
-                    onChange={handleChange}
+                    value={
+                      form.email
+                    }
+                    onChange={
+                      handleChange
+                    }
                     placeholder="name@company.com"
                     style={{
-                      width: "100%",
-                      boxSizing: "border-box",
-                      padding: "11px 12px",
+                      width:
+                        "100%",
+                      boxSizing:
+                        "border-box",
+                      padding:
+                        "11px 12px",
                       border:
                         "1px solid #cbd5e1",
-                      borderRadius: "8px",
-                      fontSize: "13px",
-                      outline: "none",
+                      borderRadius:
+                        "8px",
+                      fontSize:
+                        "13px",
                     }}
                   />
                 </div>
@@ -789,7 +1112,8 @@ export default function UsersRolesPage() {
 
                 <div
                   style={{
-                    display: "grid",
+                    display:
+                      "grid",
                     gridTemplateColumns:
                       "1fr 1fr",
                     gap: "14px",
@@ -798,11 +1122,16 @@ export default function UsersRolesPage() {
                   <div>
                     <label
                       style={{
-                        display: "block",
-                        marginBottom: "6px",
-                        fontSize: "12px",
-                        fontWeight: "600",
-                        color: "#334155",
+                        display:
+                          "block",
+                        marginBottom:
+                          "6px",
+                        fontSize:
+                          "12px",
+                        fontWeight:
+                          "600",
+                        color:
+                          "#334155",
                       }}
                     >
                       Role
@@ -810,25 +1139,42 @@ export default function UsersRolesPage() {
 
                     <select
                       name="role"
-                      value={form.role}
-                      onChange={handleChange}
+                      value={
+                        form.role
+                      }
+                      onChange={
+                        handleChange
+                      }
                       style={{
-                        width: "100%",
-                        padding: "11px 12px",
+                        width:
+                          "100%",
+                        padding:
+                          "11px 12px",
                         border:
                           "1px solid #cbd5e1",
-                        borderRadius: "8px",
-                        background: "#ffffff",
-                        fontSize: "13px",
+                        borderRadius:
+                          "8px",
+                        background:
+                          "#ffffff",
+                        fontSize:
+                          "13px",
                       }}
                     >
                       {roleOptions.map(
-                        (role) => (
+                        (
+                          role
+                        ) => (
                           <option
-                            key={role}
-                            value={role}
+                            key={
+                              role
+                            }
+                            value={
+                              role
+                            }
                           >
-                            {role}
+                            {
+                              role
+                            }
                           </option>
                         )
                       )}
@@ -838,11 +1184,16 @@ export default function UsersRolesPage() {
                   <div>
                     <label
                       style={{
-                        display: "block",
-                        marginBottom: "6px",
-                        fontSize: "12px",
-                        fontWeight: "600",
-                        color: "#334155",
+                        display:
+                          "block",
+                        marginBottom:
+                          "6px",
+                        fontSize:
+                          "12px",
+                        fontWeight:
+                          "600",
+                        color:
+                          "#334155",
                       }}
                     >
                       Branch
@@ -850,25 +1201,42 @@ export default function UsersRolesPage() {
 
                     <select
                       name="branch"
-                      value={form.branch}
-                      onChange={handleChange}
+                      value={
+                        form.branch
+                      }
+                      onChange={
+                        handleChange
+                      }
                       style={{
-                        width: "100%",
-                        padding: "11px 12px",
+                        width:
+                          "100%",
+                        padding:
+                          "11px 12px",
                         border:
                           "1px solid #cbd5e1",
-                        borderRadius: "8px",
-                        background: "#ffffff",
-                        fontSize: "13px",
+                        borderRadius:
+                          "8px",
+                        background:
+                          "#ffffff",
+                        fontSize:
+                          "13px",
                       }}
                     >
                       {branchOptions.map(
-                        (branch) => (
+                        (
+                          branch
+                        ) => (
                           <option
-                            key={branch}
-                            value={branch}
+                            key={
+                              branch
+                            }
+                            value={
+                              branch
+                            }
                           >
-                            {branch}
+                            {
+                              branch
+                            }
                           </option>
                         )
                       )}
@@ -881,11 +1249,16 @@ export default function UsersRolesPage() {
                 <div>
                   <label
                     style={{
-                      display: "block",
-                      marginBottom: "6px",
-                      fontSize: "12px",
-                      fontWeight: "600",
-                      color: "#334155",
+                      display:
+                        "block",
+                      marginBottom:
+                        "6px",
+                      fontSize:
+                        "12px",
+                      fontWeight:
+                        "600",
+                      color:
+                        "#334155",
                     }}
                   >
                     Status
@@ -893,16 +1266,25 @@ export default function UsersRolesPage() {
 
                   <select
                     name="status"
-                    value={form.status}
-                    onChange={handleChange}
+                    value={
+                      form.status
+                    }
+                    onChange={
+                      handleChange
+                    }
                     style={{
-                      width: "100%",
-                      padding: "11px 12px",
+                      width:
+                        "100%",
+                      padding:
+                        "11px 12px",
                       border:
                         "1px solid #cbd5e1",
-                      borderRadius: "8px",
-                      background: "#ffffff",
-                      fontSize: "13px",
+                      borderRadius:
+                        "8px",
+                      background:
+                        "#ffffff",
+                      fontSize:
+                        "13px",
                     }}
                   >
                     <option value="Active">
@@ -914,31 +1296,65 @@ export default function UsersRolesPage() {
                     </option>
                   </select>
                 </div>
+
+                {/* FORM ERROR */}
+
+                {message && (
+                  <div
+                    style={{
+                      padding:
+                        "10px 12px",
+                      borderRadius:
+                        "7px",
+                      background:
+                        "#fef2f2",
+                      border:
+                        "1px solid #fecaca",
+                      color:
+                        "#b91c1c",
+                      fontSize:
+                        "12px",
+                    }}
+                  >
+                    {message}
+                  </div>
+                )}
               </div>
 
               {/* MODAL FOOTER */}
 
               <div
                 style={{
-                  padding: "16px 24px",
-                  borderTop: "1px solid #e2e8f0",
+                  padding:
+                    "16px 24px",
+                  borderTop:
+                    "1px solid #e2e8f0",
                   display: "flex",
-                  justifyContent: "flex-end",
+                  justifyContent:
+                    "flex-end",
                   gap: "10px",
                 }}
               >
                 <button
                   type="button"
-                  onClick={closeModal}
+                  onClick={
+                    closeModal
+                  }
                   style={{
-                    padding: "10px 18px",
+                    padding:
+                      "10px 18px",
                     border:
                       "1px solid #cbd5e1",
-                    borderRadius: "8px",
-                    background: "#ffffff",
-                    color: "#334155",
-                    fontSize: "13px",
-                    cursor: "pointer",
+                    borderRadius:
+                      "8px",
+                    background:
+                      "#ffffff",
+                    color:
+                      "#334155",
+                    fontSize:
+                      "13px",
+                    cursor:
+                      "pointer",
                   }}
                 >
                   Cancel
@@ -947,14 +1363,21 @@ export default function UsersRolesPage() {
                 <button
                   type="submit"
                   style={{
-                    padding: "10px 18px",
+                    padding:
+                      "10px 18px",
                     border: "none",
-                    borderRadius: "8px",
-                    background: "#2563eb",
-                    color: "#ffffff",
-                    fontSize: "13px",
-                    cursor: "pointer",
-                    fontWeight: "600",
+                    borderRadius:
+                      "8px",
+                    background:
+                      "#2563eb",
+                    color:
+                      "#ffffff",
+                    fontSize:
+                      "13px",
+                    cursor:
+                      "pointer",
+                    fontWeight:
+                      "600",
                   }}
                 >
                   {editingUser
