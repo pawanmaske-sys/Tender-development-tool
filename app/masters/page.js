@@ -44,16 +44,16 @@ const masterGroups = [
         title: "Services",
         description:
           "Manage services and service categories used for tender classification.",
-        path: "",
-        available: false,
+        path: "/masters/services",
+        available: true,
         icon: "◇",
       },
       {
         title: "Currencies",
         description:
           "Manage currencies used for tender values and financial information.",
-        path: "",
-        available: false,
+        path: "/masters/currencies",
+        available: true,
         icon: "$",
       },
     ],
@@ -159,6 +159,7 @@ export default function MastersPage() {
             marginBottom: "32px",
           }}
         >
+          {/* GROUP HEADER */}
           <div style={{ marginBottom: "16px" }}>
             <h2
               style={{
@@ -181,6 +182,7 @@ export default function MastersPage() {
             </p>
           </div>
 
+          {/* MASTER CARDS */}
           <div
             style={{
               display: "grid",
@@ -228,6 +230,7 @@ export default function MastersPage() {
                     {item.icon}
                   </div>
 
+                  {/* STATUS */}
                   <span
                     style={{
                       padding: "5px 10px",
