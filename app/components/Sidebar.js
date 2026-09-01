@@ -6,49 +6,86 @@ import { useState } from "react";
 
 const menuSections = [
   {
-    title: "MAIN",
+    title: "",
     items: [
       {
         name: "Dashboard",
         path: "/",
-        icon: "▦",
-      },
-      {
-        name: "Tender Sources",
-        path: "/tender-sources",
-        icon: "◎",
-      },
-      {
-        name: "My Tenders",
-        path: "/my-tenders",
-        icon: "♙",
-      },
-      {
-        name: "All Tenders",
-        path: "/all-tenders",
-        icon: "▤",
+        icon: "⌂",
       },
     ],
   },
 
   {
-    title: "TENDER WORKFLOW",
+    title: "TENDERS",
     items: [
+      {
+        name: "All Tenders",
+        path: "/all-tenders",
+        icon: "▣",
+      },
+      {
+        name: "My Tenders",
+        path: "/my-tenders",
+        icon: "◎",
+      },
+      {
+        name: "Tender Sources",
+        path: "/tender-sources",
+        icon: "⌕",
+      },
       {
         name: "Evaluation",
         path: "/evaluation",
         icon: "✓",
       },
       {
+        name: "On Hold",
+        path: "/on-hold",
+        icon: "⟳",
+      },
+      {
+        name: "Result Awaited",
+        path: "/result-awaited",
+        icon: "◷",
+      },
+    ],
+  },
+
+  {
+    title: "BID MANAGEMENT",
+    items: [
+      {
         name: "Bid Workspace",
         path: "/bid-workspace",
-        icon: "▣",
+        icon: "▤",
       },
       {
         name: "AI Proposal Maker",
-        path: "/ai-proposal-maker",
+        path: "/ai-proposal",
         icon: "✦",
       },
+      {
+        name: "Submission",
+        path: "/submission",
+        icon: "↗",
+      },
+      {
+        name: "Post-Submission",
+        path: "/post-submission",
+        icon: "◉",
+      },
+      {
+        name: "TSR / Result Update",
+        path: "/tsr",
+        icon: "▤",
+      },
+    ],
+  },
+
+  {
+    title: "PROPOSAL",
+    items: [
       {
         name: "Content Library",
         path: "/content-library",
@@ -59,36 +96,47 @@ const menuSections = [
         path: "/template-studio",
         icon: "▧",
       },
+    ],
+  },
+
+  {
+    title: "MANAGEMENT",
+    items: [
       {
-        name: "Submission",
-        path: "/submission",
-        icon: "↗",
+        name: "Reports & Analytics",
+        path: "/reports",
+        icon: "▥",
       },
       {
-        name: "Post-Submission",
-        path: "/post-submission",
-        icon: "↻",
+        name: "Targets",
+        path: "/targets",
+        icon: "◎",
       },
       {
-        name: "TSR / Result Update",
-        path: "/tsr-result-update",
-        icon: "◉",
+        name: "Data Quality",
+        path: "/data-quality",
+        icon: "△",
       },
     ],
   },
 
   {
-    title: "REPORTING & ADMIN",
+    title: "ADMINISTRATION",
     items: [
       {
-        name: "Reports",
-        path: "/reports",
-        icon: "▥",
+        name: "Masters",
+        path: "/masters",
+        icon: "⚙",
       },
       {
-        name: "Admin / Masters",
-        path: "/admin-masters",
-        icon: "⚙",
+        name: "Users & Roles",
+        path: "/users-roles",
+        icon: "♙",
+      },
+      {
+        name: "Audit History",
+        path: "/audit-history",
+        icon: "☷",
       },
     ],
   },
@@ -112,18 +160,19 @@ export default function Sidebar() {
           T
         </div>
 
-        <div>
-          <div className="brand-title">
-            Tender Tool
-          </div>
+        {!collapsed && (
+          <div>
+            <div className="brand-title">
+              TenderHub
+            </div>
 
-          <div className="brand-sub">
-            Management System
+            <div className="brand-sub">
+              Management Tool
+            </div>
           </div>
-        </div>
+        )}
 
       </div>
-
 
       {/* COLLAPSE */}
       <button
@@ -132,20 +181,21 @@ export default function Sidebar() {
         onClick={() => setCollapsed(!collapsed)}
         title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
       >
-        {collapsed ? "→" : "←"}
+        {collapsed ? "→" : "« Collapse"}
       </button>
-
 
       {/* NAVIGATION */}
       <nav className="nav">
 
         {menuSections.map((section) => (
 
-          <div key={section.title}>
+          <div key={section.title || "main"}>
 
-            <div className="nav-label">
-              {section.title}
-            </div>
+            {section.title && (
+              <div className="nav-label">
+                {section.title}
+              </div>
+            )}
 
             {section.items.map((item) => {
 
@@ -167,9 +217,11 @@ export default function Sidebar() {
                     {item.icon}
                   </span>
 
-                  <span className="nav-text">
-                    {item.name}
-                  </span>
+                  {!collapsed && (
+                    <span className="nav-text">
+                      {item.name}
+                    </span>
+                  )}
 
                 </Link>
               );
