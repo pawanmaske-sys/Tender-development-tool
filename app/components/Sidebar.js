@@ -4,21 +4,93 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 
-const menuItems = [
+const menuSections = [
   {
-    name: "Dashboard",
-    path: "/",
-    icon: "▦",
+    title: "MAIN",
+    items: [
+      {
+        name: "Dashboard",
+        path: "/",
+        icon: "▦",
+      },
+      {
+        name: "Tender Sources",
+        path: "/tender-sources",
+        icon: "◎",
+      },
+      {
+        name: "My Tenders",
+        path: "/my-tenders",
+        icon: "♙",
+      },
+      {
+        name: "All Tenders",
+        path: "/all-tenders",
+        icon: "▤",
+      },
+    ],
   },
+
   {
-    name: "All Tenders",
-    path: "/all-tenders",
-    icon: "▤",
+    title: "TENDER WORKFLOW",
+    items: [
+      {
+        name: "Evaluation",
+        path: "/evaluation",
+        icon: "✓",
+      },
+      {
+        name: "Bid Workspace",
+        path: "/bid-workspace",
+        icon: "▣",
+      },
+      {
+        name: "AI Proposal Maker",
+        path: "/ai-proposal-maker",
+        icon: "✦",
+      },
+      {
+        name: "Content Library",
+        path: "/content-library",
+        icon: "▥",
+      },
+      {
+        name: "Template Studio",
+        path: "/template-studio",
+        icon: "▧",
+      },
+      {
+        name: "Submission",
+        path: "/submission",
+        icon: "↗",
+      },
+      {
+        name: "Post-Submission",
+        path: "/post-submission",
+        icon: "↻",
+      },
+      {
+        name: "TSR / Result Update",
+        path: "/tsr-result-update",
+        icon: "◉",
+      },
+    ],
   },
+
   {
-    name: "Tender Sources",
-    path: "/tender-sources",
-    icon: "◎",
+    title: "REPORTING & ADMIN",
+    items: [
+      {
+        name: "Reports",
+        path: "/reports",
+        icon: "▥",
+      },
+      {
+        name: "Admin / Masters",
+        path: "/admin-masters",
+        icon: "⚙",
+      },
+    ],
   },
 ];
 
@@ -53,7 +125,7 @@ export default function Sidebar() {
       </div>
 
 
-      {/* COLLAPSE BUTTON */}
+      {/* COLLAPSE */}
       <button
         type="button"
         className="collapse-button"
@@ -67,78 +139,46 @@ export default function Sidebar() {
       {/* NAVIGATION */}
       <nav className="nav">
 
-        <div className="nav-label">
-          MAIN MENU
-        </div>
+        {menuSections.map((section) => (
 
-        {menuItems.map((item) => {
+          <div key={section.title}>
 
-          const isActive =
-            item.path === "/"
-              ? pathname === "/"
-              : pathname.startsWith(item.path);
+            <div className="nav-label">
+              {section.title}
+            </div>
 
-          return (
-            <Link
-              key={item.path}
-              href={item.path}
-              className={`nav-item ${
-                isActive ? "active" : ""
-              }`}
-            >
+            {section.items.map((item) => {
 
-              <span className="nav-icon">
-                {item.icon}
-              </span>
+              const isActive =
+                item.path === "/"
+                  ? pathname === "/"
+                  : pathname.startsWith(item.path);
 
-              <span className="nav-text">
-                {item.name}
-              </span>
+              return (
+                <Link
+                  key={item.path}
+                  href={item.path}
+                  className={`nav-item ${
+                    isActive ? "active" : ""
+                  }`}
+                >
 
-            </Link>
-          );
-        })}
+                  <span className="nav-icon">
+                    {item.icon}
+                  </span>
 
+                  <span className="nav-text">
+                    {item.name}
+                  </span>
 
-        {/* MODULES */}
-        <div className="nav-label">
-          MODULES
-        </div>
+                </Link>
+              );
 
-        <Link
-          href="/all-tenders"
-          className={`nav-item ${
-            pathname.startsWith("/all-tenders")
-              ? "active"
-              : ""
-          }`}
-        >
-          <span className="nav-icon">
-            📋
-          </span>
+            })}
 
-          <span className="nav-text">
-            Tender Management
-          </span>
-        </Link>
+          </div>
 
-
-        <Link
-          href="/tender-sources"
-          className={`nav-item ${
-            pathname.startsWith("/tender-sources")
-              ? "active"
-              : ""
-          }`}
-        >
-          <span className="nav-icon">
-            🌐
-          </span>
-
-          <span className="nav-text">
-            Tender Sources
-          </span>
-        </Link>
+        ))}
 
       </nav>
 
