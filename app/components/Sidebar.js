@@ -16,6 +16,9 @@ const menuSections = [
     ],
   },
 
+  // =========================
+  // TENDERS
+  // =========================
   {
     title: "TENDERS",
     items: [
@@ -52,6 +55,9 @@ const menuSections = [
     ],
   },
 
+  // =========================
+  // BID MANAGEMENT
+  // =========================
   {
     title: "BID MANAGEMENT",
     items: [
@@ -83,6 +89,9 @@ const menuSections = [
     ],
   },
 
+  // =========================
+  // PROPOSAL
+  // =========================
   {
     title: "PROPOSAL",
     items: [
@@ -99,6 +108,9 @@ const menuSections = [
     ],
   },
 
+  // =========================
+  // MANAGEMENT
+  // =========================
   {
     title: "MANAGEMENT",
     items: [
@@ -120,11 +132,14 @@ const menuSections = [
     ],
   },
 
+  // =========================
+  // ADMINISTRATION
+  // =========================
   {
     title: "ADMINISTRATION",
     items: [
       {
-        name: "Masters",
+        name: "Master Management",
         path: "/masters",
         icon: "⚙",
       },
@@ -152,10 +167,10 @@ export default function Sidebar() {
         collapsed ? "sidebar-collapsed" : ""
       }`}
     >
-
-      {/* BRAND */}
+      {/* =========================
+          BRAND
+      ========================= */}
       <div className="brand">
-
         <div className="brand-logo">
           T
         </div>
@@ -171,34 +186,42 @@ export default function Sidebar() {
             </div>
           </div>
         )}
-
       </div>
 
-      {/* COLLAPSE */}
+      {/* =========================
+          COLLAPSE BUTTON
+      ========================= */}
       <button
         type="button"
         className="collapse-button"
         onClick={() => setCollapsed(!collapsed)}
-        title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+        title={
+          collapsed
+            ? "Expand sidebar"
+            : "Collapse sidebar"
+        }
       >
         {collapsed ? "→" : "« Collapse"}
       </button>
 
-      {/* NAVIGATION */}
+      {/* =========================
+          NAVIGATION
+      ========================= */}
       <nav className="nav">
-
         {menuSections.map((section) => (
-
-          <div key={section.title || "main"}>
-
+          <div
+            key={section.title || "main"}
+            className="nav-section"
+          >
+            {/* SECTION TITLE */}
             {section.title && (
               <div className="nav-label">
                 {section.title}
               </div>
             )}
 
+            {/* SECTION ITEMS */}
             {section.items.map((item) => {
-
               const isActive =
                 item.path === "/"
                   ? pathname === "/"
@@ -212,7 +235,6 @@ export default function Sidebar() {
                     isActive ? "active" : ""
                   }`}
                 >
-
                   <span className="nav-icon">
                     {item.icon}
                   </span>
@@ -222,18 +244,12 @@ export default function Sidebar() {
                       {item.name}
                     </span>
                   )}
-
                 </Link>
               );
-
             })}
-
           </div>
-
         ))}
-
       </nav>
-
     </aside>
   );
 }
