@@ -2,961 +2,434 @@
 
 import { useMemo, useState } from "react";
 
-const initialData = {
-  branches: [
-    {
-      id: 1,
-      name: "Delhi",
-      legalEntity: "Satguru Travel Pvt Ltd",
-      country: "India",
-      currency: "INR",
-      status: "Active",
-    },
-    {
-      id: 2,
-      name: "Mumbai",
-      legalEntity: "Satguru Travel Pvt Ltd",
-      country: "India",
-      currency: "INR",
-      status: "Active",
-    },
-  ],
-
-  legalEntities: [
-    {
-      id: 1,
-      name: "Satguru Travel Pvt Ltd",
-      country: "India",
-      currency: "INR",
-      status: "Active",
-    },
-    {
-      id: 2,
-      name: "Satguru Travel International",
-      country: "UAE",
-      currency: "AED",
-      status: "Active",
-    },
-  ],
-
-  countries: [
-    { id: 1, name: "India", code: "IN", currency: "INR", status: "Active" },
-    { id: 2, name: "UAE", code: "AE", currency: "AED", status: "Active" },
-    { id: 3, name: "Kenya", code: "KE", currency: "KES", status: "Active" },
-  ],
-
-  currencies: [
-    { id: 1, code: "INR", name: "Indian Rupee", status: "Active" },
-    { id: 2, code: "AED", name: "UAE Dirham", status: "Active" },
-    { id: 3, code: "USD", name: "US Dollar", status: "Active" },
-    { id: 4, code: "KES", name: "Kenyan Shilling", status: "Active" },
-  ],
-
-  services: [
-    {
-      id: 1,
-      name: "Corporate Travel",
-      status: "Active",
-    },
-    {
-      id: 2,
-      name: "MICE",
-      status: "Active",
-    },
-    {
-      id: 3,
-      name: "Visa Services",
-      status: "Active",
-    },
-  ],
-
-  tenderSources: [
-    {
-      id: 1,
-      name: "Government eProcurement",
-      sourceType: "Government Portal",
-      country: "India",
-      status: "Active",
-    },
-    {
-      id: 2,
-      name: "GeM",
-      sourceType: "Government Portal",
-      country: "India",
-      status: "Active",
-    },
-    {
-      id: 3,
-      name: "Client Email",
-      sourceType: "Email",
-      country: "India",
-      status: "Active",
-    },
-  ],
-
-  tenderTypes: [
-    {
-      id: 1,
-      name: "RFP",
-      description: "Request for Proposal",
-      status: "Active",
-    },
-    {
-      id: 2,
-      name: "RFQ",
-      description: "Request for Quotation",
-      status: "Active",
-    },
-    {
-      id: 3,
-      name: "EOI",
-      description: "Expression of Interest",
-      status: "Active",
-    },
-  ],
-
-  tenderStatuses: [
-    { id: 1, name: "New", status: "Active" },
-    { id: 2, name: "In Process", status: "Active" },
-    { id: 3, name: "Submitted", status: "Active" },
-    { id: 4, name: "Result Awaited", status: "Active" },
-    { id: 5, name: "Won", status: "Active" },
-    { id: 6, name: "Lost", status: "Active" },
-    { id: 7, name: "On Hold", status: "Active" },
-  ],
-
-  lossReasons: [
-    {
-      id: 1,
-      name: "Price",
-      status: "Active",
-    },
-    {
-      id: 2,
-      name: "Technical Non-Compliance",
-      status: "Active",
-    },
-    {
-      id: 3,
-      name: "Client Preference",
-      status: "Active",
-    },
-    {
-      id: 4,
-      name: "Competitor",
-      status: "Active",
-    },
-  ],
-
-  evaluationReasons: [
-    {
-      id: 1,
-      name: "Commercially Not Viable",
-      type: "Evaluation",
-      status: "Active",
-    },
-    {
-      id: 2,
-      name: "Insufficient Information",
-      type: "Hold",
-      status: "Active",
-    },
-    {
-      id: 3,
-      name: "Management Review Required",
-      type: "Hold",
-      status: "Active",
-    },
-  ],
-
-  contentCategories: [
-    {
-      id: 1,
-      name: "Company Profile",
-      status: "Active",
-    },
-    {
-      id: 2,
-      name: "Financial Documents",
-      status: "Active",
-    },
-    {
-      id: 3,
-      name: "Technical Content",
-      status: "Active",
-    },
-    {
-      id: 4,
-      name: "Legal Documents",
-      status: "Active",
-    },
-  ],
-
-  templates: [
-    {
-      id: 1,
-      name: "Standard Technical Proposal",
-      category: "Technical",
-      version: "1.0",
-      status: "Active",
-    },
-    {
-      id: 2,
-      name: "Commercial Proposal",
-      category: "Commercial",
-      version: "1.0",
-      status: "Active",
-    },
-  ],
-};
-
-const categoryDefinitions = [
+const initialBranches = [
   {
-    key: "branches",
-    title: "Branches",
-    description: "Manage branches and their approved legal entity mapping.",
+    id: "BR-0001",
+    name: "Mumbai Head Office",
+    code: "MUM",
+    fullName: "Mumbai Head Office",
+    country: "India",
+    region: "Maharashtra",
+    city: "Mumbai",
+    status: "Active",
+    users: 5,
+    address: "Mumbai, Maharashtra, India",
+    phone: "+91 22 4000 1000",
+    email: "mumbai@satgurutravel.com",
+    remarks: "Head office",
   },
   {
-    key: "legalEntities",
-    title: "Legal Entities",
-    description: "Manage approved legal entities used for tender participation.",
+    id: "BR-0002",
+    name: "Delhi Branch",
+    code: "DEL",
+    fullName: "Delhi Branch",
+    country: "India",
+    region: "Delhi",
+    city: "New Delhi",
+    status: "Active",
+    users: 4,
+    address: "New Delhi, India",
+    phone: "+91 11 4000 2000",
+    email: "delhi@satgurutravel.com",
+    remarks: "",
   },
   {
-    key: "countries",
-    title: "Countries",
-    description: "Manage countries used across tender and branch records.",
+    id: "BR-0003",
+    name: "Bangalore Office",
+    code: "BLR",
+    fullName: "Bangalore Office",
+    country: "India",
+    region: "Karnataka",
+    city: "Bengaluru",
+    status: "Active",
+    users: 3,
+    address: "Bengaluru, Karnataka, India",
+    phone: "+91 80 4000 3000",
+    email: "bangalore@satgurutravel.com",
+    remarks: "",
   },
   {
-    key: "currencies",
-    title: "Currencies",
-    description: "Manage currencies used for tender financial information.",
+    id: "BR-0004",
+    name: "Abuja",
+    code: "ABV",
+    fullName: "Abuja Branch",
+    country: "Nigeria",
+    region: "Nigeria Region",
+    city: "Abuja",
+    status: "Active",
+    users: 3,
+    address: "Abuja, Nigeria",
+    phone: "",
+    email: "",
+    remarks: "",
   },
   {
-    key: "services",
-    title: "Service Categories",
-    description: "Manage service categories used to classify opportunities.",
+    id: "BR-0005",
+    name: "Nairobi Office",
+    code: "NRB",
+    fullName: "Nairobi Office",
+    country: "Kenya",
+    region: "Kenya Region",
+    city: "Nairobi",
+    status: "Active",
+    users: 2,
+    address: "Nairobi, Kenya",
+    phone: "",
+    email: "",
+    remarks: "",
   },
   {
-    key: "tenderSources",
-    title: "Tender Sources",
-    description: "Manage portals, emails and other tender opportunity sources.",
+    id: "BR-0006",
+    name: "Lagos Branch",
+    code: "LAG",
+    fullName: "Lagos Branch",
+    country: "Nigeria",
+    region: "Nigeria Region",
+    city: "Lagos",
+    status: "Active",
+    users: 1,
+    address: "Lagos, Nigeria",
+    phone: "",
+    email: "",
+    remarks: "",
   },
   {
-    key: "tenderTypes",
-    title: "Tender Types",
-    description: "Manage procurement and tender types.",
+    id: "BR-0007",
+    name: "Dubai Office",
+    code: "DXB",
+    fullName: "Dubai Office",
+    country: "UAE",
+    region: "UAE Region",
+    city: "Dubai",
+    status: "Inactive",
+    users: 2,
+    address: "Dubai, UAE",
+    phone: "",
+    email: "",
+    remarks: "",
   },
   {
-    key: "tenderStatuses",
-    title: "Status Masters",
-    description: "Manage permitted tender lifecycle statuses.",
+    id: "BR-0008",
+    name: "Pune Branch",
+    code: "PUN",
+    fullName: "Pune Branch",
+    country: "India",
+    region: "Maharashtra",
+    city: "Pune",
+    status: "Active",
+    users: 2,
+    address: "Pune, Maharashtra, India",
+    phone: "",
+    email: "",
+    remarks: "",
   },
   {
-    key: "evaluationReasons",
-    title: "Evaluation / Hold Reasons",
-    description: "Manage standard evaluation and hold reasons.",
+    id: "BR-0009",
+    name: "Chennai Office",
+    code: "MAA",
+    fullName: "Chennai Office",
+    country: "India",
+    region: "Tamil Nadu",
+    city: "Chennai",
+    status: "Active",
+    users: 2,
+    address: "Chennai, Tamil Nadu, India",
+    phone: "",
+    email: "",
+    remarks: "",
   },
   {
-    key: "lossReasons",
-    title: "Loss Reasons",
-    description: "Manage standard reasons for unsuccessful outcomes.",
-  },
-  {
-    key: "contentCategories",
-    title: "Content Library Categories",
-    description: "Manage categories used to organise reusable content.",
-  },
-  {
-    key: "templates",
-    title: "Template Master",
-    description: "Manage proposal and bid templates.",
+    id: "BR-0010",
+    name: "Hyderabad Branch",
+    code: "HYD",
+    fullName: "Hyderabad Branch",
+    country: "India",
+    region: "Telangana",
+    city: "Hyderabad",
+    status: "Active",
+    users: 1,
+    address: "Hyderabad, Telangana, India",
+    phone: "",
+    email: "",
+    remarks: "",
   },
 ];
 
-export default function MastersPage() {
-  const [data, setData] = useState(initialData);
+const emptyForm = {
+  name: "",
+  code: "",
+  fullName: "",
+  country: "",
+  region: "",
+  city: "",
+  status: "Active",
+  address: "",
+  phone: "",
+  email: "",
+  remarks: "",
+};
 
-  const [selectedCategory, setSelectedCategory] =
-    useState("branches");
+export default function BranchManagementPage() {
+  const [branches, setBranches] = useState(initialBranches);
 
   const [search, setSearch] = useState("");
+  const [statusFilter, setStatusFilter] = useState("Active");
+  const [regionFilter, setRegionFilter] = useState("All Regions");
+  const [countryFilter, setCountryFilter] = useState("All Countries");
 
   const [showModal, setShowModal] = useState(false);
+  const [editingBranch, setEditingBranch] = useState(null);
+  const [form, setForm] = useState(emptyForm);
 
-  const [editingItem, setEditingItem] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(7);
 
-  const [form, setForm] = useState({});
+  const regions = useMemo(() => {
+    return [
+      "All Regions",
+      ...Array.from(new Set(branches.map((branch) => branch.region))),
+    ];
+  }, [branches]);
 
-  const selectedDefinition = categoryDefinitions.find(
-    (item) => item.key === selectedCategory
+  const countries = useMemo(() => {
+    return [
+      "All Countries",
+      ...Array.from(new Set(branches.map((branch) => branch.country))),
+    ];
+  }, [branches]);
+
+  const filteredBranches = useMemo(() => {
+    const term = search.trim().toLowerCase();
+
+    return branches.filter((branch) => {
+      const matchesSearch =
+        !term ||
+        branch.name.toLowerCase().includes(term) ||
+        branch.code.toLowerCase().includes(term) ||
+        branch.id.toLowerCase().includes(term) ||
+        branch.city.toLowerCase().includes(term) ||
+        branch.country.toLowerCase().includes(term) ||
+        branch.email.toLowerCase().includes(term);
+
+      const matchesStatus =
+        statusFilter === "All Statuses" ||
+        branch.status === statusFilter;
+
+      const matchesRegion =
+        regionFilter === "All Regions" ||
+        branch.region === regionFilter;
+
+      const matchesCountry =
+        countryFilter === "All Countries" ||
+        branch.country === countryFilter;
+
+      return (
+        matchesSearch &&
+        matchesStatus &&
+        matchesRegion &&
+        matchesCountry
+      );
+    });
+  }, [
+    branches,
+    search,
+    statusFilter,
+    regionFilter,
+    countryFilter,
+  ]);
+
+  const totalPages = Math.max(
+    1,
+    Math.ceil(filteredBranches.length / pageSize)
   );
 
-  const filteredItems = useMemo(() => {
-    const items = data[selectedCategory] || [];
+  const safePage = Math.min(currentPage, totalPages);
 
-    if (!search.trim()) {
-      return items;
-    }
+  const paginatedBranches = filteredBranches.slice(
+    (safePage - 1) * pageSize,
+    safePage * pageSize
+  );
 
-    const term = search.toLowerCase();
+  const totalBranches = branches.length;
 
-    return items.filter((item) =>
-      Object.values(item).some((value) =>
-        String(value).toLowerCase().includes(term)
-      )
-    );
-  }, [data, selectedCategory, search]);
+  const activeBranches = branches.filter(
+    (branch) => branch.status === "Active"
+  ).length;
 
-  function openAddModal() {
-    setEditingItem(null);
+  const countriesCovered = new Set(
+    branches.map((branch) => branch.country)
+  ).size;
 
-    const defaults = {
-      status: "Active",
-    };
+  const usersAssigned = branches.reduce(
+    (total, branch) => total + branch.users,
+    0
+  );
 
-    if (selectedCategory === "branches") {
-      defaults.name = "";
-      defaults.legalEntity = "";
-      defaults.country = "";
-      defaults.currency = "";
-    }
-
-    if (selectedCategory === "legalEntities") {
-      defaults.name = "";
-      defaults.country = "";
-      defaults.currency = "";
-    }
-
-    if (selectedCategory === "countries") {
-      defaults.name = "";
-      defaults.code = "";
-      defaults.currency = "";
-    }
-
-    if (selectedCategory === "currencies") {
-      defaults.code = "";
-      defaults.name = "";
-    }
-
-    if (selectedCategory === "services") {
-      defaults.name = "";
-    }
-
-    if (selectedCategory === "tenderSources") {
-      defaults.name = "";
-      defaults.sourceType = "";
-      defaults.country = "";
-    }
-
-    if (selectedCategory === "tenderTypes") {
-      defaults.name = "";
-      defaults.description = "";
-    }
-
-    if (selectedCategory === "tenderStatuses") {
-      defaults.name = "";
-    }
-
-    if (selectedCategory === "evaluationReasons") {
-      defaults.name = "";
-      defaults.type = "Evaluation";
-    }
-
-    if (selectedCategory === "lossReasons") {
-      defaults.name = "";
-    }
-
-    if (selectedCategory === "contentCategories") {
-      defaults.name = "";
-    }
-
-    if (selectedCategory === "templates") {
-      defaults.name = "";
-      defaults.category = "";
-      defaults.version = "1.0";
-    }
-
-    setForm(defaults);
-    setShowModal(true);
-  }
-
-  function openEditModal(item) {
-    setEditingItem(item);
-    setForm({ ...item });
-    setShowModal(true);
-  }
-
-  function closeModal() {
-    setShowModal(false);
-    setEditingItem(null);
-    setForm({});
-  }
-
-  function handleFormChange(field, value) {
+  function updateForm(field, value) {
     setForm((previous) => ({
       ...previous,
       [field]: value,
     }));
   }
 
-  function saveItem() {
-    if (!form.name && selectedCategory !== "currencies") {
-      alert("Please enter a name.");
-      return;
-    }
+  function openAddModal() {
+    setEditingBranch(null);
+    setForm(emptyForm);
+    setShowModal(true);
+  }
+
+  function openEditModal(branch) {
+    setEditingBranch(branch);
+    setForm({
+      name: branch.name,
+      code: branch.code,
+      fullName: branch.fullName,
+      country: branch.country,
+      region: branch.region,
+      city: branch.city,
+      status: branch.status,
+      address: branch.address,
+      phone: branch.phone,
+      email: branch.email,
+      remarks: branch.remarks,
+    });
+    setShowModal(true);
+  }
+
+  function closeModal() {
+    setShowModal(false);
+    setEditingBranch(null);
+    setForm(emptyForm);
+  }
+
+  function saveBranch(event) {
+    event.preventDefault();
 
     if (
-      selectedCategory === "currencies" &&
-      !form.code
+      !form.name.trim() ||
+      !form.code.trim() ||
+      !form.country ||
+      !form.region ||
+      !form.city.trim()
     ) {
-      alert("Please enter currency code.");
+      alert("Please fill all required fields.");
       return;
     }
 
-    setData((previous) => {
-      const currentItems = previous[selectedCategory];
+    if (editingBranch) {
+      setBranches((previous) =>
+        previous.map((branch) =>
+          branch.id === editingBranch.id
+            ? {
+                ...branch,
+                ...form,
+                name: form.name.trim(),
+                code: form.code.trim().toUpperCase(),
+              }
+            : branch
+        )
+      );
+    } else {
+      const newNumber = String(branches.length + 1).padStart(4, "0");
 
-      if (editingItem) {
-        return {
-          ...previous,
-          [selectedCategory]: currentItems.map((item) =>
-            item.id === editingItem.id
-              ? {
-                  ...item,
-                  ...form,
-                }
-              : item
-          ),
-        };
-      }
-
-      return {
-        ...previous,
-        [selectedCategory]: [
-          ...currentItems,
-          {
-            id: Date.now(),
-            ...form,
-          },
-        ],
+      const newBranch = {
+        id: `BR-${newNumber}`,
+        ...form,
+        name: form.name.trim(),
+        code: form.code.trim().toUpperCase(),
+        users: 0,
       };
-    });
+
+      setBranches((previous) => [newBranch, ...previous]);
+      setCurrentPage(1);
+    }
 
     closeModal();
   }
 
-  function toggleStatus(id) {
-    setData((previous) => ({
-      ...previous,
-      [selectedCategory]: previous[selectedCategory].map(
-        (item) =>
-          item.id === id
-            ? {
-                ...item,
-                status:
-                  item.status === "Active"
-                    ? "Inactive"
-                    : "Active",
-              }
-            : item
-      ),
-    }));
+  function toggleStatus(branch) {
+    const nextStatus =
+      branch.status === "Active" ? "Inactive" : "Active";
+
+    setBranches((previous) =>
+      previous.map((item) =>
+        item.id === branch.id
+          ? { ...item, status: nextStatus }
+          : item
+      )
+    );
   }
 
-  function deleteItem(id) {
+  function archiveBranch(branch) {
     const confirmed = window.confirm(
-      "Are you sure you want to delete this master record?"
+      `Archive ${branch.name}?`
     );
 
     if (!confirmed) return;
 
-    setData((previous) => ({
-      ...previous,
-      [selectedCategory]: previous[selectedCategory].filter(
-        (item) => item.id !== id
+    setBranches((previous) =>
+      previous.map((item) =>
+        item.id === branch.id
+          ? { ...item, status: "Archived" }
+          : item
+      )
+    );
+  }
+
+  function resetFilters() {
+    setSearch("");
+    setStatusFilter("Active");
+    setRegionFilter("All Regions");
+    setCountryFilter("All Countries");
+    setCurrentPage(1);
+  }
+
+  function exportCSV() {
+    const headers = [
+      "BR-ID",
+      "Branch Name",
+      "Code",
+      "Country",
+      "Region",
+      "City",
+      "Users",
+      "Status",
+    ];
+
+    const rows = filteredBranches.map((branch) => [
+      branch.id,
+      branch.name,
+      branch.code,
+      branch.country,
+      branch.region,
+      branch.city,
+      branch.users,
+      branch.status,
+    ]);
+
+    const csv = [
+      headers.join(","),
+      ...rows.map((row) =>
+        row
+          .map((value) =>
+            `"${String(value).replace(/"/g, '""')}"`
+          )
+          .join(",")
       ),
-    }));
-  }
+    ].join("\n");
 
-  function renderFormFields() {
-    if (selectedCategory === "branches") {
-      return (
-        <>
-          <Field
-            label="Branch Name"
-            value={form.name}
-            onChange={(value) =>
-              handleFormChange("name", value)
-            }
-          />
+    const blob = new Blob([csv], {
+      type: "text/csv;charset=utf-8;",
+    });
 
-          <SelectField
-            label="Legal Entity"
-            value={form.legalEntity}
-            options={data.legalEntities.map(
-              (item) => item.name
-            )}
-            onChange={(value) =>
-              handleFormChange("legalEntity", value)
-            }
-          />
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
 
-          <SelectField
-            label="Country"
-            value={form.country}
-            options={data.countries.map(
-              (item) => item.name
-            )}
-            onChange={(value) =>
-              handleFormChange("country", value)
-            }
-          />
+    link.href = url;
+    link.download = "branch-management.csv";
+    link.click();
 
-          <SelectField
-            label="Currency"
-            value={form.currency}
-            options={data.currencies.map(
-              (item) => item.code
-            )}
-            onChange={(value) =>
-              handleFormChange("currency", value)
-            }
-          />
-        </>
-      );
-    }
-
-    if (selectedCategory === "legalEntities") {
-      return (
-        <>
-          <Field
-            label="Legal Entity Name"
-            value={form.name}
-            onChange={(value) =>
-              handleFormChange("name", value)
-            }
-          />
-
-          <SelectField
-            label="Country"
-            value={form.country}
-            options={data.countries.map(
-              (item) => item.name
-            )}
-            onChange={(value) =>
-              handleFormChange("country", value)
-            }
-          />
-
-          <SelectField
-            label="Currency"
-            value={form.currency}
-            options={data.currencies.map(
-              (item) => item.code
-            )}
-            onChange={(value) =>
-              handleFormChange("currency", value)
-            }
-          />
-        </>
-      );
-    }
-
-    if (selectedCategory === "countries") {
-      return (
-        <>
-          <Field
-            label="Country Name"
-            value={form.name}
-            onChange={(value) =>
-              handleFormChange("name", value)
-            }
-          />
-
-          <Field
-            label="Country Code"
-            value={form.code}
-            onChange={(value) =>
-              handleFormChange("code", value)
-            }
-          />
-
-          <SelectField
-            label="Currency"
-            value={form.currency}
-            options={data.currencies.map(
-              (item) => item.code
-            )}
-            onChange={(value) =>
-              handleFormChange("currency", value)
-            }
-          />
-        </>
-      );
-    }
-
-    if (selectedCategory === "currencies") {
-      return (
-        <>
-          <Field
-            label="Currency Code"
-            value={form.code}
-            onChange={(value) =>
-              handleFormChange("code", value)
-            }
-          />
-
-          <Field
-            label="Currency Name"
-            value={form.name}
-            onChange={(value) =>
-              handleFormChange("name", value)
-            }
-          />
-        </>
-      );
-    }
-
-    if (selectedCategory === "services") {
-      return (
-        <Field
-          label="Service Category"
-          value={form.name}
-          onChange={(value) =>
-            handleFormChange("name", value)
-          }
-        />
-      );
-    }
-
-    if (selectedCategory === "tenderSources") {
-      return (
-        <>
-          <Field
-            label="Source Name"
-            value={form.name}
-            onChange={(value) =>
-              handleFormChange("name", value)
-            }
-          />
-
-          <Field
-            label="Source Type"
-            value={form.sourceType}
-            onChange={(value) =>
-              handleFormChange("sourceType", value)
-            }
-          />
-
-          <SelectField
-            label="Country"
-            value={form.country}
-            options={data.countries.map(
-              (item) => item.name
-            )}
-            onChange={(value) =>
-              handleFormChange("country", value)
-            }
-          />
-        </>
-      );
-    }
-
-    if (selectedCategory === "tenderTypes") {
-      return (
-        <>
-          <Field
-            label="Tender Type"
-            value={form.name}
-            onChange={(value) =>
-              handleFormChange("name", value)
-            }
-          />
-
-          <Field
-            label="Description"
-            value={form.description}
-            onChange={(value) =>
-              handleFormChange("description", value)
-            }
-          />
-        </>
-      );
-    }
-
-    if (selectedCategory === "tenderStatuses") {
-      return (
-        <Field
-          label="Status Name"
-          value={form.name}
-          onChange={(value) =>
-            handleFormChange("name", value)
-          }
-        />
-      );
-    }
-
-    if (selectedCategory === "evaluationReasons") {
-      return (
-        <>
-          <Field
-            label="Reason"
-            value={form.name}
-            onChange={(value) =>
-              handleFormChange("name", value)
-            }
-          />
-
-          <SelectField
-            label="Reason Type"
-            value={form.type}
-            options={[
-              "Evaluation",
-              "Hold",
-            ]}
-            onChange={(value) =>
-              handleFormChange("type", value)
-            }
-          />
-        </>
-      );
-    }
-
-    if (selectedCategory === "lossReasons") {
-      return (
-        <Field
-          label="Loss Reason"
-          value={form.name}
-          onChange={(value) =>
-            handleFormChange("name", value)
-          }
-        />
-      );
-    }
-
-    if (selectedCategory === "contentCategories") {
-      return (
-        <Field
-          label="Category Name"
-          value={form.name}
-          onChange={(value) =>
-            handleFormChange("name", value)
-          }
-        />
-      );
-    }
-
-    if (selectedCategory === "templates") {
-      return (
-        <>
-          <Field
-            label="Template Name"
-            value={form.name}
-            onChange={(value) =>
-              handleFormChange("name", value)
-            }
-          />
-
-          <Field
-            label="Category"
-            value={form.category}
-            onChange={(value) =>
-              handleFormChange("category", value)
-            }
-          />
-
-          <Field
-            label="Version"
-            value={form.version}
-            onChange={(value) =>
-              handleFormChange("version", value)
-            }
-          />
-        </>
-      );
-    }
-
-    return null;
-  }
-
-  function renderTable(item) {
-    if (selectedCategory === "branches") {
-      return (
-        <>
-          <td>{item.name}</td>
-          <td>{item.legalEntity}</td>
-          <td>{item.country}</td>
-          <td>{item.currency}</td>
-        </>
-      );
-    }
-
-    if (selectedCategory === "legalEntities") {
-      return (
-        <>
-          <td>{item.name}</td>
-          <td>{item.country}</td>
-          <td>{item.currency}</td>
-        </>
-      );
-    }
-
-    if (selectedCategory === "countries") {
-      return (
-        <>
-          <td>{item.name}</td>
-          <td>{item.code}</td>
-          <td>{item.currency}</td>
-        </>
-      );
-    }
-
-    if (selectedCategory === "currencies") {
-      return (
-        <>
-          <td>{item.code}</td>
-          <td>{item.name}</td>
-        </>
-      );
-    }
-
-    if (selectedCategory === "services") {
-      return <td>{item.name}</td>;
-    }
-
-    if (selectedCategory === "tenderSources") {
-      return (
-        <>
-          <td>{item.name}</td>
-          <td>{item.sourceType}</td>
-          <td>{item.country}</td>
-        </>
-      );
-    }
-
-    if (selectedCategory === "tenderTypes") {
-      return (
-        <>
-          <td>{item.name}</td>
-          <td>{item.description}</td>
-        </>
-      );
-    }
-
-    if (selectedCategory === "tenderStatuses") {
-      return <td>{item.name}</td>;
-    }
-
-    if (selectedCategory === "evaluationReasons") {
-      return (
-        <>
-          <td>{item.name}</td>
-          <td>{item.type}</td>
-        </>
-      );
-    }
-
-    if (selectedCategory === "lossReasons") {
-      return <td>{item.name}</td>;
-    }
-
-    if (selectedCategory === "contentCategories") {
-      return <td>{item.name}</td>;
-    }
-
-    if (selectedCategory === "templates") {
-      return (
-        <>
-          <td>{item.name}</td>
-          <td>{item.category}</td>
-          <td>{item.version}</td>
-        </>
-      );
-    }
-
-    return null;
-  }
-
-  function getColumns() {
-    if (selectedCategory === "branches") {
-      return [
-        "Branch",
-        "Legal Entity",
-        "Country",
-        "Currency",
-      ];
-    }
-
-    if (selectedCategory === "legalEntities") {
-      return [
-        "Legal Entity",
-        "Country",
-        "Currency",
-      ];
-    }
-
-    if (selectedCategory === "countries") {
-      return [
-        "Country",
-        "Code",
-        "Currency",
-      ];
-    }
-
-    if (selectedCategory === "currencies") {
-      return [
-        "Code",
-        "Currency Name",
-      ];
-    }
-
-    if (selectedCategory === "services") {
-      return ["Service Category"];
-    }
-
-    if (selectedCategory === "tenderSources") {
-      return [
-        "Source",
-        "Source Type",
-        "Country",
-      ];
-    }
-
-    if (selectedCategory === "tenderTypes") {
-      return [
-        "Tender Type",
-        "Description",
-      ];
-    }
-
-    if (selectedCategory === "tenderStatuses") {
-      return ["Status"];
-    }
-
-    if (selectedCategory === "evaluationReasons") {
-      return [
-        "Reason",
-        "Type",
-      ];
-    }
-
-    if (selectedCategory === "lossReasons") {
-      return ["Loss Reason"];
-    }
-
-    if (selectedCategory === "contentCategories") {
-      return ["Category"];
-    }
-
-    if (selectedCategory === "templates") {
-      return [
-        "Template",
-        "Category",
-        "Version",
-      ];
-    }
-
-    return [];
+    URL.revokeObjectURL(url);
   }
 
   return (
@@ -965,198 +438,240 @@ export default function MastersPage() {
         padding: "32px",
         minHeight: "100vh",
         background: "#f5f7fb",
+        boxSizing: "border-box",
       }}
     >
       {/* HEADER */}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "flex-start",
+          gap: "20px",
+          marginBottom: "24px",
+          flexWrap: "wrap",
+        }}
+      >
+        <div>
+          <div
+            style={{
+              fontSize: "13px",
+              color: "#64748b",
+              marginBottom: "6px",
+            }}
+          >
+            Home / Administration / Masters / Branch Management
+          </div>
 
-      <div style={{ marginBottom: "24px" }}>
-        <div
-          style={{
-            fontSize: "13px",
-            color: "#64748b",
-            marginBottom: "6px",
-          }}
-        >
-          Home / Administration / Masters
+          <h1
+            style={{
+              margin: 0,
+              fontSize: "28px",
+              color: "#0f172a",
+            }}
+          >
+            Branch Management
+          </h1>
+
+          <p
+            style={{
+              margin: "8px 0 0",
+              fontSize: "14px",
+              color: "#64748b",
+            }}
+          >
+            Manage branches and their country, region and tender ownership.
+          </p>
         </div>
 
-        <h1
+        <div
           style={{
-            margin: 0,
-            fontSize: "28px",
-            color: "#0f172a",
+            display: "flex",
+            gap: "10px",
           }}
         >
-          Masters
-        </h1>
+          <button
+            type="button"
+            onClick={exportCSV}
+            style={secondaryButton}
+          >
+            ↓ Export CSV
+          </button>
 
-        <p
-          style={{
-            marginTop: "8px",
-            marginBottom: 0,
-            color: "#64748b",
-            fontSize: "15px",
-          }}
-        >
-          Manage reference data used throughout the
-          Tender Management Tool.
-        </p>
+          <button
+            type="button"
+            onClick={openAddModal}
+            style={primaryButton}
+          >
+            + New Branch
+          </button>
+        </div>
       </div>
 
-      {/* CATEGORY CARDS */}
-
+      {/* SUMMARY CARDS */}
       <div
         style={{
           display: "grid",
           gridTemplateColumns:
             "repeat(4, minmax(0, 1fr))",
-          gap: "12px",
+          gap: "16px",
           marginBottom: "24px",
         }}
       >
-        {categoryDefinitions.map((category) => {
-          const active =
-            selectedCategory === category.key;
+        <SummaryCard
+          title="Total Branches"
+          value={totalBranches}
+          subtitle={`${filteredBranches.length} shown`}
+          icon="▣"
+        />
 
-          return (
-            <button
-              key={category.key}
-              type="button"
-              onClick={() => {
-                setSelectedCategory(category.key);
-                setSearch("");
-              }}
-              style={{
-                textAlign: "left",
-                padding: "16px",
-                background: active
-                  ? "#eff6ff"
-                  : "#ffffff",
-                border: active
-                  ? "1px solid #2563eb"
-                  : "1px solid #e2e8f0",
-                borderRadius: "10px",
-                cursor: "pointer",
-              }}
-            >
-              <div
-                style={{
-                  fontSize: "14px",
-                  fontWeight: "700",
-                  color: "#0f172a",
-                }}
-              >
-                {category.title}
-              </div>
+        <SummaryCard
+          title="Active Branches"
+          value={activeBranches}
+          subtitle="Currently active"
+          icon="✓"
+        />
 
-              <div
-                style={{
-                  marginTop: "5px",
-                  fontSize: "11px",
-                  color: "#64748b",
-                }}
-              >
-                {data[category.key].length} records
-              </div>
-            </button>
-          );
-        })}
+        <SummaryCard
+          title="Countries Covered"
+          value={countriesCovered}
+          subtitle="Countries with branches"
+          icon="◎"
+        />
+
+        <SummaryCard
+          title="Users Assigned"
+          value={usersAssigned}
+          subtitle="Across all branches"
+          icon="♙"
+        />
       </div>
 
-      {/* MANAGEMENT PANEL */}
-
+      {/* FILTER AREA */}
       <div
         style={{
-          background: "#ffffff",
-          border: "1px solid #e2e8f0",
+          background: "#fff",
+          border: "1px solid #dbe3ef",
+          borderRadius: "12px",
+          padding: "20px",
+          marginBottom: "16px",
+        }}
+      >
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns:
+              "minmax(280px, 2fr) repeat(3, minmax(150px, 1fr)) auto",
+            gap: "12px",
+            alignItems: "center",
+          }}
+        >
+          {/* SEARCH */}
+          <div
+            style={{
+              position: "relative",
+            }}
+          >
+            <span
+              style={{
+                position: "absolute",
+                left: "13px",
+                top: "50%",
+                transform: "translateY(-50%)",
+                color: "#94a3b8",
+                fontSize: "16px",
+              }}
+            >
+              ⌕
+            </span>
+
+            <input
+              value={search}
+              onChange={(event) => {
+                setSearch(event.target.value);
+                setCurrentPage(1);
+              }}
+              placeholder="Search by name, code, BR-ID, city, country, email..."
+              style={{
+                ...inputStyle,
+                paddingLeft: "38px",
+              }}
+            />
+          </div>
+
+          {/* STATUS */}
+          <select
+            value={statusFilter}
+            onChange={(event) => {
+              setStatusFilter(event.target.value);
+              setCurrentPage(1);
+            }}
+            style={selectStyle}
+          >
+            <option>Active</option>
+            <option>Inactive</option>
+            <option>Archived</option>
+            <option>All Statuses</option>
+          </select>
+
+          {/* REGION */}
+          <select
+            value={regionFilter}
+            onChange={(event) => {
+              setRegionFilter(event.target.value);
+              setCurrentPage(1);
+            }}
+            style={selectStyle}
+          >
+            {regions.map((region) => (
+              <option key={region}>{region}</option>
+            ))}
+          </select>
+
+          {/* COUNTRY */}
+          <select
+            value={countryFilter}
+            onChange={(event) => {
+              setCountryFilter(event.target.value);
+              setCurrentPage(1);
+            }}
+            style={selectStyle}
+          >
+            {countries.map((country) => (
+              <option key={country}>{country}</option>
+            ))}
+          </select>
+
+          <button
+            type="button"
+            onClick={resetFilters}
+            style={resetButton}
+          >
+            Reset
+          </button>
+        </div>
+
+        <div
+          style={{
+            marginTop: "14px",
+            fontSize: "12px",
+            color: "#64748b",
+          }}
+        >
+          {filteredBranches.length} result
+          {filteredBranches.length !== 1 ? "s" : ""} found
+        </div>
+      </div>
+
+      {/* TABLE */}
+      <div
+        style={{
+          background: "#fff",
+          border: "1px solid #dbe3ef",
           borderRadius: "12px",
           overflow: "hidden",
         }}
       >
-        {/* PANEL HEADER */}
-
-        <div
-          style={{
-            padding: "20px 24px",
-            borderBottom:
-              "1px solid #e2e8f0",
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            gap: "20px",
-          }}
-        >
-          <div>
-            <h2
-              style={{
-                margin: 0,
-                fontSize: "19px",
-                color: "#0f172a",
-              }}
-            >
-              {selectedDefinition.title}
-            </h2>
-
-            <p
-              style={{
-                margin: "6px 0 0",
-                color: "#64748b",
-                fontSize: "13px",
-              }}
-            >
-              {selectedDefinition.description}
-            </p>
-          </div>
-
-          <button
-            type="button"
-            onClick={openAddModal}
-            style={{
-              padding: "10px 16px",
-              border: "none",
-              borderRadius: "8px",
-              background: "#2563eb",
-              color: "#ffffff",
-              fontSize: "13px",
-              fontWeight: "600",
-              cursor: "pointer",
-              whiteSpace: "nowrap",
-            }}
-          >
-            + Add Master
-          </button>
-        </div>
-
-        {/* SEARCH */}
-
-        <div
-          style={{
-            padding: "16px 24px",
-            borderBottom:
-              "1px solid #e2e8f0",
-          }}
-        >
-          <input
-            value={search}
-            onChange={(e) =>
-              setSearch(e.target.value)
-            }
-            placeholder={`Search ${selectedDefinition.title.toLowerCase()}...`}
-            style={{
-              width: "100%",
-              boxSizing: "border-box",
-              padding: "11px 13px",
-              border:
-                "1px solid #cbd5e1",
-              borderRadius: "8px",
-              fontSize: "13px",
-              outline: "none",
-            }}
-          />
-        </div>
-
-        {/* TABLE */}
-
         <div
           style={{
             overflowX: "auto",
@@ -1165,257 +680,328 @@ export default function MastersPage() {
           <table
             style={{
               width: "100%",
-              borderCollapse:
-                "collapse",
-              minWidth: "850px",
+              minWidth: "1050px",
+              borderCollapse: "collapse",
             }}
           >
             <thead>
               <tr
                 style={{
-                  background:
-                    "#f8fafc",
+                  background: "#f8fafc",
+                  borderBottom: "1px solid #e2e8f0",
                 }}
               >
-                {getColumns().map(
-                  (column) => (
-                    <th
-                      key={column}
-                      style={{
-                        padding:
-                          "13px 20px",
-                        textAlign:
-                          "left",
-                        fontSize:
-                          "12px",
-                        color:
-                          "#64748b",
-                        borderBottom:
-                          "1px solid #e2e8f0",
-                      }}
-                    >
-                      {column}
-                    </th>
-                  )
-                )}
-
-                <th
-                  style={{
-                    padding:
-                      "13px 20px",
-                    textAlign:
-                      "left",
-                    fontSize:
-                      "12px",
-                    color:
-                      "#64748b",
-                    borderBottom:
-                      "1px solid #e2e8f0",
-                  }}
-                >
-                  Status
-                </th>
-
-                <th
-                  style={{
-                    padding:
-                      "13px 20px",
-                    textAlign:
-                      "center",
-                    fontSize:
-                      "12px",
-                    color:
-                      "#64748b",
-                    borderBottom:
-                      "1px solid #e2e8f0",
-                  }}
-                >
-                  Actions
-                </th>
+                {[
+                  "BR-ID",
+                  "Branch Name",
+                  "Code",
+                  "Country",
+                  "Region",
+                  "City",
+                  "Users",
+                  "Status",
+                  "Actions",
+                ].map((heading) => (
+                  <th
+                    key={heading}
+                    style={tableHeaderStyle}
+                  >
+                    {heading}
+                  </th>
+                ))}
               </tr>
             </thead>
 
             <tbody>
-              {filteredItems.length === 0 ? (
+              {paginatedBranches.length === 0 ? (
                 <tr>
                   <td
-                    colSpan={
-                      getColumns().length +
-                      2
-                    }
+                    colSpan="9"
                     style={{
-                      padding:
-                        "50px 20px",
-                      textAlign:
-                        "center",
-                      color:
-                        "#64748b",
-                      fontSize:
-                        "13px",
+                      padding: "50px 20px",
+                      textAlign: "center",
+                      color: "#64748b",
+                      fontSize: "14px",
                     }}
                   >
-                    No records found.
+                    No branches match the selected filters.
                   </td>
                 </tr>
               ) : (
-                filteredItems.map(
-                  (item) => (
-                    <tr key={item.id}>
-                      {renderTable(
-                        item
-                      )}
-
-                      <td
+                paginatedBranches.map((branch) => (
+                  <tr
+                    key={branch.id}
+                    style={{
+                      borderBottom:
+                        "1px solid #e2e8f0",
+                    }}
+                  >
+                    <td style={tableCellStyle}>
+                      <span
                         style={{
-                          padding:
-                            "14px 20px",
-                          borderBottom:
-                            "1px solid #e2e8f0",
+                          color: "#475569",
+                          fontSize: "12px",
+                          fontWeight: "600",
                         }}
                       >
-                        <span
-                          style={{
-                            display:
-                              "inline-block",
-                            padding:
-                              "5px 9px",
-                            borderRadius:
-                              "999px",
-                            background:
-                              item.status ===
-                              "Active"
-                                ? "#dcfce7"
-                                : "#fee2e2",
-                            color:
-                              item.status ===
-                              "Active"
-                                ? "#166534"
-                                : "#b91c1c",
-                            fontSize:
-                              "11px",
-                            fontWeight:
-                              "600",
-                          }}
-                        >
-                          {item.status}
-                        </span>
-                      </td>
+                        {branch.id}
+                      </span>
+                    </td>
 
-                      <td
+                    <td style={tableCellStyle}>
+                      <div
                         style={{
-                          padding:
-                            "14px 20px",
-                          borderBottom:
-                            "1px solid #e2e8f0",
-                          textAlign:
-                            "center",
+                          fontWeight: "600",
+                          color: "#0f172a",
                         }}
                       >
-                        <div
-                          style={{
-                            display:
-                              "flex",
-                            justifyContent:
-                              "center",
-                            gap: "6px",
-                          }}
-                        >
-                          <button
-                            type="button"
-                            onClick={() =>
-                              openEditModal(
-                                item
-                              )
-                            }
-                            style={{
-                              padding:
-                                "6px 10px",
-                              border:
-                                "1px solid #cbd5e1",
-                              borderRadius:
-                                "6px",
-                              background:
-                                "#ffffff",
-                              color:
-                                "#334155",
-                              fontSize:
-                                "11px",
-                              cursor:
-                                "pointer",
-                            }}
-                          >
-                            Edit
-                          </button>
+                        {branch.name}
+                      </div>
 
-                          <button
-                            type="button"
-                            onClick={() =>
-                              toggleStatus(
-                                item.id
-                              )
-                            }
+                      {branch.fullName &&
+                        branch.fullName !== branch.name && (
+                          <div
                             style={{
-                              padding:
-                                "6px 10px",
-                              border:
-                                "1px solid #cbd5e1",
-                              borderRadius:
-                                "6px",
-                              background:
-                                "#ffffff",
-                              color:
-                                "#334155",
-                              fontSize:
-                                "11px",
-                              cursor:
-                                "pointer",
+                              marginTop: "3px",
+                              color: "#94a3b8",
+                              fontSize: "11px",
                             }}
                           >
-                            {item.status ===
-                            "Active"
+                            {branch.fullName}
+                          </div>
+                        )}
+                    </td>
+
+                    <td style={tableCellStyle}>
+                      <span
+                        style={{
+                          fontWeight: "600",
+                          color: "#334155",
+                        }}
+                      >
+                        {branch.code}
+                      </span>
+                    </td>
+
+                    <td style={tableCellStyle}>
+                      {branch.country}
+                    </td>
+
+                    <td style={tableCellStyle}>
+                      <span
+                        style={{
+                          color: "#475569",
+                        }}
+                      >
+                        {branch.region}
+                      </span>
+                    </td>
+
+                    <td style={tableCellStyle}>
+                      {branch.city}
+                    </td>
+
+                    <td
+                      style={{
+                        ...tableCellStyle,
+                        textAlign: "center",
+                      }}
+                    >
+                      <span
+                        style={{
+                          display: "inline-flex",
+                          alignItems: "center",
+                          gap: "5px",
+                          color: "#475569",
+                        }}
+                      >
+                        ♙ {branch.users}
+                      </span>
+                    </td>
+
+                    <td style={tableCellStyle}>
+                      <StatusBadge status={branch.status} />
+                    </td>
+
+                    <td style={tableCellStyle}>
+                      <div
+                        style={{
+                          display: "flex",
+                          gap: "6px",
+                          alignItems: "center",
+                        }}
+                      >
+                        <button
+                          type="button"
+                          onClick={() =>
+                            openEditModal(branch)
+                          }
+                          style={actionButton}
+                          title="Edit"
+                        >
+                          ✎
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() =>
+                            toggleStatus(branch)
+                          }
+                          style={actionButton}
+                          title={
+                            branch.status === "Active"
                               ? "Disable"
-                              : "Enable"}
-                          </button>
+                              : "Activate"
+                          }
+                        >
+                          {branch.status === "Active"
+                            ? "⊘"
+                            : "✓"}
+                        </button>
 
-                          <button
-                            type="button"
-                            onClick={() =>
-                              deleteItem(
-                                item.id
-                              )
-                            }
-                            style={{
-                              padding:
-                                "6px 10px",
-                              border:
-                                "1px solid #fecaca",
-                              borderRadius:
-                                "6px",
-                              background:
-                                "#fffafa",
-                              color:
-                                "#dc2626",
-                              fontSize:
-                                "11px",
-                              cursor:
-                                "pointer",
-                            }}
-                          >
-                            Delete
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  )
-                )
+                        <button
+                          type="button"
+                          onClick={() =>
+                            archiveBranch(branch)
+                          }
+                          style={{
+                            ...actionButton,
+                            color: "#dc2626",
+                          }}
+                          title="Archive"
+                        >
+                          ▣
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))
               )}
             </tbody>
           </table>
         </div>
+
+        {/* PAGINATION */}
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            padding: "14px 20px",
+            borderTop: "1px solid #e2e8f0",
+            gap: "12px",
+            flexWrap: "wrap",
+          }}
+        >
+          <div
+            style={{
+              fontSize: "12px",
+              color: "#64748b",
+            }}
+          >
+            Showing{" "}
+            {filteredBranches.length === 0
+              ? 0
+              : (safePage - 1) * pageSize + 1}{" "}
+            to{" "}
+            {Math.min(
+              safePage * pageSize,
+              filteredBranches.length
+            )}{" "}
+            of {filteredBranches.length} entries
+          </div>
+
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+            }}
+          >
+            <select
+              value={pageSize}
+              onChange={(event) => {
+                setPageSize(Number(event.target.value));
+                setCurrentPage(1);
+              }}
+              style={{
+                ...selectStyle,
+                width: "105px",
+              }}
+            >
+              <option value="7">7 / page</option>
+              <option value="10">10 / page</option>
+              <option value="20">20 / page</option>
+              <option value="50">50 / page</option>
+            </select>
+
+            <button
+              type="button"
+              disabled={safePage === 1}
+              onClick={() =>
+                setCurrentPage((page) =>
+                  Math.max(1, page - 1)
+                )
+              }
+              style={{
+                ...pageButton,
+                opacity: safePage === 1 ? 0.4 : 1,
+              }}
+            >
+              ‹
+            </button>
+
+            {Array.from(
+              { length: totalPages },
+              (_, index) => index + 1
+            )
+              .slice(0, 5)
+              .map((page) => (
+                <button
+                  key={page}
+                  type="button"
+                  onClick={() => setCurrentPage(page)}
+                  style={{
+                    ...pageButton,
+                    background:
+                      safePage === page
+                        ? "#2563eb"
+                        : "#fff",
+                    color:
+                      safePage === page
+                        ? "#fff"
+                        : "#334155",
+                    borderColor:
+                      safePage === page
+                        ? "#2563eb"
+                        : "#cbd5e1",
+                  }}
+                >
+                  {page}
+                </button>
+              ))}
+
+            <button
+              type="button"
+              disabled={safePage === totalPages}
+              onClick={() =>
+                setCurrentPage((page) =>
+                  Math.min(totalPages, page + 1)
+                )
+              }
+              style={{
+                ...pageButton,
+                opacity:
+                  safePage === totalPages ? 0.4 : 1,
+              }}
+            >
+              ›
+            </button>
+          </div>
+        </div>
       </div>
 
-      {/* SYSTEM NOTE */}
-
+      {/* INFORMATION NOTE */}
       <div
         style={{
           marginTop: "20px",
@@ -1425,28 +1011,30 @@ export default function MastersPage() {
           border: "1px solid #bfdbfe",
           color: "#1e40af",
           fontSize: "13px",
-          lineHeight: "1.5",
+          lineHeight: "1.6",
         }}
       >
-        Master data is centrally maintained so
-        tender records, workflows and reports use
-        consistent reference values. Changes to
-        master data should be auditable.
+        <strong>About Branch Management</strong>
+        <div style={{ marginTop: "6px" }}>
+          • Branches are mapped to Country and Region.
+          <br />
+          • Branch information can be used for tender ownership,
+          reporting and user-scoping.
+          <br />
+          • Branch changes should be recorded in Audit History.
+        </div>
       </div>
 
-      {/* MODAL */}
-
+      {/* ADD / EDIT MODAL */}
       {showModal && (
         <div
           style={{
             position: "fixed",
             inset: 0,
-            background:
-              "rgba(15, 23, 42, 0.45)",
+            background: "rgba(15, 23, 42, 0.45)",
             display: "flex",
+            justifyContent: "center",
             alignItems: "center",
-            justifyContent:
-              "center",
             padding: "20px",
             zIndex: 1000,
           }}
@@ -1454,84 +1042,60 @@ export default function MastersPage() {
           <div
             style={{
               width: "100%",
-              maxWidth: "560px",
+              maxWidth: "760px",
               maxHeight: "90vh",
               overflowY: "auto",
-              background:
-                "#ffffff",
-              borderRadius:
-                "14px",
+              background: "#fff",
+              borderRadius: "14px",
               boxShadow:
-                "0 20px 50px rgba(15,23,42,.2)",
+                "0 20px 50px rgba(15,23,42,0.25)",
             }}
           >
             {/* MODAL HEADER */}
-
             <div
               style={{
-                padding:
-                  "20px 24px",
+                padding: "20px 24px",
                 borderBottom:
                   "1px solid #e2e8f0",
-                display:
-                  "flex",
-                justifyContent:
-                  "space-between",
-                alignItems:
-                  "center",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
               }}
             >
               <div>
                 <h2
                   style={{
                     margin: 0,
-                    fontSize:
-                      "19px",
-                    color:
-                      "#0f172a",
+                    fontSize: "20px",
+                    color: "#0f172a",
                   }}
                 >
-                  {editingItem
-                    ? "Edit Master"
-                    : "Add Master"}
+                  {editingBranch
+                    ? "Edit Branch"
+                    : "Add Branch"}
                 </h2>
 
                 <p
                   style={{
-                    margin:
-                      "5px 0 0",
-                    color:
-                      "#64748b",
-                    fontSize:
-                      "12px",
+                    margin: "5px 0 0",
+                    fontSize: "12px",
+                    color: "#64748b",
                   }}
                 >
-                  {selectedDefinition.title}
+                  Maintain branch details used by the
+                  tender management system.
                 </p>
               </div>
 
               <button
                 type="button"
-                onClick={
-                  closeModal
-                }
+                onClick={closeModal}
                 style={{
-                  width:
-                    "32px",
-                  height:
-                    "32px",
-                  border:
-                    "none",
-                  borderRadius:
-                    "7px",
-                  background:
-                    "#f1f5f9",
-                  color:
-                    "#475569",
-                  fontSize:
-                    "18px",
-                  cursor:
-                    "pointer",
+                  border: "none",
+                  background: "transparent",
+                  fontSize: "22px",
+                  color: "#64748b",
+                  cursor: "pointer",
                 }}
               >
                 ×
@@ -1539,108 +1103,204 @@ export default function MastersPage() {
             </div>
 
             {/* FORM */}
-
-            <div
-              style={{
-                padding:
-                  "24px",
-                display:
-                  "grid",
-                gap: "15px",
-              }}
-            >
-              {renderFormFields()}
-
-              <SelectField
-                label="Status"
-                value={
-                  form.status ||
-                  "Active"
-                }
-                options={[
-                  "Active",
-                  "Inactive",
-                ]}
-                onChange={(
-                  value
-                ) =>
-                  handleFormChange(
-                    "status",
-                    value
-                  )
-                }
-              />
-            </div>
-
-            {/* FOOTER */}
-
-            <div
-              style={{
-                padding:
-                  "16px 24px",
-                borderTop:
-                  "1px solid #e2e8f0",
-                display:
-                  "flex",
-                justifyContent:
-                  "flex-end",
-                gap: "10px",
-              }}
-            >
-              <button
-                type="button"
-                onClick={
-                  closeModal
-                }
+            <form onSubmit={saveBranch}>
+              <div
                 style={{
-                  padding:
-                    "10px 16px",
-                  border:
-                    "1px solid #cbd5e1",
-                  borderRadius:
-                    "8px",
-                  background:
-                    "#ffffff",
-                  color:
-                    "#334155",
-                  fontSize:
-                    "13px",
-                  cursor:
-                    "pointer",
+                  padding: "24px",
+                  display: "grid",
+                  gridTemplateColumns:
+                    "repeat(2, minmax(0, 1fr))",
+                  gap: "16px",
                 }}
               >
-                Cancel
-              </button>
+                <FormField
+                  label="Branch Name"
+                  required
+                  value={form.name}
+                  onChange={(value) =>
+                    updateForm("name", value)
+                  }
+                  placeholder="e.g. Mumbai Head Office"
+                />
 
-              <button
-                type="button"
-                onClick={
-                  saveItem
-                }
+                <FormField
+                  label="Code"
+                  required
+                  value={form.code}
+                  onChange={(value) =>
+                    updateForm("code", value)
+                  }
+                  placeholder="e.g. MUM"
+                />
+
+                <div
+                  style={{
+                    gridColumn: "1 / -1",
+                  }}
+                >
+                  <FormField
+                    label="Full Name"
+                    value={form.fullName}
+                    onChange={(value) =>
+                      updateForm("fullName", value)
+                    }
+                    placeholder="Optional long-form name"
+                  />
+                </div>
+
+                <SelectField
+                  label="Country"
+                  required
+                  value={form.country}
+                  onChange={(value) =>
+                    updateForm("country", value)
+                  }
+                  options={[
+                    "India",
+                    "Nigeria",
+                    "Kenya",
+                    "UAE",
+                    "United Kingdom",
+                    "Other",
+                  ]}
+                  placeholder="Select country"
+                />
+
+                <SelectField
+                  label="Region"
+                  required
+                  value={form.region}
+                  onChange={(value) =>
+                    updateForm("region", value)
+                  }
+                  options={[
+                    "Maharashtra",
+                    "Delhi",
+                    "Karnataka",
+                    "Tamil Nadu",
+                    "Telangana",
+                    "Nigeria Region",
+                    "Kenya Region",
+                    "UAE Region",
+                    "Other Region",
+                  ]}
+                  placeholder="Select region"
+                />
+
+                <FormField
+                  label="City"
+                  required
+                  value={form.city}
+                  onChange={(value) =>
+                    updateForm("city", value)
+                  }
+                  placeholder="e.g. Mumbai"
+                />
+
+                <SelectField
+                  label="Status"
+                  required
+                  value={form.status}
+                  onChange={(value) =>
+                    updateForm("status", value)
+                  }
+                  options={[
+                    "Active",
+                    "Inactive",
+                    "Archived",
+                  ]}
+                />
+
+                <div
+                  style={{
+                    gridColumn: "1 / -1",
+                  }}
+                >
+                  <FormField
+                    label="Address"
+                    value={form.address}
+                    onChange={(value) =>
+                      updateForm("address", value)
+                    }
+                    placeholder="Full office address"
+                  />
+                </div>
+
+                <FormField
+                  label="Phone"
+                  value={form.phone}
+                  onChange={(value) =>
+                    updateForm("phone", value)
+                  }
+                  placeholder="e.g. +91 22 4000 1000"
+                />
+
+                <FormField
+                  label="Email"
+                  type="email"
+                  value={form.email}
+                  onChange={(value) =>
+                    updateForm("email", value)
+                  }
+                  placeholder="e.g. branch@company.com"
+                />
+
+                <div
+                  style={{
+                    gridColumn: "1 / -1",
+                  }}
+                >
+                  <label style={labelStyle}>
+                    Remarks
+                  </label>
+
+                  <textarea
+                    value={form.remarks}
+                    onChange={(event) =>
+                      updateForm(
+                        "remarks",
+                        event.target.value
+                      )
+                    }
+                    placeholder="Internal notes for governance / audit"
+                    rows={4}
+                    style={{
+                      ...inputStyle,
+                      resize: "vertical",
+                    }}
+                  />
+                </div>
+              </div>
+
+              {/* MODAL FOOTER */}
+              <div
                 style={{
-                  padding:
-                    "10px 18px",
-                  border:
-                    "none",
-                  borderRadius:
-                    "8px",
-                  background:
-                    "#2563eb",
-                  color:
-                    "#ffffff",
-                  fontSize:
-                    "13px",
-                  fontWeight:
-                    "600",
-                  cursor:
-                    "pointer",
+                  display: "flex",
+                  justifyContent: "flex-end",
+                  gap: "10px",
+                  padding: "16px 24px",
+                  borderTop:
+                    "1px solid #e2e8f0",
                 }}
               >
-                {editingItem
-                  ? "Save Changes"
-                  : "Add Master"}
-              </button>
-            </div>
+                <button
+                  type="button"
+                  onClick={closeModal}
+                  style={secondaryButton}
+                >
+                  Cancel
+                </button>
+
+                <button
+                  type="submit"
+                  style={primaryButton}
+                >
+                  {editingBranch
+                    ? "Save Changes"
+                    : "Save Branch"}
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}
@@ -1648,126 +1308,293 @@ export default function MastersPage() {
   );
 }
 
-/* FIELD COMPONENT */
+/* =========================================================
+   COMPONENTS
+========================================================= */
 
-function Field({
+function SummaryCard({
+  title,
+  value,
+  subtitle,
+  icon,
+}) {
+  return (
+    <div
+      style={{
+        background: "#fff",
+        border: "1px solid #dbe3ef",
+        borderRadius: "12px",
+        padding: "18px",
+        minHeight: "105px",
+        boxSizing: "border-box",
+      }}
+    >
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "flex-start",
+        }}
+      >
+        <div>
+          <div
+            style={{
+              fontSize: "12px",
+              color: "#64748b",
+            }}
+          >
+            {title}
+          </div>
+
+          <div
+            style={{
+              marginTop: "8px",
+              fontSize: "27px",
+              fontWeight: "700",
+              color: "#0f172a",
+            }}
+          >
+            {value}
+          </div>
+
+          <div
+            style={{
+              marginTop: "2px",
+              fontSize: "11px",
+              color: "#64748b",
+            }}
+          >
+            {subtitle}
+          </div>
+        </div>
+
+        <div
+          style={{
+            width: "34px",
+            height: "34px",
+            borderRadius: "9px",
+            background: "#eff6ff",
+            color: "#2563eb",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontSize: "16px",
+          }}
+        >
+          {icon}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function StatusBadge({ status }) {
+  let background = "#dcfce7";
+  let color = "#15803d";
+
+  if (status === "Inactive") {
+    background = "#fef3c7";
+    color = "#b45309";
+  }
+
+  if (status === "Archived") {
+    background = "#f1f5f9";
+    color = "#64748b";
+  }
+
+  return (
+    <span
+      style={{
+        display: "inline-flex",
+        alignItems: "center",
+        padding: "5px 9px",
+        borderRadius: "999px",
+        background,
+        color,
+        fontSize: "11px",
+        fontWeight: "700",
+      }}
+    >
+      {status.toUpperCase()}
+    </span>
+  );
+}
+
+function FormField({
   label,
+  required,
   value,
   onChange,
+  placeholder,
+  type = "text",
 }) {
   return (
     <div>
-      <label
-        style={{
-          display:
-            "block",
-          marginBottom:
-            "6px",
-          fontSize:
-            "12px",
-          fontWeight:
-            "600",
-          color:
-            "#475569",
-        }}
-      >
+      <label style={labelStyle}>
         {label}
+        {required && (
+          <span style={{ color: "#dc2626" }}>
+            {" "}
+            *
+          </span>
+        )}
       </label>
 
       <input
-        value={value || ""}
-        onChange={(e) =>
-          onChange(
-            e.target.value
-          )
+        type={type}
+        value={value}
+        onChange={(event) =>
+          onChange(event.target.value)
         }
-        style={{
-          width:
-            "100%",
-          boxSizing:
-            "border-box",
-          padding:
-            "10px 12px",
-          border:
-            "1px solid #cbd5e1",
-          borderRadius:
-            "8px",
-          fontSize:
-            "13px",
-          color:
-            "#334155",
-        }}
+        placeholder={placeholder}
+        style={inputStyle}
       />
     </div>
   );
 }
 
-/* SELECT COMPONENT */
-
 function SelectField({
   label,
+  required,
   value,
-  options,
   onChange,
+  options,
+  placeholder,
 }) {
   return (
     <div>
-      <label
-        style={{
-          display:
-            "block",
-          marginBottom:
-            "6px",
-          fontSize:
-            "12px",
-          fontWeight:
-            "600",
-          color:
-            "#475569",
-        }}
-      >
+      <label style={labelStyle}>
         {label}
+        {required && (
+          <span style={{ color: "#dc2626" }}>
+            {" "}
+            *
+          </span>
+        )}
       </label>
 
       <select
-        value={value || ""}
-        onChange={(e) =>
-          onChange(
-            e.target.value
-          )
+        value={value}
+        onChange={(event) =>
+          onChange(event.target.value)
         }
-        style={{
-          width:
-            "100%",
-          padding:
-            "10px 12px",
-          border:
-            "1px solid #cbd5e1",
-          borderRadius:
-            "8px",
-          background:
-            "#ffffff",
-          color:
-            "#334155",
-          fontSize:
-            "13px",
-        }}
+        style={selectStyle}
       >
-        <option value="">
-          Select {label}
-        </option>
-
-        {options.map(
-          (option) => (
-            <option
-              key={option}
-              value={option}
-            >
-              {option}
-            </option>
-          )
+        {placeholder && (
+          <option value="">
+            {placeholder}
+          </option>
         )}
+
+        {options.map((option) => (
+          <option key={option}>{option}</option>
+        ))}
       </select>
     </div>
   );
 }
+
+/* =========================================================
+   STYLES
+========================================================= */
+
+const inputStyle = {
+  width: "100%",
+  boxSizing: "border-box",
+  padding: "10px 12px",
+  border: "1px solid #cbd5e1",
+  borderRadius: "8px",
+  background: "#fff",
+  color: "#334155",
+  fontSize: "13px",
+  outline: "none",
+};
+
+const selectStyle = {
+  width: "100%",
+  boxSizing: "border-box",
+  padding: "10px 12px",
+  border: "1px solid #cbd5e1",
+  borderRadius: "8px",
+  background: "#fff",
+  color: "#334155",
+  fontSize: "13px",
+};
+
+const labelStyle = {
+  display: "block",
+  marginBottom: "6px",
+  fontSize: "12px",
+  fontWeight: "600",
+  color: "#334155",
+};
+
+const primaryButton = {
+  padding: "10px 16px",
+  border: "none",
+  borderRadius: "8px",
+  background: "#2563eb",
+  color: "#fff",
+  fontSize: "13px",
+  fontWeight: "600",
+  cursor: "pointer",
+};
+
+const secondaryButton = {
+  padding: "10px 16px",
+  border: "1px solid #cbd5e1",
+  borderRadius: "8px",
+  background: "#fff",
+  color: "#334155",
+  fontSize: "13px",
+  fontWeight: "600",
+  cursor: "pointer",
+};
+
+const resetButton = {
+  padding: "10px 14px",
+  border: "1px solid #cbd5e1",
+  borderRadius: "8px",
+  background: "#f8fafc",
+  color: "#475569",
+  fontSize: "13px",
+  cursor: "pointer",
+};
+
+const tableHeaderStyle = {
+  padding: "13px 14px",
+  textAlign: "left",
+  fontSize: "11px",
+  fontWeight: "700",
+  color: "#64748b",
+  whiteSpace: "nowrap",
+};
+
+const tableCellStyle = {
+  padding: "15px 14px",
+  fontSize: "13px",
+  color: "#334155",
+  whiteSpace: "nowrap",
+};
+
+const actionButton = {
+  width: "30px",
+  height: "30px",
+  border: "1px solid #cbd5e1",
+  borderRadius: "6px",
+  background: "#fff",
+  color: "#475569",
+  cursor: "pointer",
+  fontSize: "14px",
+};
+
+const pageButton = {
+  width: "30px",
+  height: "30px",
+  border: "1px solid #cbd5e1",
+  borderRadius: "6px",
+  background: "#fff",
+  color: "#334155",
+  cursor: "pointer",
+  fontSize: "12px",
+};
