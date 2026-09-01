@@ -2268,3 +2268,85 @@ body {
     grid-column: auto;
   }
 }
+
+/* =========================================================
+   SIDEBAR LINK / FOCUS FIX
+   ========================================================= */
+
+/* Remove browser default underline from sidebar links */
+.nav a,
+.nav a:link,
+.nav a:visited,
+.nav a:hover,
+.nav a:active {
+  text-decoration: none;
+}
+
+/* Make sidebar links inherit the nav-item styling */
+.nav a.nav-item {
+  color: #b8c2d3;
+  text-decoration: none;
+}
+
+/* Hover */
+.nav a.nav-item:hover {
+  color: #ffffff;
+  text-decoration: none;
+  background: #18253b;
+}
+
+/* Active */
+.nav a.nav-item.active {
+  color: #ffffff;
+  text-decoration: none;
+  background: #2563eb;
+}
+
+/* Remove unwanted browser outline */
+.nav-item:focus {
+  outline: none;
+}
+
+/* Use a subtle focus style only for keyboard navigation */
+.nav-item:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.35);
+  outline-offset: -2px;
+}
+
+/* Remove underline from any sidebar text */
+.sidebar a {
+  text-decoration: none;
+}
+
+/* Prevent default button/link appearance from affecting sidebar */
+.sidebar button,
+.sidebar a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* =========================================================
+   SIDEBAR SCROLLING
+   ========================================================= */
+
+.sidebar {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* Clean scrollbar */
+.sidebar::-webkit-scrollbar {
+  width: 5px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background: #29364d;
+  border-radius: 10px;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+  background: #3b4a64;
+}
