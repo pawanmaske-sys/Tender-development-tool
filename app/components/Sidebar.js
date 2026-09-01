@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useState } from "react";
 
 const menuItems = [
   {
@@ -23,13 +24,19 @@ const menuItems = [
 
 export default function Sidebar() {
   const pathname = usePathname();
+  const [collapsed, setCollapsed] = useState(false);
 
   return (
-    <aside className="sidebar">
+    <aside
+      className={`sidebar ${
+        collapsed ? "sidebar-collapsed" : ""
+      }`}
+    >
 
-      {/* LOGO / BRAND */}
-      <div className="sidebar-brand">
-        <div className="brand-icon">
+      {/* BRAND */}
+      <div className="brand">
+
+        <div className="brand-logo">
           T
         </div>
 
@@ -38,17 +45,29 @@ export default function Sidebar() {
             Tender Tool
           </div>
 
-          <div className="brand-subtitle">
+          <div className="brand-sub">
             Management System
           </div>
         </div>
+
       </div>
 
 
-      {/* MENU */}
-      <nav className="sidebar-nav">
+      {/* COLLAPSE BUTTON */}
+      <button
+        type="button"
+        className="collapse-button"
+        onClick={() => setCollapsed(!collapsed)}
+        title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+      >
+        {collapsed ? "→" : "←"}
+      </button>
 
-        <div className="sidebar-section-title">
+
+      {/* NAVIGATION */}
+      <nav className="nav">
+
+        <div className="nav-label">
           MAIN MENU
         </div>
 
@@ -63,16 +82,16 @@ export default function Sidebar() {
             <Link
               key={item.path}
               href={item.path}
-              className={`sidebar-item ${
-                isActive ? "sidebar-item-active" : ""
+              className={`nav-item ${
+                isActive ? "active" : ""
               }`}
             >
 
-              <span className="sidebar-icon">
+              <span className="nav-icon">
                 {item.icon}
               </span>
 
-              <span className="sidebar-label">
+              <span className="nav-text">
                 {item.name}
               </span>
 
@@ -80,76 +99,48 @@ export default function Sidebar() {
           );
         })}
 
-      </nav>
 
-
-      {/* MODULES */}
-      <div className="sidebar-modules">
-
-        <div className="sidebar-section-title">
+        {/* MODULES */}
+        <div className="nav-label">
           MODULES
         </div>
 
         <Link
           href="/all-tenders"
-          className="sidebar-module"
+          className={`nav-item ${
+            pathname.startsWith("/all-tenders")
+              ? "active"
+              : ""
+          }`}
         >
-          <span className="module-icon">
+          <span className="nav-icon">
             📋
           </span>
 
-          <div>
-            <div className="module-name">
-              Tender Management
-            </div>
-
-            <div className="module-description">
-              Manage all tenders
-            </div>
-          </div>
+          <span className="nav-text">
+            Tender Management
+          </span>
         </Link>
 
 
         <Link
           href="/tender-sources"
-          className="sidebar-module"
+          className={`nav-item ${
+            pathname.startsWith("/tender-sources")
+              ? "active"
+              : ""
+          }`}
         >
-          <span className="module-icon">
+          <span className="nav-icon">
             🌐
           </span>
 
-          <div>
-            <div className="module-name">
-              Tender Sources
-            </div>
-
-            <div className="module-description">
-              Manage tender portals
-            </div>
-          </div>
+          <span className="nav-text">
+            Tender Sources
+          </span>
         </Link>
 
-      </div>
-
-
-      {/* BOTTOM USER */}
-      <div className="sidebar-bottom">
-
-        <div className="sidebar-user-avatar">
-          PM
-        </div>
-
-        <div className="sidebar-user-info">
-          <div className="sidebar-user-name">
-            Pawan Maske
-          </div>
-
-          <div className="sidebar-user-role">
-            Tender Executive
-          </div>
-        </div>
-
-      </div>
+      </nav>
 
     </aside>
   );
