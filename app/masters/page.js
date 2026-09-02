@@ -68,40 +68,40 @@ const masterGroups = [
         title: "Tender Types",
         description:
           "Manage procurement and tender types used across tender records.",
-        path: "",
-        available: false,
+        path: "/masters/tender-types",
+        available: true,
         icon: "▤",
       },
       {
         title: "Tender Sources",
         description:
           "Manage portals, websites and other sources from which opportunities are received.",
-        path: "",
-        available: false,
+        path: "/masters/tender-sources",
+        available: true,
         icon: "⌕",
       },
       {
         title: "Tender Status",
         description:
           "Manage permitted statuses used during the tender lifecycle.",
-        path: "",
-        available: false,
+        path: "/masters/tender-status",
+        available: true,
         icon: "◷",
       },
       {
         title: "Evaluation / Hold Reasons",
         description:
           "Manage standard reasons used for evaluation, hold and decision tracking.",
-        path: "",
-        available: false,
+        path: "/masters/evaluation-hold-reasons",
+        available: true,
         icon: "✓",
       },
       {
         title: "Loss Reasons",
         description:
           "Manage standard reasons for unsuccessful tender outcomes.",
-        path: "",
-        available: false,
+        path: "/masters/loss-reasons",
+        available: true,
         icon: "△",
       },
     ],
